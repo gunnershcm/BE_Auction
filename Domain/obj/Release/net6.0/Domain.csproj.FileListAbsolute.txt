@@ -1,0 +1,12 @@
+D:\SWP_10\BE_Auction\BE_Auction\Domain\bin\Release\net6.0\Domain.deps.json
+D:\SWP_10\BE_Auction\BE_Auction\Domain\bin\Release\net6.0\Domain.dll
+D:\SWP_10\BE_Auction\BE_Auction\Domain\bin\Release\net6.0\Domain.pdb
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.csproj.AssemblyReference.cache
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.AssemblyInfoInputs.cache
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.AssemblyInfo.cs
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.csproj.CoreCompileInputs.cache
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.dll
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\refint\Domain.dll
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\Domain.pdb
+D:\SWP_10\BE_Auction\BE_Auction\Domain\obj\Release\net6.0\ref\Domain.dll

@@ -103,7 +103,7 @@ public class AuthService : IAuthService
         var passwordHasher = new PasswordHasher<User>();
         entity.Password = passwordHasher.HashPassword(entity, model.Password);
         entity.IsActive = true;
-        entity.Role = Role.Guest;
+        entity.Role = Role.Member;
         await _userRepository.CreateAsync(entity);
         return entity;
     }

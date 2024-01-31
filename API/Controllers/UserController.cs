@@ -52,13 +52,13 @@ public class UserController : BaseController
         }
     }
 
-    [Authorize(Roles = Roles.ADMIN)]
+    //[Authorize(Roles = Roles.ADMIN)]
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest model)
     {
         try
         {
-            var user = await _userService.Create(model);
+            await _userService.Create(model);
             return Ok("Created Successfully");
         }
         catch (Exception ex)

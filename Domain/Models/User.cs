@@ -41,7 +41,7 @@ namespace Domain.Models
 
         public Gender? Gender { get; set; }
 
-        public string IdentityId { get; set; }
+        public string? IdentityId { get; set; }
 
         public DateTime? IssuedDate { get; set; }
 

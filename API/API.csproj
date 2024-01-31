@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Requests\Posts\" />
+    <Folder Include="DTOs\Requests\Properties\" />
   </ItemGroup>
 
 </Project>

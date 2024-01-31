@@ -24,6 +24,7 @@ builder.Services.AddDbContext<AuctionDbContext>(options =>
 builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPostService, PostService>();  
 
 
 builder.Services.AddControllers();
@@ -90,7 +91,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auction v1"));
+    app.UseSwaggerUI(
+        c => {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auction v1");            
+    });
 }
 
 app.UseRouting();

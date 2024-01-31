@@ -24,6 +24,10 @@ namespace Domain.Models
 
         public User? Author { get; set; }
 
-        
+        public int PostId { get; set; }
+
+        public Post? Post { get; set; }
+
+
     }
 }

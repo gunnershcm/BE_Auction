@@ -12,8 +12,8 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20240126080859_AddNew")]
-    partial class AddNew
+    [Migration("20240131100409_UpdateNew")]
+    partial class UpdateNew
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -193,8 +193,28 @@ namespace Persistence.Migrations
                     b.Property<int>("PostStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
+                    b.Property<string>("PropertyAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("PropertyRevervePrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PropertyTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Response")
                         .HasColumnType("nvarchar(max)");
@@ -208,8 +228,6 @@ namespace Persistence.Migrations
                     b.HasIndex("ApproverId");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("PropertyId");
 
                     b.ToTable("Posts");
                 });
@@ -250,6 +268,9 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
                     b.Property<double>("RevervePrice")
                         .HasColumnType("float");
 
@@ -260,6 +281,8 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Properties");
                 });
@@ -389,7 +412,6 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("IdentityId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsActive")
@@ -511,17 +533,9 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Property", "Property")
-                        .WithMany()
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Approver");
 
                     b.Navigation("Author");
-
-                    b.Navigation("Property");
                 });
 
             modelBuilder.Entity("Domain.Models.Property", b =>
@@ -532,7 +546,15 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Author");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Domain.Models.Transaction", b =>
