@@ -26,7 +26,7 @@ public class UserService : IUserService
 
     public async Task<List<GetUserResponse>> Get()
     {
-        var result = await _userRepository.ToListAsync();
+        var result = await _userRepository.WhereAsync(u => u.IsActive == true);
         var response = new List<GetUserResponse>();
         foreach (var user in result)
         {
@@ -41,7 +41,7 @@ public class UserService : IUserService
     public async Task<GetUserResponse> GetById(int id)
     {
         var result =
-            await _userRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("User is not exist"));
+            await _userRepository.FoundOrThrow(u => u.Id.Equals(id) && u.IsActive == true, new KeyNotFoundException("User is not exist"));
         var entity = _mapper.Map(result, new GetUserResponse());
         DataResponse.CleanNullableDateTime(entity);
         return entity;
@@ -66,7 +66,7 @@ public class UserService : IUserService
     public async Task<User> Update(int id, UpdateUserRequest model)
     {
         var target =
-            await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
+            await _userRepository.FoundOrThrow(c => c.Id.Equals(id) && c.IsActive == true, new KeyNotFoundException("User is not exist"));
         User user = _mapper.Map(model, target);
         await _userRepository.UpdateAsync(user);
         return user;
@@ -75,7 +75,8 @@ public class UserService : IUserService
     public async Task Remove(int id)
     {
         var target =
-            await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));          
+            await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
+        target.IsActive = false;
         await _userRepository.SoftDeleteAsync(target);
     }
 

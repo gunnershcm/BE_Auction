@@ -52,7 +52,7 @@ public class UserController : BaseController
         }
     }
 
-    //[Authorize(Roles = Roles.ADMIN)]
+    [Authorize(Roles = Roles.ADMIN)]
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest model)
     {

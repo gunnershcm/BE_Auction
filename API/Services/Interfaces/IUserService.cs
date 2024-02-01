@@ -11,7 +11,8 @@ namespace API.Services.Interfaces
         Task<GetUserResponse> GetById(int id);
         Task<List<GetPostResponse>> GetByUser(int userId);
         Task<User> Create(CreateUserRequest model);
-        Task Remove(int id);
         Task<User> Update(int id, UpdateUserRequest model);
+        Task Remove(int id);
+        
     }
 }
