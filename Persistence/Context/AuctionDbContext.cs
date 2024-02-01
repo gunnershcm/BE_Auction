@@ -44,14 +44,14 @@ namespace Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            //foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            //{
-            //    //other automated configurations left out
-            //    if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
-            //    {
-            //        entityType.AddSoftDeleteQueryFilter();
-            //    }
-            //}
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                //other automated configurations left out
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    entityType.AddSoftDeleteQueryFilter();
+                }
+            }
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Author)
