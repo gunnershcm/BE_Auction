@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Text;
 using API.Services.Implements;
 using API.Services.Interfaces;
+using API.Utils;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -24,10 +26,11 @@ builder.Services.AddDbContext<AuctionDbContext>(options =>
 builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPostService, PostService>();  
+builder.Services.AddScoped<IPostService, PostService>();
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add<ValidateModelStateFilter>())
+    .AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddEndpointsApiExplorer();
