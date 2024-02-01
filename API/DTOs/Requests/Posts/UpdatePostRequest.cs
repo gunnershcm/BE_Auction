@@ -5,7 +5,7 @@ using Domain.Models;
 
 namespace API.DTOs.Requests.Posts
 {
-    public class CreatePostRequest : IMapTo<Post>
+    public class UpdatePostRequest : IMapTo<Post>
     {
         public string Title { get; set; }
 

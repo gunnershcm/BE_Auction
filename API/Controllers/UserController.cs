@@ -68,6 +68,25 @@ public class UserController : BaseController
     }
 
     [Authorize(Roles = Roles.ADMIN)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequest model)
+    {
+        try
+        {
+            var user = await _userService.Update(id, model);
+            return Ok("Updated Successfully");
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize(Roles = Roles.ADMIN)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {

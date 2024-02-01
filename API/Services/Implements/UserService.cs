@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Requests.Users;
+using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.Users;
 using API.Services.Interfaces;
 using AutoMapper;
@@ -57,11 +58,24 @@ public class UserService : IUserService
         return entity;
     }
 
+    public async Task<User> Update(int id, UpdateUserRequest model)
+    {
+        var target =
+            await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
+        User user = _mapper.Map(model, target);
+        await _userRepository.UpdateAsync(user);
+        return user;
+    }
 
     public async Task Remove(int id)
     {
         var target =
             await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
         await _userRepository.SoftDeleteAsync(target);
+    }
+
+    public Task<List<GetPostResponse>> GetByUser(int userId)
+    {
+        throw new NotImplementedException();
     }
 }
