@@ -171,7 +171,7 @@ namespace API.Controllers
             try
             {
                 await _postService.Approve(postId);
-                return Ok("Approve Successfully");
+                return Ok("Approve Post Successfully");
             }
             catch (KeyNotFoundException)
             {
@@ -185,12 +185,12 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.STAFF)]
         [HttpPatch("reject")]
-        public async Task<IActionResult> RejectPost(int postId)
+        public async Task<IActionResult> RejectPost(int postId, [FromBody] UpdateRejectReason model)
         {
             try
             {
-                await _postService.Reject(postId);
-                return Ok("Reject Successfully");
+                await _postService.Reject(postId, model);
+                return Ok("Reject Post Successfully");
             }
             catch (KeyNotFoundException)
             {

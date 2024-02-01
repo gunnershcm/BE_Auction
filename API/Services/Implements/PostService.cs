@@ -91,12 +91,14 @@ namespace API.Services.Implements
             await _postRepository.UpdateAsync(target);
         }
 
-        public async Task Reject(int postId)
+        public async Task<Post> Reject(int postId, UpdateRejectReason model)
         {
             var target = await _postRepository.FirstOrDefaultAsync(c => c.Id.Equals(postId)) ??
                          throw new KeyNotFoundException();
+            var entity = _mapper.Map(model, target);
             target.PostStatus = PostStatus.Rejected;
-            await _postRepository.UpdateAsync(target);
+            await _postRepository.UpdateAsync(entity);
+            return entity;
         }
 
        

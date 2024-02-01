@@ -28,6 +28,5 @@ namespace Domain.Models
 
         public Post? Post { get; set; }
 
-
     }
 }

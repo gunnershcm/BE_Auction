@@ -15,7 +15,7 @@ namespace API.Services.Interfaces
         Task<Post> CreatePostByMember(int createdById, CreatePostRequest model);
         Task<Post> UpdateByMember(int id, UpdatePostRequest model);
         Task Approve(int postId);
-        Task Reject(int postId);
+        Task<Post> Reject(int postId, UpdateRejectReason model);
         Task Remove(int id);
     }
 }
