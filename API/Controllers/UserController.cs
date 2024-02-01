@@ -4,7 +4,7 @@ using Domain.Constants;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Persistence.Helpers;
 
 namespace API.Controllers;
 
@@ -26,6 +26,26 @@ public class UserController : BaseController
         {
             var result = await _userService.Get();
             return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
+    [HttpGet]
+    public async Task<IActionResult> GetUsers(
+         [FromQuery] string? filter,
+         [FromQuery] string? sort,
+         [FromQuery] int page = 1,
+         [FromQuery] int pageSize = 5)
+    {
+        try
+        {
+            var result = await _userService.Get();
+            var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
+            return Ok(pagedResponse);
         }
         catch (Exception ex)
         {
@@ -105,7 +125,7 @@ public class UserController : BaseController
         }
     }
 
-    
+
 
 
 

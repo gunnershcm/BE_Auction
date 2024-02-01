@@ -48,6 +48,7 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetPostResponse>>(result);
             return response;
         }
+   
 
         public async Task<List<GetPostResponse>> GetPostApproveByUser(int userId)
         {
@@ -88,6 +89,7 @@ namespace API.Services.Implements
             var target = await _postRepository.FirstOrDefaultAsync(c => c.Id.Equals(postId)) ??
                          throw new KeyNotFoundException();
             target.PostStatus = PostStatus.Approved;
+            target.Response = null;
             await _postRepository.UpdateAsync(target);
         }
 

@@ -7,6 +7,7 @@ using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 using System.Net.Sockets;
 
@@ -31,6 +32,26 @@ namespace API.Controllers
         {
             var result = await _postService.Get();
             return Ok(result);
+        }
+
+        [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
+        [HttpGet]
+        public async Task<IActionResult> GetPosts(
+            [FromQuery] string? filter,
+            [FromQuery] string? sort,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            try
+            {
+                var result = await _postService.Get();
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
+                return Ok(pagedResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize]
@@ -59,6 +80,25 @@ namespace API.Controllers
             try
             {
                 var result = await _postService.GetByUser(userId);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("user/available")]
+        public async Task<IActionResult> GetPostByUserAvailable()
+        {
+            try
+            {
+                var result = await _postService.GetByUser(CurrentUserID);
                 return Ok(result);
             }
             catch (NotFoundException ex)
@@ -150,7 +190,7 @@ namespace API.Controllers
         {
             try
             {
-                var ticket = await _postRepository.FirstOrDefaultAsync(x => x.Id == postId);             
+                var ticket = await _postRepository.FirstOrDefaultAsync(x => x.Id == postId);
                 await _postService.Remove(postId);
                 return Ok("Remove Post Successfully");
             }
