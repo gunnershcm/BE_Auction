@@ -71,6 +71,44 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("approve/user/{userId}")]
+        public async Task<IActionResult> GetPostApproveByUser(int userId)
+        {
+            try
+            {
+                var result = await _postService.GetPostApproveByUser(userId);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("reject/user/{userId}")]
+        public async Task<IActionResult> GetPostRejectByUser(int userId)
+        {
+            try
+            {
+                var result = await _postService.GetPostRejectByUser(userId);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [Authorize(Roles = Roles.MEMBER)]
         [HttpPost("member/new")]
@@ -126,7 +164,43 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = Roles.STAFF)]
+        [HttpPatch("approve")]
+        public async Task<IActionResult> ApprovePost(int postId)
+        {
+            try
+            {
+                await _postService.Approve(postId);
+                return Ok("Approve Successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Post is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [Authorize(Roles = Roles.STAFF)]
+        [HttpPatch("reject")]
+        public async Task<IActionResult> RejectPost(int postId)
+        {
+            try
+            {
+                await _postService.Reject(postId);
+                return Ok("Reject Successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Post is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 

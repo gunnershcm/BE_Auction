@@ -7,7 +7,5 @@ public static class Roles
     public const string GUEST = nameof(Role.Guest);
     public const string STAFF = nameof(Role.Staff);
     public const string MEMBER = nameof(Role.Member);
-
-   
 }
 

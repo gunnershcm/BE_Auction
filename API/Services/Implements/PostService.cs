@@ -49,6 +49,22 @@ namespace API.Services.Implements
             return response;
         }
 
+        public async Task<List<GetPostResponse>> GetPostApproveByUser(int userId)
+        {
+            var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
+            && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver" });
+            var response = _mapper.Map<List<GetPostResponse>>(result);
+            return response;
+        }
+
+        public async Task<List<GetPostResponse>> GetPostRejectByUser(int userId)
+        {
+            var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
+            && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver" });
+            var response = _mapper.Map<List<GetPostResponse>>(result);
+            return response;
+        }
+
         public async Task<Post> CreatePostByMember(int createdById, CreatePostRequest model)
         {
             Post entity = _mapper.Map(model, new Post());
@@ -67,6 +83,23 @@ namespace API.Services.Implements
             return entity;
         }
 
+        public async Task Approve(int postId)
+        {
+            var target = await _postRepository.FirstOrDefaultAsync(c => c.Id.Equals(postId)) ??
+                         throw new KeyNotFoundException();
+            target.PostStatus = PostStatus.Approved;
+            await _postRepository.UpdateAsync(target);
+        }
+
+        public async Task Reject(int postId)
+        {
+            var target = await _postRepository.FirstOrDefaultAsync(c => c.Id.Equals(postId)) ??
+                         throw new KeyNotFoundException();
+            target.PostStatus = PostStatus.Rejected;
+            await _postRepository.UpdateAsync(target);
+        }
+
+       
         public async Task Remove(int id)
         {
             var target = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??

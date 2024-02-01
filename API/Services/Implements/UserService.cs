@@ -51,6 +51,11 @@ public class UserService : IUserService
     public async Task<User> Create(CreateUserRequest model)
     {
         User entity = _mapper.Map(model, new User());
+        var checkDuplicated = await _userRepository.FirstOrDefaultAsync(x => x.Username == entity.Username);
+        if (checkDuplicated != null)
+        {
+            throw new BadRequestException("Username is exist. Please use a different username.");
+        }
         var passwordHasher = new PasswordHasher<User>();
         entity.Password = passwordHasher.HashPassword(entity, model.Password);
         entity.IsActive = true;
@@ -70,7 +75,7 @@ public class UserService : IUserService
     public async Task Remove(int id)
     {
         var target =
-            await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
+            await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));          
         await _userRepository.SoftDeleteAsync(target);
     }
 
