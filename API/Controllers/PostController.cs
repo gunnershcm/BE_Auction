@@ -35,7 +35,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPosts(

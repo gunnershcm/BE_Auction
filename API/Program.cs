@@ -106,7 +106,5 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAutoWrapper();
-
 app.MapControllers();
-
 app.Run();

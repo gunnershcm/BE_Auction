@@ -110,7 +110,7 @@ namespace API.Services.Implements
 
             if (post.PostStatus == PostStatus.Completed)
             {
-                throw new BadRequestException("Cannot update post status when ticket is completed");
+                throw new BadRequestException("Cannot update post status when status is completed");
             }
 
             if (newStatus == PostStatus.Draft)
@@ -160,8 +160,8 @@ namespace API.Services.Implements
         public async Task Remove(int id)
         {
             var target = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??
-                         throw new KeyNotFoundException("Ticket is not exist");
-            await _postRepository.SoftDeleteAsync(target);
+                         throw new KeyNotFoundException("Post is not exist");
+            await _postRepository.DeleteAsync(target);
         }
 
 

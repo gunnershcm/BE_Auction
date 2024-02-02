@@ -6,6 +6,7 @@ using API.Services.Interfaces;
 using AutoMapper;
 using Domain.Constants.Enums;
 using Domain.Models;
+using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 
 namespace API.Services.Implements
@@ -33,6 +34,15 @@ namespace API.Services.Implements
             return response;
         }
 
+        public async Task<GetPropertyResponse> GetById(int id)
+        {
+            var result =
+                await _propertyRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("Property is not exist"));
+            var entity = _mapper.Map(result, new GetPropertyResponse());
+            DataResponse.CleanNullableDateTime(entity);
+            return entity;
+        }
+
         public async Task<Property> CreateProperty(int postId,CreatePropertyRequest model)
         {
             var post = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(postId)) ??   
@@ -45,5 +55,21 @@ namespace API.Services.Implements
             return entity;
         }
 
+
+        public async Task<Property> UpdateProperty(int id, UpdatePropertyRequest model)
+        {
+            var target =
+                await _propertyRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ?? throw new KeyNotFoundException();
+            var entity = _mapper.Map(model, target);
+            await _propertyRepository.UpdateAsync(entity);
+            return entity;
+        }
+
+        public async Task Remove(int id)
+        {
+            var target = await _propertyRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??
+                         throw new KeyNotFoundException("Property is not exist");
+            await _propertyRepository.DeleteAsync(target);
+        }
     }
 }
