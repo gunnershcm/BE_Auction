@@ -4,6 +4,7 @@ using API.DTOs.Responses.Users;
 using API.Services.Interfaces;
 using AutoMapper;
 using Domain.Constants.Enums;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.Extensions.Options;
 using Persistence.Helpers;
@@ -102,7 +103,60 @@ namespace API.Services.Implements
             return entity;
         }
 
-       
+        public async Task<Post> ModifyPostStatus(int postId, PostStatus newStatus)
+        {
+            var post = await _postRepository.FirstOrDefaultAsync(c => c.Id.Equals(postId)) ??
+                         throw new KeyNotFoundException("Post is not exist");
+
+            if (post.PostStatus == PostStatus.Completed)
+            {
+                throw new BadRequestException("Cannot update post status when ticket is completed");
+            }
+
+            if (newStatus == PostStatus.Draft)
+            {
+                throw new BadRequestException("Cannot update post status to draft");
+            }
+
+            switch (post.PostStatus)
+            {
+                case PostStatus.Draft:
+                    if (newStatus == PostStatus.Requesting)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }                  
+                    break;
+                case PostStatus.Requesting:
+                    if (newStatus == PostStatus.Rejected)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }
+                    else if (newStatus == PostStatus.Approved)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }
+                    break;
+              
+                case PostStatus.Approved:
+
+                    if (newStatus == PostStatus.Completed)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }
+
+                    break;
+                default:
+                    throw new BadRequestException();
+            }
+
+            return post;
+        }
+
+
         public async Task Remove(int id)
         {
             var target = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??

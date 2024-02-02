@@ -12,4 +12,6 @@ public enum PostStatus
     Rejected,
     [Description("Approved")]
     Approved,
+    [Description("Completed")]
+    Completed,
 }

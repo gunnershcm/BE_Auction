@@ -1,12 +1,14 @@
 ﻿using API.DTOs.Requests.Posts;
 using API.Services.Interfaces;
 using Domain.Constants;
+using Domain.Constants.Enums;
 using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
+using System.Net.Sockets;
 
 
 namespace API.Controllers
@@ -252,6 +254,28 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = Roles.STAFF)]
+        [HttpPatch("modify-status")]
+        public async Task<IActionResult> ModifyPostStatus(int postId, PostStatus newStatus)
+        {
+            try
+            {
+                var updated = await _postService.ModifyPostStatus(postId, newStatus);
+                return Ok("Status Updated Successfully");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 

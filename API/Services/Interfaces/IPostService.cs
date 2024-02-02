@@ -1,6 +1,7 @@
 ﻿using API.DTOs.Requests.Posts;
 using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.Users;
+using Domain.Constants.Enums;
 using Domain.Models;
 
 namespace API.Services.Interfaces
@@ -16,6 +17,7 @@ namespace API.Services.Interfaces
         Task<Post> UpdateByMember(int id, UpdatePostRequest model);
         Task Approve(int postId);
         Task<Post> Reject(int postId, UpdateRejectReason model);
+        Task<Post> ModifyPostStatus(int postId, PostStatus newStatus);
         Task Remove(int id);
     }
 }
