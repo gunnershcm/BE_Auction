@@ -27,6 +27,7 @@ builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IPropertyService, PropertyService>();
 
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidateModelStateFilter>())
@@ -38,7 +39,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuctionDbContext>(opt =>
     opt.UseInMemoryDatabase("AuctionDB"));
 builder.Services.AddSwaggerGen(c =>
-{
+{   
     c.SwaggerDoc("v1", new() { Title = "Auction", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {

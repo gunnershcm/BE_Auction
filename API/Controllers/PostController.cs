@@ -1,7 +1,5 @@
 ﻿using API.DTOs.Requests.Posts;
-using API.Services.Implements;
 using API.Services.Interfaces;
-using AutoMapper;
 using Domain.Constants;
 using Domain.Exceptions;
 using Domain.Models;
@@ -9,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
-using System.Net.Sockets;
+
 
 namespace API.Controllers
 {
@@ -28,6 +26,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("all")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetAllPost()
         {
             var result = await _postService.Get();
@@ -36,6 +35,7 @@ namespace API.Controllers
 
         [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPosts(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
@@ -56,6 +56,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPostById(int id)
         {
             try
@@ -75,6 +76,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("user/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPostByUser(int userId)
         {
             try
@@ -94,6 +96,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("user/available")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPostByUserAvailable()
         {
             try
@@ -113,6 +116,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("approve/user/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPostApproveByUser(int userId)
         {
             try
@@ -132,6 +136,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("reject/user/{userId}")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> GetPostRejectByUser(int userId)
         {
             try
@@ -152,6 +157,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.MEMBER)]
         [HttpPost("member/new")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> CreatePostByMember([FromBody] CreatePostRequest model)
         {
             try
@@ -167,6 +173,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.MEMBER)]
         [HttpPut("member/{postId}")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> UpdatePostByMember(int postId, [FromBody] UpdatePostRequest model)
         {
             try
@@ -186,6 +193,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.STAFF)]
         [HttpDelete("staff/{postId}")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> DeletePost(int postId)
         {
             try
@@ -206,6 +214,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.STAFF)]
         [HttpPatch("approve")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> ApprovePost(int postId)
         {
             try
@@ -225,6 +234,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.STAFF)]
         [HttpPatch("reject")]
+        [ProducesResponseType(typeof(IEnumerable<Post>), 200)]
         public async Task<IActionResult> RejectPost(int postId, [FromBody] UpdateRejectReason model)
         {
             try

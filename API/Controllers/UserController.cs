@@ -1,7 +1,9 @@
 using API.DTOs.Requests.Users;
+using API.Services.Implements;
 using API.Services.Interfaces;
 using Domain.Constants;
 using Domain.Exceptions;
+using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Helpers;
@@ -20,6 +22,7 @@ public class UserController : BaseController
 
     [Authorize]
     [HttpGet("all")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> GetAllUsers()
     {
         try
@@ -35,6 +38,7 @@ public class UserController : BaseController
 
     [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> GetUsers(
          [FromQuery] string? filter,
          [FromQuery] string? sort,
@@ -55,6 +59,7 @@ public class UserController : BaseController
 
     [Authorize]
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> GetUserById(int id)
     {
         try
@@ -72,8 +77,29 @@ public class UserController : BaseController
         }
     }
 
+    [Authorize]
+    [HttpGet("available")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
+    public async Task<IActionResult> GetUserAvailable() 
+    {
+        try
+        {
+            var result = await _userService.GetByUser(CurrentUserID);
+            return Ok(result);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [Authorize(Roles = Roles.ADMIN)]
     [HttpPost]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest model)
     {
         try
@@ -89,6 +115,7 @@ public class UserController : BaseController
 
     [Authorize(Roles = Roles.ADMIN)]
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserRequest model)
     {
         try
@@ -108,6 +135,7 @@ public class UserController : BaseController
 
     [Authorize(Roles = Roles.ADMIN)]
     [HttpDelete("{id}")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> DeleteUser(int id)
     {
         try

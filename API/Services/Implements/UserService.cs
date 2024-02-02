@@ -37,15 +37,22 @@ public class UserService : IUserService
         return response;
     }
 
-    public async Task<GetUserResponse> GetById(int id)
+
+    public async Task<GetUserResponse> GetById(int userId)
     {
         var result =
-            await _userRepository.FoundOrThrow(u => u.Id.Equals(id) == true, new KeyNotFoundException("User is not exist"));
+            await _userRepository.FoundOrThrow(u => u.Id.Equals(userId) == true, new KeyNotFoundException("User is not exist"));
         var entity = _mapper.Map(result, new GetUserResponse());
         DataResponse.CleanNullableDateTime(entity);
         return entity;
     }
 
+    public async Task<List<GetUserResponse>> GetByUser(int userId)
+    {
+        var result = await _userRepository.WhereAsync(x => x.Id.Equals(userId));
+        var response = _mapper.Map<List<GetUserResponse>>(result);
+        return response;
+    }
 
     public async Task<User> Create(CreateUserRequest model)
     {
@@ -79,8 +86,5 @@ public class UserService : IUserService
         await _userRepository.SoftDeleteAsync(target);
     }
 
-    public Task<List<GetPostResponse>> GetByUser(int userId)
-    {
-        throw new NotImplementedException();
-    }
+    
 }

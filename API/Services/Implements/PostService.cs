@@ -15,7 +15,6 @@ namespace API.Services.Implements
     public class PostService : IPostService
     {
         private readonly IRepositoryBase<Post> _postRepository;
-        //private readonly 
         private readonly IMapper _mapper;
 
         public PostService(IRepositoryBase<Post> postRepository, IMapper mapper)
@@ -27,7 +26,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> Get()
         {
             var result = await _postRepository.GetAsync(navigationProperties: new string[]
-                { "Author", "Approver"});
+                { "Approver"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             return response;
         }
