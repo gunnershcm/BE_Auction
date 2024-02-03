@@ -15,7 +15,7 @@ using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-
+var CorsPolicy = "CorsPolicy";
 // Add services to the container.
 
 builder.Services.AddDbContext<AuctionDbContext>(options =>
@@ -87,6 +87,18 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
         };
     });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsPolicy,
+        policy =>
+        {
+            policy.WithOrigins("*")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddLogging();
 var app = builder.Build();
 
@@ -101,6 +113,7 @@ var app = builder.Build();
     });
 
 
+app.UseCors(CorsPolicy);
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseAuthentication();
