@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddScoped<IFirebaseService, FirebaseService>();
 
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidateModelStateFilter>())

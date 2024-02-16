@@ -17,11 +17,13 @@ public class UserService : IUserService
 {
     private readonly IRepositoryBase<User> _userRepository;
     private readonly IMapper _mapper;
+    private readonly IFirebaseService _firebaseService;
 
-    public UserService(IRepositoryBase<User> userRepository, IMapper mapper)
+    public UserService(IRepositoryBase<User> userRepository, IMapper mapper, IFirebaseService firebaseService)
     {
-        _userRepository = userRepository; 
+        _userRepository = userRepository;
         _mapper = mapper;
+        _firebaseService = firebaseService;
     }
 
     public async Task<List<GetUserResponse>> Get()
@@ -86,5 +88,22 @@ public class UserService : IUserService
         await _userRepository.SoftDeleteAsync(target);
     }
 
-    
+
+    public async Task<string> UploadImageFirebase(int userId, IFormFile file)
+    {
+        var user = await _userRepository.FoundOrThrow(c => c.Id.Equals(userId),
+            new KeyNotFoundException("User is not exist"));
+        if (file == null || file.Length == 0)
+        {
+            throw new BadRequestException("No file uploaded.");
+        }
+        var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        stream.Position = 0;
+        var linkImage = await _firebaseService.UploadFirebaseAsync(stream, file.FileName);
+        user.AvatarUrl = linkImage;
+        await _userRepository.UpdateAsync(user);
+        //await UpdateUserDocument(user);
+        return linkImage;
+    }
 }

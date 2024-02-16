@@ -153,8 +153,23 @@ public class UserController : BaseController
         }
     }
 
-
-
-
+    [Authorize]
+    [HttpPatch("UploadAvatarFirebase")]
+    public async Task<IActionResult> UploadImageFirebase(IFormFile file)
+    {
+        try
+        {
+            var result = await _userService.UploadImageFirebase(CurrentUserID, file);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
 }

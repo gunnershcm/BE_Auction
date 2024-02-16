@@ -167,3 +167,6 @@ D:\SWP_10\BE_Auction\BE_Auction\API\obj\Debug\net6.0\API.genruntimeconfig.cache
 D:\SWP_10\BE_Auction\BE_Auction\API\obj\Debug\net6.0\ref\API.dll
 D:\SWP_10\BE_Auction\BE_Auction\API\bin\Debug\net6.0\Humanizer.dll
 D:\SWP_10\BE_Auction\BE_Auction\API\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\SWP_10\BE_Auction\BE_Auction\API\bin\Debug\net6.0\Firebase.Auth.dll
+D:\SWP_10\BE_Auction\BE_Auction\API\bin\Debug\net6.0\Firebase.Storage.dll
+D:\SWP_10\BE_Auction\BE_Auction\API\bin\Debug\net6.0\System.ServiceModel.dll

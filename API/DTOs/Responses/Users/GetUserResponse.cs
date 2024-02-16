@@ -17,7 +17,19 @@ public class GetUserResponse : IMapFrom<User>
     public Role? Role { get; set; }
     public string? PhoneNumber { get; set; }
     public bool? IsActive { get; set; }
-   // public Gender? Gender { get; set; }
+    public Gender? Gender { get; set; }
+
+    public string? IdentityId { get; set; }
+
+    public DateTime? IssuedDate { get; set; }
+
+    public string? IssuedPlace { get; set; }
+
+    public string? BankNumber { get; set; }
+
+    public int? BankId { get; set; }
+
+    public string? AccoountHolder { get; set; }
     public DateTime? DateOfBirth { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }

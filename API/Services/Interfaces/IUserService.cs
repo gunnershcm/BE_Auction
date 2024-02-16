@@ -13,6 +13,8 @@ namespace API.Services.Interfaces
         Task<User> Create(CreateUserRequest model);
         Task<User> Update(int id, UpdateUserRequest model);
         Task Remove(int id);
-        
+        Task<string> UploadImageFirebase(int userId, IFormFile file);
+
+
     }
 }
