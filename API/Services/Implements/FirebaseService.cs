@@ -9,8 +9,8 @@ namespace API.Services.Implements
     {
         private static string Apikey = "AIzaSyAyZedBeNxjG2BRINYU0rqdsRRsLdYdC9I";
         private static string Bucket = "swp-project-cef68.appspot.com";
-        //private static string AuthEmail = "auctionweb@gmail.com";
-        //private static string AuthPassword = "auctionweb@123";
+        private static string AuthEmail = "hoangcuong04012001@gmail.com";
+        private static string AuthPassword = "TeamTPC21No1";
 
         public async Task<bool> SignUp(string email, string password)
         {
@@ -23,7 +23,7 @@ namespace API.Services.Implements
         {
             string link = "";
             var auth = new FirebaseAuthProvider(new FirebaseConfig(Apikey));
-            var a = await auth.SignInAnonymouslyAsync();
+            var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
 
             var cancellation = new CancellationTokenSource();
 

@@ -13,10 +13,23 @@ public class LoginResponse : IMapFrom<User>
     public string? Email { get; set; }
     public string? Address { get; set; }
     public string? AvatarUrl { get; set; }
+    
     public Role Role { get; set; }
-    public string? PhoneNumber { get; set; }
+    public string? Phone { get; set; }
     public DateTime? DateOfBirth { get; set; }
-    //public Gender? Gender { get; set; }
+    public Gender? Gender { get; set; }
+    public string? IdentityId { get; set; }
 
+    public DateTime? IssuedDate { get; set; }
+
+    public string? IssuedPlace { get; set; }
+
+    public string? BankNumber { get; set; }
+
+    public int? BankId { get; set; }
+
+    public string? AccoountHolder { get; set; }
+
+    public bool? IsActive { get; set; }
     public string AccessToken { get; set; }
 }
