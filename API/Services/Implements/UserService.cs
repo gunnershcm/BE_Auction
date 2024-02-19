@@ -49,12 +49,12 @@ public class UserService : IUserService
         return entity;
     }
 
-    public async Task<List<GetUserResponse>> GetByUser(int userId)
-    {
-        var result = await _userRepository.WhereAsync(x => x.Id.Equals(userId));
-        var response = _mapper.Map<List<GetUserResponse>>(result);
-        return response;
-    }
+    //public async Task<List<GetUserResponse>> GetByUser(int userId)
+    //{
+    //    var result = await _userRepository.WhereAsync(x => x.Id.Equals(userId));
+    //    var response = _mapper.Map<List<GetUserResponse>>(result);
+    //    return response;
+    //}
 
     public async Task<User> Create(CreateUserRequest model)
     {

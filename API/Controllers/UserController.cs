@@ -84,7 +84,7 @@ public class UserController : BaseController
     {
         try
         {
-            var result = await _userService.GetByUser(CurrentUserID);
+            var result = await _userService.GetById(CurrentUserID);
             return Ok(result);
         }
         catch (NotFoundException ex)
