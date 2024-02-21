@@ -12,6 +12,9 @@ using API.Services.Implements;
 using API.Services.Interfaces;
 using API.Utils;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder.Extensions;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -20,7 +23,8 @@ var CorsPolicy = "CorsPolicy";
 
 builder.Services.AddDbContext<AuctionDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AuctionDB"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AuctionDB"), sqlServerOptions =>
+        sqlServerOptions.EnableRetryOnFailure());
 });
 
 builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
@@ -99,6 +103,15 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod();
         });
 });
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "admin_sdk.json")),
+    ProjectId = "swp-project-cef68"
+});
+
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
+    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "admin_dk.json"));
 
 builder.Services.AddLogging();
 var app = builder.Build();
