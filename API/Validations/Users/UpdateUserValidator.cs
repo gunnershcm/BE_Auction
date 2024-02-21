@@ -17,18 +17,9 @@ namespace API.Validations.Users
             RuleFor(u => u.Username)
                 .NotEmpty().WithMessage("Username is required");
 
-            RuleFor(u => u.Password)
-                .NotEmpty().WithMessage("Password is required")
-                .MinimumLength(6).WithMessage("Password must be at least 6 characters long");
-
             RuleFor(u => u.Email)
                 .EmailAddress().WithMessage("Email Address is invalid")
                 .NotEmpty().WithMessage("Email Address is required.");
-
-            RuleFor(u => u.Role)
-                .IsInEnum()
-                .Must(role => role >= Role.Admin && role <= Role.Member)
-                .WithMessage("Role must be valid long and is required.");
 
             RuleFor(u => u.Phone)
                 .Length(10).WithMessage("Phone is invalid")
