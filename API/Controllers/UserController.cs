@@ -133,6 +133,26 @@ public class UserController : BaseController
         }
     }
 
+    [Authorize]
+    [HttpPut("available")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
+    public async Task<IActionResult> UpdateUserAvailable([FromBody] UpdateUserRequest model)
+    {
+        try
+        {
+            var user = await _userService.Update(CurrentUserID, model);
+            return Ok("Updated Successfully");
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [Authorize(Roles = Roles.ADMIN)]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(IEnumerable<User>), 200)]

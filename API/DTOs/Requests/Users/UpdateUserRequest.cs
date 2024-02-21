@@ -12,11 +12,7 @@ namespace API.DTOs.Requests.Users
 
         public string? Username { get; set; }
 
-        public string? Password { get; set; }
-
         public string? Email { get; set; }
-
-        public Role? Role { get; set; }
 
         public DateTime DateOfBirth { get; set; }
 
@@ -25,5 +21,17 @@ namespace API.DTOs.Requests.Users
         public string? Address { get; set; }
 
         public Gender? Gender { get; set; }
+
+        public string? IdentityId { get; set; }
+
+        public DateTime? IssuedDate { get; set; }
+
+        public string? IssuedPlace { get; set; }
+
+        public string? BankNumber { get; set; }
+
+        public int? BankId { get; set; }
+
+        public string? AccoountHolder { get; set; }
     }
 }
