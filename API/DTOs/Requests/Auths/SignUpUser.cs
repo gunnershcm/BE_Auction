@@ -18,11 +18,11 @@ namespace API.DTOs.Requests.Auths
 
         public DateTime DateOfBirth { get; set; }
 
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         public string Address { get; set; }
 
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         public string IdentityId { get; set; }
 
