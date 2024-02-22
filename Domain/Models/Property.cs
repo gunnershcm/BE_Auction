@@ -28,5 +28,7 @@ namespace Domain.Models
 
         public Post? Post { get; set; }
 
+        public PropertyType? PropertyType { get; set; }
+
     }
 }

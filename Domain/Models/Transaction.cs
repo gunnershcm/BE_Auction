@@ -28,7 +28,6 @@ namespace Domain.Models
 
         public Auction? Auction { get; set; }
 
-        [JsonIgnore]
         public TransactionType? TransactionType { get; set;}
 
 

@@ -39,6 +39,8 @@ namespace Persistence.Context
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAuction> UserAuctions { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<PropertyType> PropertyTypes { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

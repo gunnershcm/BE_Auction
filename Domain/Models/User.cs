@@ -33,7 +33,7 @@ namespace Domain.Models
 
         public Role Role { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string? Phone { get; set; }
 
@@ -51,7 +51,7 @@ namespace Domain.Models
 
         public int? BankId { get; set; }
 
-        public string? AccoountHolder { get; set; }
+        public string? BankNameHolder { get; set; }
 
         public bool? IsActive { get; set; }
 

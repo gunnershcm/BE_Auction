@@ -28,7 +28,7 @@ public class LoginResponse : IMapFrom<User>
 
     public int? BankId { get; set; }
 
-    public string? AccoountHolder { get; set; }
+    public string? BankNameHolder { get; set; }
 
     public bool? IsActive { get; set; }
     public string AccessToken { get; set; }

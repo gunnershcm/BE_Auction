@@ -7,21 +7,19 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class TransactionType 
+    public class PropertyType 
     {
-        public TransactionType()
+        public PropertyType()
         {
-            Transactions = new HashSet<Transaction>();
+            Properties = new HashSet<Property>();
         }
 
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
-
         [JsonIgnore]
-        public virtual ICollection<Transaction>? Transactions { get; set; }
+        public virtual ICollection<Property>? Properties { get; set; }
 
     }
 }

@@ -12,7 +12,7 @@ namespace API.DTOs.Responses.Posts
 
         public string Content { get; set; }
 
-        public string? Response { get; set; }
+        public string? Reason { get; set; }
         
         public string PropertyName { get; set; }
 

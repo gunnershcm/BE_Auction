@@ -89,7 +89,7 @@ namespace API.Services.Implements
             var target = await _postRepository.FirstOrDefaultAsync(c => c.Id.Equals(postId)) ??
                          throw new KeyNotFoundException();
             target.PostStatus = PostStatus.Approved;
-            target.Response = null;
+            target.Reason = null;
             await _postRepository.UpdateAsync(target);
         }
 

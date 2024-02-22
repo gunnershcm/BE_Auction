@@ -13,7 +13,7 @@ namespace Domain.Models
 
         public string Content { get; set; }
 
-        public string? Response { get; set; }
+        public string? Reason { get; set; }
 
         public PostStatus PostStatus { get; set; }
 
@@ -25,19 +25,23 @@ namespace Domain.Models
 
         public string PropertyImage { get; set; }
 
-        public string PropertyAddress { get; set; }
+        public string PropertyStreet { get; set; }
 
-        public double PropertyRevervePrice { get; set; }
+        public string PropertyWard { get; set; }
+
+        public string PropertyDistrict { get; set; }
+
+        public string PropertyCity { get; set; }
+
+        public double Area { get; set; }
+
+        public double PropertyRevervePrice { get; set; }    
 
         public int AuthorId { get; set; }
         public User Author { get; set; }
 
         public int? ApproverId { get; set; }
-        public User? Approver { get; set; }
-
-        //public int PropertyId { get; set; }
-
-        
+        public User? Approver { get; set; }      
 
     }
 }
