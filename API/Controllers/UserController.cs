@@ -174,7 +174,7 @@ public class UserController : BaseController
     }
 
     [Authorize]
-    [HttpPatch("UploadAvatarFirebase")]
+    [HttpPatch("ChangeAvatar")]
     public async Task<IActionResult> UploadImageFirebase(IFormFile file)
     {
         try
