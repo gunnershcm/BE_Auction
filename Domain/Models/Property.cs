@@ -10,15 +10,17 @@ namespace Domain.Models
     {
         public string Name { get; set; }
 
-        public string Title { get; set; }
+        public string Street { get; set; }
 
-        public string Description { get; set; }
+        public string Ward { get; set; }
 
-        public string Image { get; set; }
+        public string District { get; set; }
 
-        public string Address { get; set; }
+        public string City { get; set; }
 
         public double RevervePrice { get; set; }
+
+        public double PropertyArea { get; set; }
 
         public int AuthorId { get; set; }
 
@@ -28,7 +30,6 @@ namespace Domain.Models
 
         public Post? Post { get; set; }
 
-        public PropertyType? PropertyType { get; set; }
-
+        
     }
 }

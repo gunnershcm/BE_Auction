@@ -11,7 +11,7 @@ namespace Domain.Models
     {
         public PropertyType()
         {
-            Properties = new HashSet<Property>();
+            Posts = new HashSet<Post>();
         }
 
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace Domain.Models
         public string Name { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Property>? Properties { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
 
     }
 }

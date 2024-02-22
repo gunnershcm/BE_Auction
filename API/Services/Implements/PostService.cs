@@ -27,7 +27,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> Get()
         {
             var result = await _postRepository.GetAsync(navigationProperties: new string[]
-                { "Approver"});
+                { "Approver", "PropertyType"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             return response;
         }
@@ -44,7 +44,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> GetByUser(int userId)
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId),
-                new string[] { "Author", "Approver" });
+                new string[] { "Author", "Approver", "PropertyType" });
             var response = _mapper.Map<List<GetPostResponse>>(result);
             return response;
         }
@@ -53,7 +53,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> GetPostApproveByUser(int userId)
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
-            && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver" });
+            && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver", "PropertyType" });
             var response = _mapper.Map<List<GetPostResponse>>(result);
             return response;
         }
@@ -61,7 +61,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> GetPostRejectByUser(int userId)
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
-            && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver" });
+            && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver", "PropertyType" });
             var response = _mapper.Map<List<GetPostResponse>>(result);
             return response;
         }

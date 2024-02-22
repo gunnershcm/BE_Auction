@@ -200,7 +200,7 @@ namespace API.Controllers
         {
             try
             {
-                var ticket = await _postRepository.FirstOrDefaultAsync(x => x.Id == postId);
+                var post = await _postRepository.FirstOrDefaultAsync(x => x.Id == postId);
                 await _postService.Remove(postId);
                 return Ok("Remove Post Successfully");
             }

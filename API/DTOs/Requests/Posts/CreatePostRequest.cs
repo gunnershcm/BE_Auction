@@ -13,13 +13,17 @@ namespace API.DTOs.Requests.Posts
 
         public string PropertyName { get; set; }
 
-        public string PropertyTitle { get; set; }
+        public List<string>? PropertyImages { get; set; }
 
-        public string PropertyDescription { get; set; }
+        public string PropertyStreet { get; set; }
 
-        public string PropertyImage { get; set; }
+        public string PropertyWard { get; set; }
 
-        public string PropertyAddress { get; set; }
+        public string PropertyDistrict { get; set; }
+
+        public string PropertyCity { get; set; }
+
+        public double PropertyArea { get; set; }
 
         public double PropertyRevervePrice { get; set; }
     }

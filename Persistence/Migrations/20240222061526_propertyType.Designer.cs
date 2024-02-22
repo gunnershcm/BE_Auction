@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,10 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    partial class AuctionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240222061526_propertyType")]
+    partial class propertyType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,6 +180,9 @@ namespace Persistence.Migrations
                     b.Property<int?>("ApproverId")
                         .HasColumnType("int");
 
+                    b.Property<double>("Area")
+                        .HasColumnType("float");
+
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
@@ -197,14 +202,19 @@ namespace Persistence.Migrations
                     b.Property<int>("PostStatus")
                         .HasColumnType("int");
 
-                    b.Property<double>("PropertyArea")
-                        .HasColumnType("float");
-
                     b.Property<string>("PropertyCity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PropertyDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PropertyDistrict")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyImage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -216,6 +226,10 @@ namespace Persistence.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("PropertyStreet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -254,12 +268,12 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("City")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -267,7 +281,11 @@ namespace Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("District")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -281,17 +299,10 @@ namespace Persistence.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<double>("PropertyArea")
-                        .HasColumnType("float");
-
                     b.Property<double>("RevervePrice")
                         .HasColumnType("float");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ward")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

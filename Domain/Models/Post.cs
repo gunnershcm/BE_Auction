@@ -19,11 +19,7 @@ namespace Domain.Models
 
         public string PropertyName { get; set; }
 
-        public string PropertyTitle { get; set; }
-
-        public string PropertyDescription { get; set; }
-
-        public string PropertyImage { get; set; }
+        //public string PropertyImage { get; set; }
 
         public string PropertyStreet { get; set; }
 
@@ -33,7 +29,7 @@ namespace Domain.Models
 
         public string PropertyCity { get; set; }
 
-        public double Area { get; set; }
+        public double PropertyArea { get; set; }
 
         public double PropertyRevervePrice { get; set; }    
 
@@ -41,7 +37,11 @@ namespace Domain.Models
         public User Author { get; set; }
 
         public int? ApproverId { get; set; }
-        public User? Approver { get; set; }      
+        public User? Approver { get; set; }
+
+
+        public int? PropertyTypeId { get; set; }
+        public PropertyType? PropertyType { get; set; }
 
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SWP_10\\BE_Auction\\BE_Auction\\Persistence\\Persistence.csproj": {}
+    "D:\\SWP_220224\\Persistence\\Persistence.csproj": {}
   },
   "projects": {
-    "D:\\SWP_10\\BE_Auction\\BE_Auction\\Domain\\Domain.csproj": {
+    "D:\\SWP_220224\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\SWP_220224\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Domain\\Domain.csproj",
+        "projectPath": "D:\\SWP_220224\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\hoang\\.nuget\\packages\\",
-        "outputPath": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Domain\\obj\\",
+        "outputPath": "D:\\SWP_220224\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -74,14 +74,14 @@
         }
       }
     },
-    "D:\\SWP_10\\BE_Auction\\BE_Auction\\Persistence\\Persistence.csproj": {
+    "D:\\SWP_220224\\Persistence\\Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Persistence\\Persistence.csproj",
+        "projectUniqueName": "D:\\SWP_220224\\Persistence\\Persistence.csproj",
         "projectName": "Persistence",
-        "projectPath": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Persistence\\Persistence.csproj",
+        "projectPath": "D:\\SWP_220224\\Persistence\\Persistence.csproj",
         "packagesPath": "C:\\Users\\hoang\\.nuget\\packages\\",
-        "outputPath": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Persistence\\obj\\",
+        "outputPath": "D:\\SWP_220224\\Persistence\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -103,8 +103,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\SWP_10\\BE_Auction\\BE_Auction\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\SWP_10\\BE_Auction\\BE_Auction\\Domain\\Domain.csproj"
+              "D:\\SWP_220224\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\SWP_220224\\Domain\\Domain.csproj"
               }
             }
           }

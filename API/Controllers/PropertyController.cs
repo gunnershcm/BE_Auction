@@ -125,7 +125,7 @@ namespace API.Controllers
         {
             try
             {
-                var ticket = await _propertyRepository.FirstOrDefaultAsync(x => x.Id == id);
+                var post = await _propertyRepository.FirstOrDefaultAsync(x => x.Id == id);
                 await _propertyService.Remove(id);
                 return Ok("Remove Property Successfully");
             }
