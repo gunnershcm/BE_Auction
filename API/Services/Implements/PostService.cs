@@ -4,6 +4,7 @@ using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.Users;
 using API.Services.Interfaces;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Constants.Enums;
 using Domain.Exceptions;
 using Domain.Models;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 using System.Net.Sockets;
+using static Grpc.Core.Metadata;
 
 namespace API.Services.Implements
 {
@@ -19,12 +21,15 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<Post> _postRepository;
         private readonly IMapper _mapper;
         private readonly IPropertyService _propertyService;
+        private readonly IUrlResourceService _urlResourceService;
 
-        public PostService(IRepositoryBase<Post> postRepository, IMapper mapper, IPropertyService propertyService)
+        public PostService(IRepositoryBase<Post> postRepository, IMapper mapper,
+            IPropertyService propertyService, IUrlResourceService urlResourceService)
         {
             _postRepository = postRepository;
             _mapper = mapper;
             _propertyService = propertyService;
+            _urlResourceService = urlResourceService;
         }
 
         public async Task<List<GetPostResponse>> Get()
@@ -32,6 +37,10 @@ namespace API.Services.Implements
             var result = await _postRepository.GetAsync(navigationProperties: new string[]
                 { "Approver", "PropertyType"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
+            foreach (var entity in response)
+            {
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+            } 
             return response;
         }
 
@@ -40,6 +49,7 @@ namespace API.Services.Implements
             var result =
                 await _postRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("Post is not exist"));
             var entity = _mapper.Map(result, new GetPostResponse());
+            entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
             DataResponse.CleanNullableDateTime(entity);
             return entity;
         }
@@ -49,6 +59,10 @@ namespace API.Services.Implements
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId),
                 new string[] { "Author", "Approver", "PropertyType" });
             var response = _mapper.Map<List<GetPostResponse>>(result);
+            foreach (var entity in response)
+            {
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+            }
             return response;
         }
    
@@ -58,6 +72,10 @@ namespace API.Services.Implements
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
             && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver", "PropertyType" });
             var response = _mapper.Map<List<GetPostResponse>>(result);
+            foreach (var entity in response)
+            {
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+            }
             return response;
         }
 
@@ -66,6 +84,10 @@ namespace API.Services.Implements
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
             && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver", "PropertyType" });
             var response = _mapper.Map<List<GetPostResponse>>(result);
+            foreach (var entity in response)
+            {
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+            }
             return response;
         }
 
@@ -74,8 +96,12 @@ namespace API.Services.Implements
             Post entity = _mapper.Map(model, new Post());
             entity.AuthorId = createdById;
             entity.PostStatus = PostStatus.Requesting;
-            await _postRepository.CreateAsync(entity);
-            return entity;
+            var result = await _postRepository.CreateAsync(entity);
+            if (model.PropertyImages != null)
+            {
+                await _urlResourceService.Add(Tables.POST, result.Id, model.PropertyImages);
+            }
+            return result;
         }
 
         public async Task<Post> UpdateByMember(int id, UpdatePostRequest model)
@@ -83,8 +109,12 @@ namespace API.Services.Implements
             var target =
                 await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ?? throw new KeyNotFoundException();
             var entity = _mapper.Map(model, target);
-            await _postRepository.UpdateAsync(entity);
-            return entity;
+            var result = await _postRepository.UpdateAsync(entity);
+            if (model.PropertyImages != null)
+            {
+                await _urlResourceService.Update(Tables.POST, result.Id, model.PropertyImages);
+            }
+            return result;
         }
 
         public async Task Approve(int postId)
@@ -94,9 +124,10 @@ namespace API.Services.Implements
             target.PostStatus = PostStatus.Approved;
             target.Reason = null;
             await _postRepository.UpdateAsync(target);
-            var model = new CreatePropertyRequest();        
+            var model = new CreatePropertyRequest();
+            //var modelPost = new CreatePostRequest();
             await _propertyService.CreateProperty(postId, model);
-
+            //model.Images = modelPost.PropertyImages;
             //await ModifyPostStatus(postId, PostStatus.Completed);
         }
 

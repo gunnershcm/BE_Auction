@@ -4,6 +4,7 @@ using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.Properties;
 using API.Services.Interfaces;
 using AutoMapper;
+using Domain.Constants;
 using Domain.Constants.Enums;
 using Domain.Models;
 using Persistence.Helpers;
@@ -15,14 +16,15 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<Property> _propertyRepository;
         private readonly IRepositoryBase<Post> _postRepository;
-        //private readonly IPostService _postService;
+        private readonly IUrlResourceService _urlResourceService;
         private readonly IMapper _mapper;
 
-        public PropertyService(IRepositoryBase<Property> propertyRepository, IMapper mapper, IRepositoryBase<Post> postRepository)
+        public PropertyService(IRepositoryBase<Property> propertyRepository, IMapper mapper, 
+            IRepositoryBase<Post> postRepository, IUrlResourceService urlResourceService)
         {
             _propertyRepository = propertyRepository;
             _mapper = mapper;
-            //_postService = postService;
+            _urlResourceService = urlResourceService;
             _postRepository = postRepository;
         }
 
@@ -31,6 +33,10 @@ namespace API.Services.Implements
             var result = await _propertyRepository.GetAsync(navigationProperties: new string[]
                 { "Author", "Post"});
             var response = _mapper.Map<List<GetPropertyResponse>>(result);
+            foreach (var entity in response)
+            {
+                entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
+            }
             return response;
         }
 
@@ -39,6 +45,7 @@ namespace API.Services.Implements
             var result =
                 await _propertyRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("Property is not exist"));
             var entity = _mapper.Map(result, new GetPropertyResponse());
+            entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
             DataResponse.CleanNullableDateTime(entity);
             return entity;
         }
@@ -47,7 +54,6 @@ namespace API.Services.Implements
         {
             var post = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(postId)) ??   
                      throw new KeyNotFoundException();           
-            //await _postService.ModifyPostStatus(postId, PostStatus.Completed);
             Property entity = _mapper.Map(model, new Property());
             entity.AuthorId = post.AuthorId;
             entity.PostId = postId;
@@ -58,18 +64,25 @@ namespace API.Services.Implements
             entity.City = post.PropertyCity;
             entity.Area= post.PropertyArea;
             entity.RevervePrice = post.PropertyRevervePrice;
-            await _propertyRepository.CreateAsync(entity);
-            return entity;
+            var result = await _propertyRepository.CreateAsync(entity);
+            if (model.Images != null)
+            {
+                await _urlResourceService.Add(Tables.PROPERTY, result.Id, model.Images);
+            }
+            return result;
         }
-
 
         public async Task<Property> UpdateProperty(int id, UpdatePropertyRequest model)
         {
             var target =
                 await _propertyRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ?? throw new KeyNotFoundException();
             var entity = _mapper.Map(model, target);
-            await _propertyRepository.UpdateAsync(entity);
-            return entity;
+            var result = await _propertyRepository.UpdateAsync(entity);
+            if (model.Images != null)
+            {
+                await _urlResourceService.Update(Tables.PROPERTY, result.Id, model.Images);
+            }
+            return result;
         }
 
         public async Task Remove(int id)

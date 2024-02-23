@@ -16,10 +16,6 @@ namespace API.DTOs.Responses.Posts
 
         public string PropertyName { get; set; }
 
-        public string PropertyTitle { get; set; }
-
-        public string PropertyDescription { get; set; }
-
         public List<string>? PropertyImages { get; set; }
 
         public string PropertyStreet { get; set; }
