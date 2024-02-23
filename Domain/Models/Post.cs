@@ -19,8 +19,6 @@ namespace Domain.Models
 
         public string PropertyName { get; set; }
 
-        //public string PropertyImage { get; set; }
-
         public string PropertyStreet { get; set; }
 
         public string PropertyWard { get; set; }

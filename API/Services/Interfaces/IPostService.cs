@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Requests.Posts;
+using API.DTOs.Requests.Properties;
 using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.Users;
 using Domain.Constants.Enums;

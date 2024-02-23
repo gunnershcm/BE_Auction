@@ -254,6 +254,9 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<double>("Area")
+                        .HasColumnType("float");
+
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
@@ -280,9 +283,6 @@ namespace Persistence.Migrations
 
                     b.Property<int>("PostId")
                         .HasColumnType("int");
-
-                    b.Property<double>("PropertyArea")
-                        .HasColumnType("float");
 
                     b.Property<double>("RevervePrice")
                         .HasColumnType("float");
@@ -395,6 +395,41 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TransactionTypes");
+                });
+
+            modelBuilder.Entity("Domain.Models.UrlResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Table")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeletedAt");
+
+                    b.ToTable("UrlResources");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>

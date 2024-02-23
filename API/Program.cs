@@ -41,8 +41,6 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidateModelStat
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AuctionDbContext>(opt =>
-    opt.UseInMemoryDatabase("AuctionDB"));
 builder.Services.AddSwaggerGen(c =>
 {   
     c.SwaggerDoc("v1", new() { Title = "Auction", Version = "v1" });

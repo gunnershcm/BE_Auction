@@ -82,21 +82,21 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = Roles.STAFF)]
-        [HttpPost("new")]
-        [ProducesResponseType(typeof(IEnumerable<GetPropertyResponse>), 200)]
-        public async Task<IActionResult> CreateProperty(int postId, [FromBody] CreatePropertyRequest model)
-        {
-            try
-            {
-                Property entity = await _propertyService.CreateProperty(postId,model);
-                return Ok(entity);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[Authorize(Roles = Roles.STAFF)]
+        //[HttpPost("new")]
+        //[ProducesResponseType(typeof(IEnumerable<GetPropertyResponse>), 200)]
+        //public async Task<IActionResult> CreateProperty(int postId, [FromBody] CreatePropertyRequest model)
+        //{
+        //    try
+        //    {
+        //        Property entity = await _propertyService.CreateProperty(postId,model);
+        //        return Ok(entity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [Authorize(Roles = Roles.STAFF)]
         [HttpPut("{id}")]

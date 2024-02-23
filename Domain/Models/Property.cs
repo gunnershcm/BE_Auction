@@ -20,7 +20,7 @@ namespace Domain.Models
 
         public double RevervePrice { get; set; }
 
-        public double PropertyArea { get; set; }
+        public double Area { get; set; }
 
         public int AuthorId { get; set; }
 

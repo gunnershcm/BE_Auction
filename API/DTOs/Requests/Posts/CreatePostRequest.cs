@@ -26,5 +26,7 @@ namespace API.DTOs.Requests.Posts
         public double PropertyArea { get; set; }
 
         public double PropertyRevervePrice { get; set; }
+
+        public int? PropertyTypeId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Requests.Posts;
+using API.DTOs.Requests.Properties;
 using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.Users;
 using API.Services.Interfaces;
@@ -17,11 +18,13 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<Post> _postRepository;
         private readonly IMapper _mapper;
+        private readonly IPropertyService _propertyService;
 
-        public PostService(IRepositoryBase<Post> postRepository, IMapper mapper)
+        public PostService(IRepositoryBase<Post> postRepository, IMapper mapper, IPropertyService propertyService)
         {
             _postRepository = postRepository;
-            _mapper = mapper;           
+            _mapper = mapper;
+            _propertyService = propertyService;
         }
 
         public async Task<List<GetPostResponse>> Get()
@@ -91,6 +94,10 @@ namespace API.Services.Implements
             target.PostStatus = PostStatus.Approved;
             target.Reason = null;
             await _postRepository.UpdateAsync(target);
+            var model = new CreatePropertyRequest();        
+            await _propertyService.CreateProperty(postId, model);
+
+            //await ModifyPostStatus(postId, PostStatus.Completed);
         }
 
         public async Task<Post> Reject(int postId, UpdateRejectReason model)

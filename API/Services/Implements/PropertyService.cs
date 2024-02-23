@@ -15,14 +15,14 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<Property> _propertyRepository;
         private readonly IRepositoryBase<Post> _postRepository;
-        private readonly IPostService _postService;
+        //private readonly IPostService _postService;
         private readonly IMapper _mapper;
 
-        public PropertyService(IRepositoryBase<Property> propertyRepository, IMapper mapper, IPostService postService, IRepositoryBase<Post> postRepository)
+        public PropertyService(IRepositoryBase<Property> propertyRepository, IMapper mapper, IRepositoryBase<Post> postRepository)
         {
             _propertyRepository = propertyRepository;
             _mapper = mapper;
-            _postService = postService;
+            //_postService = postService;
             _postRepository = postRepository;
         }
 
@@ -47,10 +47,17 @@ namespace API.Services.Implements
         {
             var post = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(postId)) ??   
                      throw new KeyNotFoundException();           
-            await _postService.ModifyPostStatus(postId, PostStatus.Completed);
+            //await _postService.ModifyPostStatus(postId, PostStatus.Completed);
             Property entity = _mapper.Map(model, new Property());
             entity.AuthorId = post.AuthorId;
             entity.PostId = postId;
+            entity.Name = post.PropertyName;
+            entity.Street = post.PropertyStreet;
+            entity.Ward = post.PropertyWard;
+            entity.District = post.PropertyDistrict;
+            entity.City = post.PropertyCity;
+            entity.Area= post.PropertyArea;
+            entity.RevervePrice = post.PropertyRevervePrice;
             await _propertyRepository.CreateAsync(entity);
             return entity;
         }

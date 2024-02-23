@@ -16,10 +16,6 @@ namespace API.DTOs.Responses.Posts
 
         public string PropertyName { get; set; }
 
-        public string PropertyTitle { get; set; }
-
-        public string PropertyDescription { get; set; }
-
         public List<string>? PropertyImages { get; set; }
 
         public string PropertyStreet { get; set; }
@@ -42,5 +38,7 @@ namespace API.DTOs.Responses.Posts
         public int? ApproverId { get; set; }
         public User? Approver { get; set; }
 
+        public int? PropertyTypeId { get; set; }
+        public PropertyType? PropertyType { get; set; }
     }
 }

@@ -40,6 +40,7 @@ namespace Persistence.Context
         public virtual DbSet<UserAuction> UserAuctions { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
+        public virtual DbSet<UrlResource> UrlResources { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
