@@ -30,7 +30,9 @@ public class GetUserResponse : IMapFrom<User>
     public int? BankId { get; set; }
 
     public string? BankNameHolder { get; set; }
+
     public DateTime? DateOfBirth { get; set; }
+
     public DateTime? CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
     public DateTime? DeletedAt { get; set; }

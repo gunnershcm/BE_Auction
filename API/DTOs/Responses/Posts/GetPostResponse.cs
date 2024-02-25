@@ -32,6 +32,10 @@ namespace API.DTOs.Responses.Posts
 
         public PostStatus PostStatus { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
         public int AuthorId { get; set; }
         public User Author { get; set; }
 
