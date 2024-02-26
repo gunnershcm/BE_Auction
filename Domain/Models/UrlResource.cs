@@ -9,5 +9,6 @@ namespace Domain.Models
         public int EntityId { get; set; }
 
         public string Url { get; set; }
+
     }
 }
