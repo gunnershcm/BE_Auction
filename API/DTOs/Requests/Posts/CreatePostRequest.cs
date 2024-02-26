@@ -28,9 +28,5 @@ namespace API.DTOs.Requests.Posts
         public double PropertyRevervePrice { get; set; }
 
         public int? PropertyTypeId { get; set; }
-
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
     }
 }

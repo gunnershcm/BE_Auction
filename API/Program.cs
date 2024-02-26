@@ -34,6 +34,7 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
 builder.Services.AddScoped<IFirebaseService, FirebaseService>();
 builder.Services.AddScoped<IUrlResourceService, UrlResourceService>();
+builder.Services.AddScoped<IAuctionService, AuctionService>();
 
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidateModelStateFilter>())

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Constants.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -22,6 +23,8 @@ namespace Domain.Models
 
         public DateTime EndTime { get; set; }
 
+        public AuctionStatus AuctionStatus { get; set; }
+
         public double RevervePrice { get; set; }
 
         public double JoiningFee { get; set; }
@@ -34,11 +37,11 @@ namespace Domain.Models
 
         public DateTime BiddingStartTime { get; set; }
 
-        public DateTime BiddingEndTime { get; set;}
+        public DateTime BiddingEndTime { get; set; }
 
         public double FinalPrice { get; set; }
 
-        public int PropertyId { get; set; }
+        public int? PropertyId { get; set; }
 
         public Property? Property { get; set; }
 
