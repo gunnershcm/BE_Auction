@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class PropertyType 
+    public class PropertyType : BaseEntity
     {
         public PropertyType()
         {
             Posts = new HashSet<Post>();
         }
-
-        public int Id { get; set; }
 
         public string Name { get; set; }
 

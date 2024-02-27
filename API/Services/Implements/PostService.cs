@@ -19,19 +19,20 @@ namespace API.Services.Implements
     public class PostService : IPostService
     {
         private readonly IRepositoryBase<Post> _postRepository;
-        //private readonly IRepositoryBase<PropertyType> _propertyTypeRepository;
+        private readonly IRepositoryBase<PropertyType> _propertyTypeRepository;
         private readonly IMapper _mapper;
         private readonly IPropertyService _propertyService;
         private readonly IUrlResourceService _urlResourceService;
 
         public PostService(IRepositoryBase<Post> postRepository, IMapper mapper,
-            IPropertyService propertyService, IUrlResourceService urlResourceService)
+            IPropertyService propertyService, IUrlResourceService urlResourceService, 
+            IRepositoryBase<PropertyType> propertyTypeRepository)
         {
             _postRepository = postRepository;
             _mapper = mapper;
             _propertyService = propertyService;
             _urlResourceService = urlResourceService;
-            //_propertyTypeRepository = propertyTypeRepository;
+            _propertyTypeRepository = propertyTypeRepository;
         }
 
         public async Task<List<GetPostResponse>> Get()
@@ -96,7 +97,7 @@ namespace API.Services.Implements
         public async Task<Post> CreatePostByMember(int createdById, CreatePostRequest model)
         {
             Post entity = _mapper.Map(model, new Post());
-            //await _propertyTypeRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyTypeId), new KeyNotFoundException("PropertyType is not exist"));
+            await _propertyTypeRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyTypeId), new KeyNotFoundException("PropertyType is not exist"));
             entity.AuthorId = createdById;
             entity.PostStatus = PostStatus.Requesting;
             var result = await _postRepository.CreateAsync(entity);
