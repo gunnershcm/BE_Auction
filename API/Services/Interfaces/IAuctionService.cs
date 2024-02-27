@@ -8,7 +8,7 @@ namespace API.Services.Interfaces
     {
         Task<List<GetAuctionResponse>> Get();
         Task<GetAuctionResponse> GetById(int id);
-        Task<Auction> CreateAuctionByStaff(int propertyId, CreateAuctionRequest model);
+        Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model);
         Task<Auction> UpdateByStaff(int id, UpdateAuctionRequest model);
         Task Remove(int id);
     }

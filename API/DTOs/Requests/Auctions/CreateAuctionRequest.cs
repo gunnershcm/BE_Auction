@@ -27,5 +27,7 @@ namespace API.DTOs.Requests.Auctions
 
         public List<string>? AuctionImages { get; set; }
 
+        public int? PropertyId { get; set; }
+
     }
 }

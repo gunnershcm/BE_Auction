@@ -562,7 +562,8 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Models.Property", "Property")
                         .WithMany()
-                        .HasForeignKey("PropertyId");
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Property");
                 });

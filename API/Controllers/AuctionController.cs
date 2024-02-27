@@ -81,11 +81,11 @@ namespace API.Controllers
         [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
         [HttpPost("staff/new")]
         [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
-        public async Task<IActionResult> CreateAuctionByStaff(int propertyId, [FromBody] CreateAuctionRequest model)
+        public async Task<IActionResult> CreateAuctionByStaff([FromBody] CreateAuctionRequest model)
         {
             try
             {
-                Auction entity = await _auctionService.CreateAuctionByStaff(propertyId, model);
+                Auction entity = await _auctionService.CreateAuctionByStaff(model);
                 return Ok(entity);
             }
             catch (Exception ex)

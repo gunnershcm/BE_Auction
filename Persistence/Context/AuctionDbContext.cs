@@ -67,6 +67,13 @@ namespace Persistence.Context
                 .WithMany(u => u.ApproverPosts)
                 .HasForeignKey(p => p.ApproverId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Auction>()
+                .HasOne(a => a.Property)
+                .WithMany()
+                .HasForeignKey(a => a.PropertyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
 

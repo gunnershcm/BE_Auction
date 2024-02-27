@@ -1,6 +1,7 @@
 ﻿using Domain.Constants.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -43,6 +44,7 @@ namespace Domain.Models
 
         public int? PropertyId { get; set; }
 
+        [ForeignKey("PropertyId")]
         public Property? Property { get; set; }
 
         [JsonIgnore]

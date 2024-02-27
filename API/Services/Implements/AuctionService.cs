@@ -54,24 +54,15 @@ namespace API.Services.Implements
             return entity;
         }
        
-        public async Task<Auction> CreateAuctionByStaff(int propertyId, CreateAuctionRequest model)
+        public async Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model)
         {
-            //var auction = await _propertyRepository.FirstOrDefaultAsync(x => x.Id.Equals(propertyId)) ??
-            //         throw new KeyNotFoundException();
             Auction entity = _mapper.Map(model, new Auction());
-            //entity.AuthorId = post.AuthorId;
-            //entity.PostId = postId;
-            //entity.Name = post.PropertyName;
-            //entity.Street = post.PropertyStreet;
-            //entity.Ward = post.PropertyWard;
-            //entity.District = post.PropertyDistrict;
-            //entity.City = post.PropertyCity;
-            //entity.Area = post.PropertyArea;
-            //entity.RevervePrice = post.PropertyRevervePrice;
+            await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
+            entity.AuctionStatus = AuctionStatus.ComingUp;
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {
-                await _urlResourceService.Add(Tables.PROPERTY, result.Id, model.AuctionImages);
+                await _urlResourceService.Add(Tables.AUCTION, result.Id, model.AuctionImages);
             }
             return result;
         }
