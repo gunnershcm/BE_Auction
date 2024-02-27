@@ -57,8 +57,10 @@ namespace API.Services.Implements
         public async Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model)
         {
             Auction entity = _mapper.Map(model, new Auction());
-            await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
+            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
             entity.AuctionStatus = AuctionStatus.ComingUp;
+            var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id);
+            model.AuctionImages = propertyImages;
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {

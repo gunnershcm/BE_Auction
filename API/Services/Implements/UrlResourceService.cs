@@ -20,6 +20,12 @@ namespace API.Services.Implements
             return result.ToList();
         }
 
+        public async Task<List<string>> GetUrls(string table, int entityId)
+        {
+            var urlResources = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId);
+            return urlResources.Select(x => x.Url).ToList();
+        }
+
         public async Task<List<UrlResource>> Add(string table, int entityId, List<string>? urls)
         {
             List<UrlResource> newList = new();
