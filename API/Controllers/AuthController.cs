@@ -107,6 +107,76 @@ public class AuthController : BaseController
         }
     }
 
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(string email)
+    {
+        try
+        {
+            await _authService.ForgotPassword(email);
+            return Ok("Send Mail successfully");
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (BadRequestException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("confirmPassword")]
+    public async Task<IActionResult> ConfirmChangePassWord(string confirmcode, string email)
+    {
+        try
+        {
+            await _authService.ConfirmChangePassWord(confirmcode,email);
+            return Ok("Confirm Code successfully");
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (BadRequestException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPatch("change-password-by-email")]
+    public async Task<IActionResult> ChangePasswordByEmail(string email, [FromBody] ChangePasswordByEmailRequest model)
+    {
+        try
+        {
+            await _authService.ChangePasswordByEmail(email, model);
+            return Ok("Update Successfully");
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UnauthorizedException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
+
+
+
 
     #region Handle Cookie
     private void RemoveCookie(string key)

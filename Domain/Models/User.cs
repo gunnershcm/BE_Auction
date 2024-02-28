@@ -59,6 +59,8 @@ namespace Domain.Models
 
         public string? PasswordResetToken { get; set; }
 
+        public string? ConfirmCode { get; set; }
+
         public DateTime? ResetTokenExpires { get; set; }
 
         [JsonIgnore]

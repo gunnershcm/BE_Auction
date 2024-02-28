@@ -10,6 +10,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Persistence.Helpers;
 //using MimeKit;
 using Persistence.Repositories.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,6 +18,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using static Grpc.Core.Metadata;
 
 
 namespace API.Services.Implements;
@@ -26,12 +28,14 @@ public class AuthService : IAuthService
     private readonly IRepositoryBase<User> _userRepository;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
+    private readonly IMailService _mailService;
 
-    public AuthService(IRepositoryBase<User> userRepository, IConfiguration configuration, IMapper mapper)
+    public AuthService(IRepositoryBase<User> userRepository, IConfiguration configuration, IMapper mapper, IMailService mailService)
     {
         _userRepository = userRepository;
         _configuration = configuration;
         _mapper = mapper;
+        _mailService = mailService;
     }
 
     public async Task<LoginResponse> Login(LoginRequest model)
@@ -77,6 +81,21 @@ public class AuthService : IAuthService
         await _userRepository.UpdateAsync(user);
     }
 
+    public async Task ChangePasswordByEmail(string email, ChangePasswordByEmailRequest model)
+    {
+        var user =  await _userRepository.FirstOrDefaultAsync(c => c.Email.Equals(email)) ??
+                        throw new KeyNotFoundException();
+
+        var passwordHasher = new PasswordHasher<User>();
+        if (!model.NewPassword.Equals(model.ConfirmNewPassword))
+        {
+            throw new BadRequestException("Password and Confirm Password does not match.");
+        }
+        user.Password = passwordHasher.HashPassword(user, model.NewPassword);
+
+        await _userRepository.UpdateAsync(user);
+    }
+
     public async Task ResetPassword(int uid, string token, ResetPasswordRequest model)
     {
         var user = await _userRepository.FirstOrDefaultAsync(x => x.Id.Equals(uid) && x.PasswordResetToken!.Equals(token));
@@ -104,9 +123,31 @@ public class AuthService : IAuthService
         entity.Password = passwordHasher.HashPassword(entity, model.Password);
         entity.IsActive = true;
         entity.Role = Role.Member;
-        await _userRepository.CreateAsync(entity);
+        await _userRepository.CreateAsync(entity);    
         return entity;
+
     }
+
+    public async Task ForgotPassword(string email)
+    {
+        var target = await _userRepository.FirstOrDefaultAsync(c => c.Email.Equals(email)) ??
+                        throw new KeyNotFoundException();
+        var code = CommonService.CreateRandomCode();
+        target.ConfirmCode = code;
+        await _userRepository.UpdateAsync(target);
+        string fullname = $"{target.FirstName} {target.LastName}";
+        await _mailService.SendUserCreatedNotification(fullname, target.Username, target.Email, code);
+    }
+
+    public async Task ConfirmChangePassWord(string confirmcode, string email)
+    {
+        var target = await _userRepository.FoundOrThrow(c => c.Email.Equals(email), new KeyNotFoundException("Email is not exist"));
+        if (confirmcode != target.ConfirmCode)
+        {
+            throw new KeyNotFoundException("Confirm Code is wrong");
+        }        
+    }
+
 
     #region Generate JWT Token
     private string GenerateToken(User user)

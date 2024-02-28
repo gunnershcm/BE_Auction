@@ -129,8 +129,7 @@ namespace API.Services.Implements
             target.Reason = null;
             await _postRepository.UpdateAsync(target);
             var model = new CreatePropertyRequest();
-            await _propertyService.CreateProperty(postId, model);
-            
+            await _propertyService.CreateProperty(postId, model);   
         }
 
         public async Task<Post> Reject(int postId, UpdateRejectReason model)

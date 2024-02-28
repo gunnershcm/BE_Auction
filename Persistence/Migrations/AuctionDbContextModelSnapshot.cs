@@ -469,6 +469,9 @@ namespace Persistence.Migrations
                     b.Property<string>("BankNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ConfirmCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
