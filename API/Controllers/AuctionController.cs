@@ -12,6 +12,7 @@ using API.DTOs.Responses.Auctions;
 using Persistence.Helpers;
 using API.DTOs.Requests.Auctions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using API.Services.Implements;
 
 namespace API.Controllers
 {
@@ -22,11 +23,11 @@ namespace API.Controllers
         private readonly IAuctionService _auctionService;
         private readonly IRepositoryBase<Auction> _auctionRepository;
 
-        public AuctionController(IAuctionService auctionService, IRepositoryBase<Auction> auctionRepository)
+        public AuctionController(IAuctionService auctionService, IRepositoryBase<Auction> auctionRepository, IUserAuctionService userAuctionService)
         {
             _auctionService = auctionService;
             _auctionRepository = auctionRepository;
-        }
+    }
 
         [Authorize]
         [HttpGet("all")]
@@ -133,7 +134,9 @@ namespace API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }     
+        }
+
+
 
     }
 }

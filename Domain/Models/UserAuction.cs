@@ -16,5 +16,7 @@ namespace Domain.Models
 
         public Auction? Auction { get; set; }
 
+        public bool isJoin { get; set; }
+
     }
 }

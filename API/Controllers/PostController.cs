@@ -223,7 +223,7 @@ namespace API.Controllers
         {
             try
             {
-                await _postService.Approve(postId);
+                await _postService.Approve(postId); 
                 return Ok("Approve Post Successfully");
             }
             catch (KeyNotFoundException)
