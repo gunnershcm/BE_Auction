@@ -38,7 +38,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> Get()
         {
             var result = await _postRepository.GetAsync(navigationProperties: new string[]
-                { "Approver", "PropertyType"});
+                { "Approver", "PropertyType", "Author"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -50,7 +50,8 @@ namespace API.Services.Implements
         public async Task<GetPostResponse> GetById(int id)
         {
             var result =
-                await _postRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("Post is not exist"));
+                await _postRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
+                { "Approver", "PropertyType", "Author"}) ?? throw new KeyNotFoundException("Post is not exist");
             var entity = _mapper.Map(result, new GetPostResponse());
             entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
             DataResponse.CleanNullableDateTime(entity);
@@ -180,13 +181,29 @@ namespace API.Services.Implements
                     break;
               
                 case PostStatus.Approved:
-
                     if (newStatus == PostStatus.Completed)
                     {
                         post.PostStatus = newStatus;
                         await _postRepository.UpdateAsync(post);
                     }
+                    else if (newStatus == PostStatus.Requesting)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }
+                    break;
 
+                case PostStatus.Rejected:
+                    if (newStatus == PostStatus.Completed)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }
+                    else if (newStatus == PostStatus.Requesting)
+                    {
+                        post.PostStatus = newStatus;
+                        await _postRepository.UpdateAsync(post);
+                    }
                     break;
                 default:
                     throw new BadRequestException();

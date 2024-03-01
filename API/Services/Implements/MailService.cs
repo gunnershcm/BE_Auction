@@ -42,7 +42,7 @@ namespace API.Services.Implements
     </div>
     <div style=""padding: 20px;"">
       <p>Dear {0},</p>
-      <p>We are delighted to welcome you to Auction Web! Your new account has been successfully created, and we're excited to have you on board. Below are your account details:</p>
+      <p>We are delighted to welcome you to Auction Web! Your account has been successfully reseted. Below are your account details:</p>
         <ul style=""list-style-type: none; padding: 0;"">
         <li style=""margin-bottom: 10px;""><strong>Username:</strong> {1}</li>
         <li style=""margin-bottom: 10px;""><strong>Password:</strong> {2}</li>

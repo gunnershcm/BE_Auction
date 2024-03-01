@@ -1,8 +1,13 @@
-﻿using API.Services.Implements;
+﻿using API.DTOs.Responses.Posts;
+using API.DTOs.Responses.UserAuctions;
+using API.Services.Implements;
+using API.Services.Interfaces;
 using Domain.Constants;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 
 namespace API.Controllers
@@ -18,6 +23,56 @@ namespace API.Controllers
         {
             _userAuctionService = userAuctionService;
             _userAuctionRepository = userAuctionRepository;
+        }
+
+        [Authorize]
+        [HttpGet("all")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        public async Task<IActionResult> GetAllUserAuction()
+        {
+            var result = await _userAuctionService.Get();
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        public async Task<IActionResult> GetUserAuctions(
+            [FromQuery] string? filter,
+            [FromQuery] string? sort,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            try
+            {
+                var result = await _userAuctionService.Get();
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
+                return Ok(pagedResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        public async Task<IActionResult> GetUserAuctionById(int id)
+        {
+            try
+            {
+                var result = await _userAuctionService.GetById(id);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize(Roles = Roles.MEMBER)]

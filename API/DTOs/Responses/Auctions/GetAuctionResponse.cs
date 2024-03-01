@@ -1,4 +1,5 @@
-﻿using API.Mappings;
+﻿using API.DTOs.Responses.Properties;
+using API.Mappings;
 using Domain.Constants.Enums;
 using Domain.Models;
 
@@ -35,7 +36,7 @@ namespace API.DTOs.Responses.Auctions
         public List<string>? AuctionImages { get; set; }
 
         public int? PropertyId { get; set; }    
-        public Property? Property { get; set; }
+        public GetPropertyResponse? Property { get; set; }
 
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }

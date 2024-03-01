@@ -43,7 +43,8 @@ namespace API.Services.Implements
         public async Task<GetPropertyResponse> GetById(int id)
         {
             var result =
-                await _propertyRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("Property is not exist"));
+                await _propertyRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
+                { "Author", "Post"}) ?? throw new KeyNotFoundException("Property is not exist");
             var entity = _mapper.Map(result, new GetPropertyResponse());
             entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
             DataResponse.CleanNullableDateTime(entity);

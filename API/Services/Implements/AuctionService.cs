@@ -47,7 +47,8 @@ namespace API.Services.Implements
         public async Task<GetAuctionResponse> GetById(int id)
         {
             var result =
-                await _auctionRepository.FoundOrThrow(u => u.Id.Equals(id), new KeyNotFoundException("Auction is not exist"));
+                await _auctionRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
+                {"Property"}) ?? throw new KeyNotFoundException("Auction is not exist");
             var entity = _mapper.Map(result, new GetAuctionResponse());
             entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id)).Select(x => x.Url).ToList();
             DataResponse.CleanNullableDateTime(entity);
