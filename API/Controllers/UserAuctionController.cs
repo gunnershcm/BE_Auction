@@ -1,4 +1,6 @@
-﻿using API.DTOs.Responses.Posts;
+﻿using API.DTOs.Requests.Posts;
+using API.DTOs.Requests.UserAuctions;
+using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.UserAuctions;
 using API.Services.Implements;
 using API.Services.Interfaces;
@@ -75,6 +77,26 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("available")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        public async Task<IActionResult> GetAuctionByUserAvailable()
+        {
+            try
+            {
+                var result = await _userAuctionService.GetAuctionByUser(CurrentUserID);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [Authorize(Roles = Roles.MEMBER)]
         [HttpPost("member/join-auction")]
         public async Task<IActionResult> JoinAuction(int auctionId)
@@ -83,6 +105,26 @@ namespace API.Controllers
             {
                 await _userAuctionService.JoinAuction(CurrentUserID, auctionId);
                 return Ok("Join Auction successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Auction is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.MEMBER)]
+        [HttpPatch("bidding-amount")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        public async Task<IActionResult> BiddingAmount(int auctionId, [FromBody] BiddingAmountRequest model)
+        {
+            try
+            {
+                await _userAuctionService.BiddingAmount(CurrentUserID, auctionId, model);
+                return Ok("Bidding Amount Successfully");
             }
             catch (KeyNotFoundException)
             {

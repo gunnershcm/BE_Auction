@@ -37,7 +37,6 @@ namespace Domain.Models
         public int? ApproverId { get; set; }
         public User? Approver { get; set; }
 
-
         public int? PropertyTypeId { get; set; }
         public PropertyType? PropertyType { get; set; }
 

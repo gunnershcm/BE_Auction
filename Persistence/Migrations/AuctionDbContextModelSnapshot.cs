@@ -549,6 +549,9 @@ namespace Persistence.Migrations
                     b.Property<int>("AuctionId")
                         .HasColumnType("int");
 
+                    b.Property<double?>("BiddingAmount")
+                        .HasColumnType("float");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
