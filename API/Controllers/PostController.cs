@@ -43,13 +43,14 @@ namespace API.Controllers
         public async Task<IActionResult> GetPosts(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
+            [FromQuery] int itemCount,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
                 var result = await _postService.Get();
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
                 return Ok(pagedResponse);
             }
             catch (Exception ex)

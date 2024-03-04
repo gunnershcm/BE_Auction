@@ -42,13 +42,14 @@ namespace API.Controllers
         public async Task<IActionResult> GetUserAuctions(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
+            [FromQuery] int itemCount,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
                 var result = await _userAuctionService.Get();
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
                 return Ok(pagedResponse);
             }
             catch (Exception ex)
@@ -57,26 +58,27 @@ namespace API.Controllers
             }
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //[ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
-        //public async Task<IActionResult> GetUserByAuction(int auctionId,
-        //    [FromQuery] string? filter,
-        //    [FromQuery] string? sort,
-        //    [FromQuery] int page = 1,
-        //    [FromQuery] int pageSize = 5)
-        //{
-        //    try
-        //    {
-        //        var result = await _userAuctionService.GetUserByAuction(auctionId);
-        //        var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
-        //        return Ok(pagedResponse);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        [Authorize]
+        [HttpGet("get-by-auction/{auctionId}")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
+        public async Task<IActionResult> GetUserByAuction(int auctionId,
+            [FromQuery] string? filter,
+            [FromQuery] string? sort,
+            [FromQuery] int itemCount,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 5)
+        {
+            try
+            {
+                var result = await _userAuctionService.GetUserByAuction(auctionId);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
+                return Ok(pagedResponse);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [Authorize]
         [HttpGet("{id}")]
