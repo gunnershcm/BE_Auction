@@ -9,7 +9,8 @@ namespace API.Services.Implements
         Task JoinAuction(int userId, int auctionId);
         Task<List<GetUserAuctionResponse>> Get();
         Task<GetUserAuctionResponse> GetById(int id);
-        Task<List<GetUserAuctionResponse>> GetAuctionByUser(int userId);
+        Task<List<GetUserByAuctionResponse>> GetUserByAuction(int auctionId);
+        Task<List<GetAuctionByUserResponse>> GetAuctionByUser(int userId);
         Task<UserAuction> BiddingAmount(int userId, int auctionId, BiddingAmountRequest model);
     }
 }

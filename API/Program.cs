@@ -12,10 +12,10 @@ using API.Services.Implements;
 using API.Services.Interfaces;
 using API.Utils;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Builder.Extensions;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Domain.Mails;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -28,6 +28,13 @@ builder.Services.AddDbContext<AuctionDbContext>(options =>
         sqlServerOptions.EnableRetryOnFailure());
 });
 
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
+builder.Services.AddHangfireServer();
+
 builder.Services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
 builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -39,6 +46,7 @@ builder.Services.AddScoped<IUrlResourceService, UrlResourceService>();
 builder.Services.AddScoped<IAuctionService, AuctionService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IUserAuctionService, UserAuctionService>();
+builder.Services.AddScoped<IHangFireService, HangFireService>();
 
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidateModelStateFilter>())
@@ -138,4 +146,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAutoWrapper();
 app.MapControllers();
+app.UseHangfireDashboard("/hangfire");
+app.MapHangfireDashboard();
+
+RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
 app.Run();

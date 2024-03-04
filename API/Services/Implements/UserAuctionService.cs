@@ -6,6 +6,7 @@ using AutoMapper;
 using Domain.Constants;
 using Domain.Constants.Enums;
 using Domain.Models;
+using Firebase.Auth;
 using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 
@@ -17,12 +18,13 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<Auction> _auctionRepository;
         private readonly IMapper _mapper;
 
-        public UserAuctionService(IRepositoryBase<UserAuction> userAuctionRepository, IRepositoryBase<Auction> auctionRepository, IMapper mapper)
+        public UserAuctionService(IRepositoryBase<UserAuction> userAuctionRepository, 
+            IRepositoryBase<Auction> auctionRepository, IMapper mapper)
         {
             _userAuctionRepository = userAuctionRepository;
             _auctionRepository = auctionRepository;
             _mapper = mapper;
-        }
+        }    
 
         public async Task<List<GetUserAuctionResponse>> Get()
         {
@@ -42,11 +44,19 @@ namespace API.Services.Implements
             return entity;
         }
 
-        public async Task<List<GetUserAuctionResponse>> GetAuctionByUser(int userId)
+        public async Task<List<GetUserByAuctionResponse>> GetUserByAuction(int auctionId)
+        {
+            var result = await _userAuctionRepository.WhereAsync(x => x.AuctionId.Equals(auctionId),
+                new string[] { "User" });
+            var response = _mapper.Map<List<GetUserByAuctionResponse>>(result);
+            return response;
+        }
+
+        public async Task<List<GetAuctionByUserResponse>> GetAuctionByUser(int userId)
         {
             var result = await _userAuctionRepository.WhereAsync(x => x.UserId.Equals(userId),
                 new string[] { "Auction" });
-            var response = _mapper.Map<List<GetUserAuctionResponse>>(result);
+            var response = _mapper.Map<List<GetAuctionByUserResponse>>(result);
             return response;
         }
          
@@ -76,15 +86,33 @@ namespace API.Services.Implements
             {
                 throw new InvalidOperationException("Bidding is not allowed for this auction.");
             } 
-            if (model.BiddingAmount > auction.RevervePrice)
+            //if (model.BiddingAmount > auction.RevervePrice && model.BiddingAmount > auction.FinalPrice)
+            //{
+            //    target.BiddingAmount = model.BiddingAmount;
+            //    auction.FinalPrice = model.BiddingAmount;
+            //    await _auctionRepository.UpdateAsync(auction);
+            //}
+            //else if (model.BiddingAmount > auction.RevervePrice && model.BiddingAmount < auction.FinalPrice)
+            //{
+            //    throw new InvalidOperationException("Bidding amount must be greater than current price");
+            //}
+            //else
+            //{
+            //    throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
+            //}
+            if (model.BiddingAmount < auction.RevervePrice)
             {
-                target.BiddingAmount = model.BiddingAmount;
-                auction.RevervePrice = model.BiddingAmount;
-                await _auctionRepository.UpdateAsync(auction);
+                throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
+            }
+            else if (model.BiddingAmount < auction.FinalPrice)
+            {
+                throw new InvalidOperationException("Bidding amount must be greater than current price");
             }
             else
             {
-                throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
+                target.BiddingAmount = model.BiddingAmount;
+                auction.FinalPrice = model.BiddingAmount;
+                await _auctionRepository.UpdateAsync(auction);
             }
             await _userAuctionRepository.UpdateAsync(entity);
             return entity;

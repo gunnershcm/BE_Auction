@@ -21,6 +21,7 @@ namespace API.Services.Implements
         private readonly IMapper _mapper;
         private readonly IPropertyService _propertyService;
         private readonly IUrlResourceService _urlResourceService;
+        private readonly IRepositoryBase<Post> _postRepository;
 
         public AuctionService(IRepositoryBase<Auction> auctionRepository, IMapper mapper,
             IPropertyService propertyService, IUrlResourceService urlResourceService, IRepositoryBase<Property> propertyRepository)
@@ -62,6 +63,7 @@ namespace API.Services.Implements
             entity.AuctionStatus = AuctionStatus.ComingUp;
             var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id);
             model.AuctionImages = propertyImages;
+            model.FinalPrice = 0;
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {
