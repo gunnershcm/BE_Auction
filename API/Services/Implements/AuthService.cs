@@ -136,7 +136,7 @@ public class AuthService : IAuthService
         target.ConfirmCode = code;
         await _userRepository.UpdateAsync(target);
         string fullname = $"{target.FirstName} {target.LastName}";
-        await _mailService.SendUserCreatedNotification(fullname, target.Username, target.Email, code);
+        await _mailService.SendUserResetNotification(fullname, target.Username, target.Email, code);
     }
 
     public async Task ConfirmChangePassWord(string confirmcode, string email)

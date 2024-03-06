@@ -1,6 +1,7 @@
 ﻿using API.DTOs.Requests.Posts;
 using API.DTOs.Requests.Properties;
 using API.DTOs.Responses.Posts;
+using API.Services.Implements;
 using API.Services.Interfaces;
 using Domain.Constants;
 using Domain.Constants.Enums;
@@ -43,14 +44,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetPosts(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
-            [FromQuery] int itemCount,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
                 var result = await _postService.Get();
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
                 return Ok(pagedResponse);
             }
             catch (Exception ex)
@@ -58,6 +58,7 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [Authorize]
         [HttpGet("{id}")]

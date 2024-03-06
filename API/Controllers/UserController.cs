@@ -42,14 +42,13 @@ public class UserController : BaseController
     public async Task<IActionResult> GetUsers(
          [FromQuery] string? filter,
          [FromQuery] string? sort,
-         [FromQuery] int itemCount,
          [FromQuery] int page = 1,
          [FromQuery] int pageSize = 5)
     {
         try
         {
             var result = await _userService.Get();
-            var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
+            var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
             return Ok(pagedResponse);
         }
         catch (Exception ex)

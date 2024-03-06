@@ -20,7 +20,7 @@ namespace API.Controllers
         private readonly IUserAuctionService _userAuctionService;
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
 
-        public UserAuctionController(IUserAuctionService userAuctionService, 
+        public UserAuctionController(IUserAuctionService userAuctionService,
             IRepositoryBase<UserAuction> userAuctionRepository)
         {
             _userAuctionService = userAuctionService;
@@ -42,18 +42,18 @@ namespace API.Controllers
         public async Task<IActionResult> GetUserAuctions(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
-            [FromQuery] int itemCount,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
                 var result = await _userAuctionService.Get();
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
                 return Ok(pagedResponse);
             }
             catch (Exception ex)
             {
+
                 return BadRequest(ex.Message);
             }
         }
@@ -64,14 +64,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetUserByAuction(int auctionId,
             [FromQuery] string? filter,
             [FromQuery] string? sort,
-            [FromQuery] int itemCount,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
                 var result = await _userAuctionService.GetUserByAuction(auctionId);
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
                 return Ok(pagedResponse);
             }
             catch (Exception ex)

@@ -10,7 +10,7 @@ namespace API.Services.Interfaces
     public interface IPostService
     {
         Task<List<GetPostResponse>> Get();
-        Task<GetPostResponse> GetById(int id);
+        Task<GetPostResponse> GetById(int postId);
         Task<List<GetPostResponse>> GetByUser(int userId);
         Task<List<GetPostResponse>> GetPostApproveByUser(int userId);
         Task<List<GetPostResponse>> GetPostRejectByUser(int userId);

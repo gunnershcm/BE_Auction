@@ -48,6 +48,7 @@ namespace API.Services.Implements
         {
             var result = await _userAuctionRepository.WhereAsync(x => x.AuctionId.Equals(auctionId),
                 new string[] { "User" });
+            result = result.OrderByDescending(x => x.BiddingAmount).ToList();
             var response = _mapper.Map<List<GetUserByAuctionResponse>>(result);
             return response;
         }
@@ -86,20 +87,6 @@ namespace API.Services.Implements
             {
                 throw new InvalidOperationException("Bidding is not allowed for this auction.");
             } 
-            //if (model.BiddingAmount > auction.RevervePrice && model.BiddingAmount > auction.FinalPrice)
-            //{
-            //    target.BiddingAmount = model.BiddingAmount;
-            //    auction.FinalPrice = model.BiddingAmount;
-            //    await _auctionRepository.UpdateAsync(auction);
-            //}
-            //else if (model.BiddingAmount > auction.RevervePrice && model.BiddingAmount < auction.FinalPrice)
-            //{
-            //    throw new InvalidOperationException("Bidding amount must be greater than current price");
-            //}
-            //else
-            //{
-            //    throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
-            //}
             if (model.BiddingAmount < auction.RevervePrice)
             {
                 throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");

@@ -52,7 +52,6 @@ namespace API.Services.Implements
                 {"Property"}) ?? throw new KeyNotFoundException("Auction is not exist");
             var entity = _mapper.Map(result, new GetAuctionResponse());
             entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id)).Select(x => x.Url).ToList();
-            DataResponse.CleanNullableDateTime(entity);
             return entity;
         }
        

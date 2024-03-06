@@ -47,14 +47,13 @@ namespace API.Services.Implements
             return response;
         }
 
-        public async Task<GetPostResponse> GetById(int id)
+        public async Task<GetPostResponse> GetById(int postId)
         {
             var result =
-                await _postRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
-                { "Approver", "PropertyType", "Author"}) ?? throw new KeyNotFoundException("Post is not exist");
+               await _postRepository.FirstOrDefaultAsync(u => u.Id.Equals(postId), new string[]
+               { "Approver", "PropertyType", "Author"}) ?? throw new KeyNotFoundException("Post is not exist");
             var entity = _mapper.Map(result, new GetPostResponse());
             entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
-            DataResponse.CleanNullableDateTime(entity);
             return entity;
         }
 

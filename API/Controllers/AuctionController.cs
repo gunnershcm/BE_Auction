@@ -44,14 +44,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetAuctions(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
-            [FromQuery] int itemCount,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
             try
             {
                 var result = await _auctionService.Get();
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort, itemCount);
+                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
                 return Ok(pagedResponse);
             }
             catch (Exception ex)
@@ -63,7 +62,7 @@ namespace API.Controllers
         [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
-        public async Task<IActionResult> GetPostById(int id)
+        public async Task<IActionResult> GetAuctionById(int id)
         {
             try
             {

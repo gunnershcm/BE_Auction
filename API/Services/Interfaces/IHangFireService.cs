@@ -3,5 +3,6 @@
     public interface IHangFireService
     {
         Task UpdateAuctionStatus();
+        Task SendMailAuction();
     }
 }
