@@ -114,6 +114,14 @@
               "target": "Package",
               "version": "[6.0.26, )"
             },
+            "PayPalCheckoutSdk": {
+              "target": "Package",
+              "version": "[1.0.4, )"
+            },
+            "PayPalHttp": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"

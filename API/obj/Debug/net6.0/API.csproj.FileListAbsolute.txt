@@ -327,3 +327,5 @@ D:\SWP_220224\API\bin\Debug\net6.0\sv\Hangfire.Core.resources.dll
 D:\SWP_220224\API\bin\Debug\net6.0\tr-TR\Hangfire.Core.resources.dll
 D:\SWP_220224\API\bin\Debug\net6.0\zh-TW\Hangfire.Core.resources.dll
 D:\SWP_220224\API\bin\Debug\net6.0\zh\Hangfire.Core.resources.dll
+D:\SWP_220224\API\bin\Debug\net6.0\PayPalCheckoutSdk.dll
+D:\SWP_220224\API\bin\Debug\net6.0\PayPalHttp-Dotnet.dll

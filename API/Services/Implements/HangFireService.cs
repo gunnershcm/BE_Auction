@@ -44,24 +44,24 @@ namespace API.Services.Implements
         {
             var currentTime = DateTime.Now;
             var auctionsStartingIn5Minutes = await _auctionRepository
-                .FirstOrDefaultAsync(a => a.BiddingStartTime == currentTime.AddMinutes(5));
+                .WhereAsync(a => a.BiddingStartTime == currentTime);
 
-            //foreach (var auction in auctionsStartingIn5Minutes)
-            //{
-            //    var userAuctions = await _userAuctionRepository
-            //        .WhereAsync(u => u.AuctionId == auction.Id);
-
-            //    foreach (var userAuction in userAuctions)
-            //    {
-            //        await _mailService.SendUserAuctionNotification(userAuction.User.Username, userAuction.User.Email);
-            //    }
-            //}
-            var userAuctions = await _userAuctionRepository.WhereAsync(u => u.AuctionId == auctionsStartingIn5Minutes.Id);
-            foreach (var userauction in userAuctions)
+            foreach (var auction in auctionsStartingIn5Minutes)
             {
-                await _mailService.SendUserAuctionNotification(userauction.User.Username, userauction.User.Email);
+                var userAuctions = await _userAuctionRepository
+                    .WhereAsync(u => u.AuctionId == auction.Id);
+
+                foreach (var userAuction in userAuctions)
+                {
+                    await _mailService.SendUserAuctionNotification(userAuction.User.Username, userAuction.User.Email);
+                }
             }
-            
+            //var userAuctions = await _userAuctionRepository.WhereAsync(u => u.AuctionId == auctionsStartingIn5Minutes.Id);
+            //foreach (var userauction in userAuctions)
+            //{
+            //    await _mailService.SendUserAuctionNotification(userauction.User.Username, userauction.User.Email);
+            //}
+
 
         }
 
