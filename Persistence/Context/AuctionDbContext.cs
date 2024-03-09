@@ -28,6 +28,7 @@ namespace Persistence.Context
             {
                 optionsBuilder.UseSqlServer(connectionString);
             }
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         public virtual DbSet<Auction> Auctions { get; set; }

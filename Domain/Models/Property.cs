@@ -22,6 +22,8 @@ namespace Domain.Models
 
         public double Area { get; set; }
 
+        public bool isAvailable { get; set; }
+
         public int AuthorId { get; set; }
 
         public User? Author { get; set; }

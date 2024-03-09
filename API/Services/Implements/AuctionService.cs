@@ -59,6 +59,7 @@ namespace API.Services.Implements
         {
             Auction entity = _mapper.Map(model, new Auction());
             var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
+            property.isAvailable = false;
             entity.AuctionStatus = AuctionStatus.ComingUp;
             var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id);
             model.AuctionImages = propertyImages;

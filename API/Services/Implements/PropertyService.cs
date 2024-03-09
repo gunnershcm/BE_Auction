@@ -65,6 +65,7 @@ namespace API.Services.Implements
             entity.City = post.PropertyCity;
             entity.Area= post.PropertyArea;
             entity.RevervePrice = post.PropertyRevervePrice;
+            entity.isAvailable = true;
             var postImages = await _urlResourceService.GetUrls(Tables.POST, post.Id);
             model.Images = postImages;
             var result = await _propertyRepository.CreateAsync(entity);

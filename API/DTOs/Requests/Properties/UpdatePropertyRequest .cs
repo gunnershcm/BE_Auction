@@ -20,6 +20,8 @@ namespace API.DTOs.Requests.Properties
         public double Area { get; set; }
 
         public double RevervePrice { get; set; }
+
+        public bool isAvailable { get; set; }
     }
 }
     

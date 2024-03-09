@@ -21,6 +21,8 @@ namespace API.DTOs.Requests.Properties
 
         public double RevervePrice { get; set; }
 
+        public bool isAvailable { get; set; }
+
     }
 }
     

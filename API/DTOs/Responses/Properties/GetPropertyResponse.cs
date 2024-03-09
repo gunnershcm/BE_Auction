@@ -24,6 +24,8 @@ namespace API.DTOs.Responses.Properties
 
         public double RevervePrice { get; set; }
 
+        public bool isAvailable { get; set; }
+
         public int PostId { get; set; }
 
         public GetPostForPropertyResponse? Post { get; set; }
