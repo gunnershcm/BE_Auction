@@ -86,14 +86,14 @@ namespace API.Services.Implements
             if (auction.AuctionStatus != AuctionStatus.InProgress)
             {
                 throw new InvalidOperationException("Bidding is not allowed for this auction.");
-            } 
-            if (model.BiddingAmount < auction.RevervePrice)
+            }
+            else if (model.BiddingAmount < auction.RevervePrice)
             {
                 throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
             }
-            else if (model.BiddingAmount < auction.FinalPrice)
+            else if (model.BiddingAmount < (auction.FinalPrice + auction.StepFee))
             {
-                throw new InvalidOperationException("Bidding amount must be greater than current price");
+                throw new InvalidOperationException("Bidding amount must be greater than current price with stepFee");
             }
             else
             {
