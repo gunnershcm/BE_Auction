@@ -10,11 +10,11 @@ namespace Domain.Models
 {
     public class Transaction : BaseEntity
     {
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public double Amount { get; set; }
 
-        public string PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
 
         public TransactionStatus TransactionStatus { get; set; }
 
@@ -22,7 +22,7 @@ namespace Domain.Models
 
         public int AuctionId { get; set; }
 
-        public int TransactionTypeId { get; set; }
+        public int? TransactionTypeId { get; set; }
 
         public User? User { get; set; }
 

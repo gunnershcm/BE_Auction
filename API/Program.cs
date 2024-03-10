@@ -35,7 +35,7 @@ builder.Services.AddHangfire(config => config
     .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
 builder.Services.AddHangfireServer();
 
-builder.Services.Configure<PaymentSettings>(configuration.GetSection(nameof(PaymentSettings)));
+//builder.Services.Configure<PaymentSettings>(configuration.GetSection(nameof(PaymentSettings)));
 
 
 builder.Services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
@@ -50,7 +50,7 @@ builder.Services.AddScoped<IAuctionService, AuctionService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IUserAuctionService, UserAuctionService>();
 builder.Services.AddScoped<IHangFireService, HangFireService>();
-//builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 
 

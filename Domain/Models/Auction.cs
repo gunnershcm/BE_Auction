@@ -20,10 +20,6 @@ namespace Domain.Models
 
         public string Name { get; set; }
 
-        public DateTime OpenTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
         public AuctionStatus AuctionStatus { get; set; }
 
         public double RevervePrice { get; set; }
@@ -33,8 +29,6 @@ namespace Domain.Models
         public double StepFee { get; set; }
 
         public double Deposit { get; set; }
-
-        public string Method { get; set; }
 
         public DateTime BiddingStartTime { get; set; }
 

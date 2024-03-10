@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Context;
 
@@ -11,9 +12,10 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    partial class AuctionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240310085829_changefieldTran1")]
+    partial class changefieldTran1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,11 +50,18 @@ namespace Persistence.Migrations
                     b.Property<double>("Deposit")
                         .HasColumnType("float");
 
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<double>("FinalPrice")
                         .HasColumnType("float");
 
                     b.Property<double>("JoiningFee")
                         .HasColumnType("float");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -60,6 +69,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OpenTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("PropertyId")
                         .HasColumnType("int");
@@ -362,7 +374,7 @@ namespace Persistence.Migrations
                     b.Property<int>("TransactionStatus")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TransactionTypeId")
+                    b.Property<int>("TransactionTypeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
@@ -664,7 +676,9 @@ namespace Persistence.Migrations
 
                     b.HasOne("Domain.Models.TransactionType", "TransactionType")
                         .WithMany("Transactions")
-                        .HasForeignKey("TransactionTypeId");
+                        .HasForeignKey("TransactionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Models.User", "User")
                         .WithMany("Transactions")

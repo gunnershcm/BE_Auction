@@ -19,13 +19,13 @@ namespace API.DTOs.Responses.Auctions
 
         public int? UserId { get; set; }
 
-        public int AuctionId { get; set; }
-
-        public int TransactionTypeId { get; set; }
-
         public User? User { get; set; }
 
+        public int AuctionId { get; set; }
+
         public Auction? Auction { get; set; }
+
+        public int TransactionTypeId { get; set; }      
 
         public TransactionType? TransactionType { get; set; }
     }

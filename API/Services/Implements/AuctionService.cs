@@ -64,6 +64,8 @@ namespace API.Services.Implements
             var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id);
             model.AuctionImages = propertyImages;
             model.FinalPrice = 0;
+            model.JoiningFee = 50000;
+            model.StepFee = 0.1 * (model.RevervePrice);
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {
