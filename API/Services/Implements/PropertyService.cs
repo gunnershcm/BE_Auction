@@ -47,7 +47,6 @@ namespace API.Services.Implements
                 { "Author", "Post"}) ?? throw new KeyNotFoundException("Property is not exist");
             var entity = _mapper.Map(result, new GetPropertyResponse());
             entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
-            DataResponse.CleanNullableDateTime(entity);
             return entity;
         }
 

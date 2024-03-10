@@ -31,7 +31,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("all")]
-        [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> GetAllAuction()
         {
             var result = await _auctionService.Get();
@@ -40,7 +40,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> GetAuctions(
             [FromQuery] string? filter,
             [FromQuery] string? sort,
@@ -61,7 +61,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> GetAuctionById(int id)
         {
             try
@@ -81,7 +81,7 @@ namespace API.Controllers
 
         [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
         [HttpPost("staff/new")]
-        [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> CreateAuctionByStaff([FromBody] CreateAuctionRequest model)
         {
             try
@@ -97,7 +97,7 @@ namespace API.Controllers
 
         [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
         [HttpPut("staff/{auctionId}")]
-        [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> UpdateAuctionByStaff(int auctionId, [FromBody] UpdateAuctionRequest model)
         {
             try
@@ -117,7 +117,7 @@ namespace API.Controllers
 
         [Authorize(Roles = $"{Roles.STAFF},{Roles.ADMIN}")]
         [HttpDelete("staff/{auctionId}")]
-        [ProducesResponseType(typeof(IEnumerable<GetAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> DeleteAuction(int auctionId)
         {
             try

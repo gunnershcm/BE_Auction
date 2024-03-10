@@ -1,93 +1,72 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Net.Http;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Domain.Mails;
-//using Microsoft.Extensions.Options;
-//using Newtonsoft.Json;
-//using PayPalCheckoutSdk.Core;
-//using PayPalCheckoutSdk.Orders;
-//using PayPalHttp;
-//using HttpClient = PayPalHttp.HttpClient;
-//using HttpResponse = PayPalHttp.HttpResponse;
+﻿using API.DTOs.Requests.Posts;
+using API.DTOs.Requests.Properties;
+using API.DTOs.Responses.Posts;
+using API.Services.Interfaces;
+using AutoMapper;
+using Domain.Constants.Enums;
+using Domain.Constants;
+using Domain.Exceptions;
+using Domain.Models;
+using Persistence.Helpers;
+using Persistence.Repositories.Interfaces;
+using API.DTOs.Responses.Auctions;
+using API.DTOs.Requests.Auctions;
+using API.DTOs.Responses.UserAuctions;
 
-//namespace API.Services.Implements
-//{
-//    public class PaymentService : IPaymentService
-//    {
-//        private readonly PaymentSettings _paymentSettings;
-//        private readonly HttpClient _httpClient;
+namespace API.Services.Implements
+{
+    public class PaymentService : IPaymentService
+    {
+        private readonly IRepositoryBase<Auction> _auctionRepository;
+        private readonly IRepositoryBase<User> _userRepository;
+        private readonly IRepositoryBase<Transaction> _paymentRepository;
+        private readonly IRepositoryBase<TransactionType> _tranTypeRepository;
+        private readonly IMapper _mapper;
+        
 
-//        public PaymentService(IOptions<PaymentSettings> paymentSettings, HttpClient httpClient)
-//        {
-//            _paymentSettings = paymentSettings.Value;
-//            _httpClient = httpClient;
-//            _httpClient.BaseAddress = new Uri("https://api.sandbox.paypal.com"); // Use Sandbox environment
-//        }
+        public PaymentService(IRepositoryBase<Auction> auctionRepository, IMapper mapper,
+            IRepositoryBase<User> userRepository, IRepositoryBase<Transaction> paymentRepository, IRepositoryBase<TransactionType> tranTypeRepository)
+        {
+            _auctionRepository = auctionRepository;
+            _mapper = mapper;
+            _userRepository = userRepository;
+            _paymentRepository = paymentRepository;
+            _tranTypeRepository = tranTypeRepository;
+        }
 
-//        public async Task<HttpResponse> CreateOrderAsync(decimal amount, string currency)
-//        {
-//            // Get access token
-//            var accessToken = await GetAccessTokenAsync();
+        public async Task<List<GetPaymentResponse>> Get()
+        {
+            var result = await _paymentRepository.GetAsync(navigationProperties: new string[]
+                {"User", "Auction", "TransactionType"});
+            var response = _mapper.Map<List<GetPaymentResponse>>(result);         
+            return response;
+        }
 
-//            // Build request body
-//            var request = new
-//            {
-//                intent = "CAPTURE",
-//                purchase_units = new[]
-//                {
-//                    new
-//                    {
-//                        amount = new
-//                        {
-//                            currency_code = currency,
-//                            value = amount.ToString("0.00")
-//                        }
-//                    }
-//                }
-//            };
 
-//            // Convert request to JSON
-//            var jsonRequest = JsonConvert.SerializeObject(request);
+        public async Task<GetPaymentResponse> GetById(int id)
+        {
+            var result =
+                await _paymentRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
+                {"User", "Auction", "TransactionType"}) ?? throw new KeyNotFoundException("Payment is not exist");
+            var entity = _mapper.Map(result, new GetPaymentResponse());
+            DataResponse.CleanNullableDateTime(entity);
+            return entity;
+        }
 
-//            // Send request to PayPal API
-//            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/v2/checkout/orders");
-//            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-//            httpRequest.Content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+        //public async Task PayAuction(int userId, int auctionId, int transactionTypeId)
+        //{
+        //    await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+        //    await _tranTypeRepository.FoundOrThrow(u => u.Id.Equals(transactionTypeId), new KeyNotFoundException("TransactionType is not exist"));
+        //    await _paymentRepository.FoundOrThrow(u => u.UserId.Equals(userId) &&
+        //    u.AuctionId.Equals(auctionId), new KeyNotFoundException("You has already pay for this auction"));
+            
+        //    Transaction transaction = new Transaction();
+        //    transaction.UserId = userId;
+        //    transaction.AuctionId = auctionId;
+        //    transaction.TransactionStatus = true;
+        //    await _userAuctionRepository.CreateAsync(userAuction);
+        //}
 
-//            return await _httpClient.SendAsync(httpRequest);
-//        }
 
-//        private async Task<string> GetAccessTokenAsync()
-//        {
-//            // Build token request
-//            var request = new HttpRequestMessage(HttpMethod.Post, "/v1/oauth2/token");
-//            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
-//                "Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_paymentSettings.ClientId}:{_paymentSettings.ClientSecret}")));
-
-//            request.Content = new StringContent("grant_type=client_credentials", Encoding.UTF8, "application/x-www-form-urlencoded");
-
-//            // Send token request and receive response
-//            var response = await _httpClient.SendAsync(request);
-
-//            // Read token from response
-//            var responseContent = await response.Content.ReadAsStringAsync();
-//            dynamic jsonResponse = JsonConvert.DeserializeObject(responseContent);
-//            return jsonResponse.access_token;
-//        }
-
-//        public async Task<HttpResponse> CaptureOrderAsync(string orderId)
-//        {
-//            // Get access token
-//            var accessToken = await GetAccessTokenAsync();
-
-//            // Send request to capture order
-//            var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"/v2/checkout/orders/{orderId}/capture");
-//            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-//            httpRequest.Content = new StringContent("{}", Encoding.UTF8, "application/json");
-
-//            return await _httpClient.SendAsync(httpRequest);
-//        }
-//    }
-//}
+    }
+}
