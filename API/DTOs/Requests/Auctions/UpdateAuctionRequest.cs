@@ -7,10 +7,6 @@ namespace API.DTOs.Requests.Auctions
     {
         public string Name { get; set; }
 
-        public DateTime OpenTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
         public double RevervePrice { get; set; }
 
         public double JoiningFee { get; set; }

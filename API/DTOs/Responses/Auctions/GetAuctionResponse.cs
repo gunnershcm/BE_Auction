@@ -13,10 +13,6 @@ namespace API.DTOs.Responses.Auctions
 
         public AuctionStatus AuctionStatus { get; set; }
 
-        public DateTime OpenTime { get; set; }
-
-        public DateTime EndTime { get; set; }
-
         public double RevervePrice { get; set; }
 
         public double JoiningFee { get; set; }
