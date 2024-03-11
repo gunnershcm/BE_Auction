@@ -102,6 +102,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
         return await dbSet.AsNoTracking().ToListAsync();
     }
 
+    public async Task<List<T>> ToListAsyncAll()
+    {
+        return await dbSet.IgnoreQueryFilters().ToListAsync();
+    }
+
     public async Task<T> UpdateAsync(T updated)
     {
         _context.Attach(updated).State = EntityState.Modified;

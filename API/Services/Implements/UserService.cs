@@ -28,7 +28,7 @@ public class UserService : IUserService
 
     public async Task<List<GetUserResponse>> Get()
     {
-        var result = await _userRepository.ToListAsync();
+        var result = await _userRepository.ToListAsyncAll();
         var response = new List<GetUserResponse>();
         foreach (var user in result)
         {
