@@ -12,15 +12,13 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<Auction> _auctionRepository;
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
         private readonly IMailService _mailService;
-        private readonly IMapper _mapper;
 
         public HangFireService(IRepositoryBase<Auction> auctionRepository, IRepositoryBase<UserAuction> userAuctionRepository, 
-            IMailService mailService, IMapper mapper)
+            IMailService mailService)
         {
             _auctionRepository = auctionRepository;
             _userAuctionRepository = userAuctionRepository;
             _mailService = mailService;
-            _mapper = mapper;
         }
 
 

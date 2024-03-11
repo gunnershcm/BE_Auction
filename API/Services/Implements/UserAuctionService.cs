@@ -10,6 +10,7 @@ using Firebase.Auth;
 using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 
+
 namespace API.Services.Implements
 {
     public class UserAuctionService : IUserAuctionService
@@ -60,7 +61,18 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetAuctionByUserResponse>>(result);
             return response;
         }
-         
+
+        public async Task<List<GetUserByAuctionResponse>> GetUserTop3ByAuction(int userId)
+        {
+            var result = await _userAuctionRepository
+                .WhereAsync(x => x.UserId.Equals(userId), new string[] { "Auction" });
+
+            var orderedResult = result.OrderByDescending(x => x.BiddingAmount).ToList().Take(3);
+            var response = _mapper.Map<List<GetUserByAuctionResponse>>(orderedResult);
+            return response;
+        }
+
+
         public async Task JoinAuction(int userId, int auctionId)
         {
             await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
@@ -104,5 +116,7 @@ namespace API.Services.Implements
             await _userAuctionRepository.UpdateAsync(entity);
             return entity;
         }
+
+
     }
 }

@@ -5,6 +5,8 @@ namespace API.DTOs.Requests.Auctions
 {
     public class CreateAuctionRequest : IMapTo<Auction>
     {
+        public string Title { get; set; }
+
         public string? Content { get; set; }
 
         public string Name { get; set; }

@@ -100,6 +100,26 @@ namespace API.Controllers
         }
 
         [Authorize]
+        [HttpGet("get-top3")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
+        public async Task<IActionResult> GetUserTop3ByAuction(int auctionId)
+        {
+            try
+            {
+                var result = await _userAuctionService.GetUserTop3ByAuction(auctionId);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpGet("available")]
         [ProducesResponseType(typeof(IEnumerable<GetAuctionByUserResponse>), 200)]
         public async Task<IActionResult> GetAuctionByUserAvailable()

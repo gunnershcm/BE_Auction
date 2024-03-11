@@ -11,6 +11,7 @@ namespace API.Services.Implements
         Task<GetUserAuctionResponse> GetById(int id);
         Task<List<GetUserByAuctionResponse>> GetUserByAuction(int auctionId);
         Task<List<GetAuctionByUserResponse>> GetAuctionByUser(int userId);
+        Task<List<GetUserByAuctionResponse>> GetUserTop3ByAuction(int userId);
         Task<UserAuction> BiddingAmount(int userId, int auctionId, BiddingAmountRequest model);
     }
 }
