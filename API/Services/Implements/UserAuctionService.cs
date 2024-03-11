@@ -75,18 +75,26 @@ namespace API.Services.Implements
 
         public async Task JoinAuction(int userId, int auctionId)
         {
-            await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+            var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
             var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
             u.AuctionId.Equals(auctionId));
             if (target != null)
             {
                 throw new InvalidOperationException("You has already joined this auction");
-            }
-            UserAuction userAuction = new UserAuction();
-            userAuction.UserId = userId;
-            userAuction.AuctionId = auctionId;
-            userAuction.isJoin = true;
-            await _userAuctionRepository.CreateAsync(userAuction);
+            }else if (auction.AuctionStatus == AuctionStatus.ComingUp)
+            {
+                UserAuction userAuction = new UserAuction();
+                userAuction.UserId = userId;
+                userAuction.AuctionId = auctionId;
+                userAuction.isJoin = true;
+                await _userAuctionRepository.CreateAsync(userAuction);
+            } 
+            else
+            {
+                throw new InvalidOperationException("Invalid Time to join this auction");
+            }  
+            
+            
         }
         
         public async Task<UserAuction> BiddingAmount(int userId, int auctionId, BiddingAmountRequest model)
