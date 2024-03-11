@@ -39,6 +39,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("BiddingStartTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
