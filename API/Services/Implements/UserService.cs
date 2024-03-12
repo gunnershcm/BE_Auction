@@ -85,8 +85,15 @@ public class UserService : IUserService
     {
         var target =
             await _userRepository.FoundOrThrow(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
-        target.IsActive = false;
-        await _userRepository.SoftDeleteAsync(target);
+        if (target.Username == "admin")
+        {
+            throw new Exception("Can not remove this admin account");
+        }
+        else
+        {
+            target.IsActive = false;
+            await _userRepository.SoftDeleteAsync(target);
+        }       
     }
 
     public async Task UndoSoftDelete(int id)
