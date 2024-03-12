@@ -160,7 +160,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.MEMBER)]
         [HttpPatch("bidding-amount")]
-        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<BiddingAmountRequest>), 200)]
         public async Task<IActionResult> BiddingAmount(int auctionId, [FromBody] BiddingAmountRequest model)
         {
             try

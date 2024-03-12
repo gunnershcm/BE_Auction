@@ -90,6 +90,16 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
         return target;
     }
 
+    public async Task<T> FoundOrThrowAll(Expression<Func<T, bool>> predicate, Exception error)
+    {
+        var entity = await dbSet.IgnoreQueryFilters().FirstOrDefaultAsync(predicate);
+        if (entity == null)
+        {
+            throw error;
+        }
+        return entity;
+    }
+
     public virtual async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
     {
         var query = ApplyNavigation(dbSet.AsQueryable(), navigationProperties);
@@ -121,5 +131,12 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : BaseEntity
         var query = ApplyNavigation(dbSet.AsQueryable(), navigationProperties);
         list = await query.Where(predicate).AsNoTracking().ToListAsync();
         return list;
+    }
+
+    public async Task UndoSoftDeleteAsync(T entity)
+    {
+        entity.DeletedAt = null; 
+        _context.Attach(entity).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
 }

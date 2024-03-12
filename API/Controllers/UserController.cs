@@ -154,7 +154,7 @@ public class UserController : BaseController
     }
 
     [Authorize(Roles = Roles.ADMIN)]
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     [ProducesResponseType(typeof(IEnumerable<User>), 200)]
     public async Task<IActionResult> DeleteUser(int id)
     {
@@ -172,6 +172,28 @@ public class UserController : BaseController
             return BadRequest(ex.Message);
         }
     }
+
+    [Authorize(Roles = Roles.ADMIN)]
+    [HttpPut("active/{id}")]
+    [ProducesResponseType(typeof(IEnumerable<User>), 200)]
+    public async Task<IActionResult> ActiveUser(int id)
+    {
+        try
+        {
+            await _userService.UndoSoftDelete(id);
+            return Ok("Active User Successfully");
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
 
     [Authorize]
     [HttpPatch("ChangeAvatar")]

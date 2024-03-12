@@ -1,4 +1,5 @@
-﻿using API.DTOs.Requests.Posts;
+﻿using API.DTOs.Requests.Auctions;
+using API.DTOs.Requests.Posts;
 using API.DTOs.Requests.UserAuctions;
 using API.DTOs.Responses.Auctions;
 using API.DTOs.Responses.Posts;
@@ -58,7 +59,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPaymentResponse>), 200)]
         public async Task<IActionResult> GetPaymentById(int id)
         {
             try
@@ -76,14 +77,33 @@ namespace API.Controllers
             }
         }
 
-
-        [Authorize(Roles = Roles.MEMBER)]
-        [HttpPost("member/pay-auction")]
-        public async Task<IActionResult> Auction(int auctionId, int transactionTypeId)
+        [Authorize]
+        [HttpGet("available")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserPaymentResponse>), 200)]
+        public async Task<IActionResult> GetPaymentAvailable()
         {
             try
             {
-                await _paymentService.PayAuction(CurrentUserID, auctionId, transactionTypeId);
+                var result = await _paymentService.GetPaymentAvailable(CurrentUserID);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.MEMBER)]
+        [HttpPost("member/pay-joining-auction")]
+        public async Task<IActionResult> PayJoiningFeeAuction(int auctionId)
+        {
+            try
+            {
+                await _paymentService.PayJoiningFeeAuction(CurrentUserID, auctionId);
                 return Ok("Payment successfully");
             }
             catch (KeyNotFoundException)
@@ -96,6 +116,25 @@ namespace API.Controllers
             }
         }
 
-        
+        [Authorize(Roles = Roles.MEMBER)]
+        [HttpPost("member/pay-deposit-auction")]
+        public async Task<IActionResult> PayDepositFeeAuction(int auctionId)
+        {
+            try
+            {
+                await _paymentService.PayDepositFeeAuction(CurrentUserID, auctionId);
+                return Ok("Payment successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Payment is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

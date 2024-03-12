@@ -20,5 +20,7 @@ namespace Domain.Models
 
         public double? BiddingAmount {get; set; }
 
+        public bool? isWin { get; set; }
+
     }
 }

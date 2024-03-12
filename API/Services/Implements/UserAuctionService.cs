@@ -87,14 +87,13 @@ namespace API.Services.Implements
                 userAuction.UserId = userId;
                 userAuction.AuctionId = auctionId;
                 userAuction.isJoin = true;
+                userAuction.isWin = false;
                 await _userAuctionRepository.CreateAsync(userAuction);
             } 
             else
             {
                 throw new InvalidOperationException("Invalid Time to join this auction");
-            }  
-            
-            
+            }                
         }
         
         public async Task<UserAuction> BiddingAmount(int userId, int auctionId, BiddingAmountRequest model)

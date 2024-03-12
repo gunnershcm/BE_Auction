@@ -6,6 +6,8 @@ namespace API.Services.Implements
     {
         Task<List<GetPaymentResponse>> Get();
         Task<GetPaymentResponse> GetById(int id);
-        Task PayAuction(int userId, int auctionId, int transactionTypeId);
+        Task<List<GetPaymentResponse>> GetPaymentAvailable(int userId);
+        Task PayJoiningFeeAuction(int userId, int auctionId);
+        Task PayDepositFeeAuction(int userId, int auctionId);
     }
 }

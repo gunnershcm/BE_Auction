@@ -89,6 +89,15 @@ public class UserService : IUserService
         await _userRepository.SoftDeleteAsync(target);
     }
 
+    public async Task UndoSoftDelete(int id)
+    {
+        var target =
+            await _userRepository.FoundOrThrowAll(c => c.Id.Equals(id), new KeyNotFoundException("User is not exist"));
+        target.IsActive = true;
+        await _userRepository.UndoSoftDeleteAsync(target);
+    }
+
+
 
     public async Task<string> UploadImageFirebase(int userId, IFormFile file)
     {
@@ -107,4 +116,5 @@ public class UserService : IUserService
         //await UpdateUserDocument(user);
         return linkImage;
     }
+    
 }

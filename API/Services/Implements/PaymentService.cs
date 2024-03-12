@@ -20,16 +20,18 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<Auction> _auctionRepository;
         private readonly IRepositoryBase<Transaction> _paymentRepository;
         private readonly IRepositoryBase<TransactionType> _tranTypeRepository;
+        private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
         private readonly IMapper _mapper;
         
 
         public PaymentService(IRepositoryBase<Auction> auctionRepository, IMapper mapper,
-            IRepositoryBase<Transaction> paymentRepository, IRepositoryBase<TransactionType> tranTypeRepository)
+            IRepositoryBase<Transaction> paymentRepository, IRepositoryBase<TransactionType> tranTypeRepository, IRepositoryBase<UserAuction> userAuctionRepository)
         {
             _auctionRepository = auctionRepository;
             _mapper = mapper;
             _paymentRepository = paymentRepository;
             _tranTypeRepository = tranTypeRepository;
+            _userAuctionRepository = userAuctionRepository;
         }
 
         public async Task<List<GetPaymentResponse>> Get()
@@ -51,24 +53,58 @@ namespace API.Services.Implements
             return entity;
         }
 
-        public async Task PayAuction(int userId, int auctionId, int transactionTypeId)
+        public async Task<List<GetPaymentResponse>> GetPaymentAvailable(int userId)
+        {
+            var result = await _paymentRepository.WhereAsync(x => x.UserId.Equals(userId),
+               new string[] { "Auction", "TransactionType" });
+            var response = _mapper.Map<List<GetPaymentResponse>>(result);
+            return response;
+        }
+
+
+        public async Task PayJoiningFeeAuction(int userId, int auctionId)
         {
             await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
-            await _tranTypeRepository.FoundOrThrow(u => u.Id.Equals(transactionTypeId), new KeyNotFoundException("TransactionType is not exist"));
+            var transactionType =  await _tranTypeRepository.FirstOrDefaultAsync(u => u.Name.Equals("JoiningFee"));
             var target = await _paymentRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
-            u.AuctionId.Equals(auctionId) && u.TransactionTypeId.Equals(transactionTypeId));
+            u.AuctionId.Equals(auctionId) && u.TransactionTypeId.Equals(transactionType.Id));
             if (target != null)
             {
-                throw new InvalidOperationException("You has already paid for this auction");
+                throw new InvalidOperationException("You has already paid joining fee for this auction");
             }
             Transaction transaction = new Transaction();
             transaction.UserId = userId;
             transaction.AuctionId = auctionId;
-            transaction.TransactionTypeId = transactionTypeId;
+            transaction.TransactionTypeId = transactionType.Id;
             transaction.TransactionStatus = TransactionStatus.Paid;
             transaction.Amount = 50000;
             await _paymentRepository.CreateAsync(transaction);
         }
+
+        public async Task PayDepositFeeAuction(int userId, int auctionId)
+        {
+            var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));          
+            var transactionType = await _tranTypeRepository.FirstOrDefaultAsync(u => u.Name.Equals("Deposit"));
+            var userAuction = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) && u.AuctionId.Equals(auctionId));
+            var target = await _paymentRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
+            u.AuctionId.Equals(auctionId) && u.TransactionTypeId.Equals(transactionType.Id));
+            if (target != null)
+            {
+                throw new InvalidOperationException("You has already paid deposit fee for this auction");
+            }
+            Transaction transaction = new Transaction();
+            transaction.UserId = userId;
+            transaction.AuctionId = auctionId;
+            transaction.TransactionTypeId = transactionType.Id;
+            transaction.TransactionStatus = TransactionStatus.Paid;
+            transaction.Amount = 0.1 * (auction.FinalPrice);            
+            await _paymentRepository.CreateAsync(transaction);
+            userAuction.isWin = true;
+            await _userAuctionRepository.UpdateAsync(userAuction);
+        }
+
+
+
 
 
     }

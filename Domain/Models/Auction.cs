@@ -45,6 +45,7 @@ namespace Domain.Models
         [ForeignKey("PropertyId")]
         public Property? Property { get; set; }
 
+
         [JsonIgnore]
         public virtual ICollection<UserAuction>? UserAuctions { get; set; }
 

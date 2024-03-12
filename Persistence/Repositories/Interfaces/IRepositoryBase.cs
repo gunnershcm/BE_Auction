@@ -8,6 +8,7 @@ public interface IRepositoryBase<T>
     Task<T> CreateAsync(T entity);
     Task<IEnumerable<T>> CreateAsync(IEnumerable<T> entities);
     Task<T> FoundOrThrow(Expression<Func<T, bool>> predicate, Exception error);
+    Task<T> FoundOrThrowAll(Expression<Func<T, bool>> predicate, Exception error);
     public Task<IEnumerable<T>> GetAsync(
        Expression<Func<T, bool>> filter = null,
        int first = 0, int offset = 0,
@@ -19,5 +20,6 @@ public interface IRepositoryBase<T>
     Task<T> UpdateAsync(T updated);
     Task DeleteAsync(T entity);
     Task SoftDeleteAsync(T entity);
+    Task UndoSoftDeleteAsync(T entity);
 
 }

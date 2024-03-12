@@ -575,6 +575,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("isJoin")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("isWin")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuctionId");
