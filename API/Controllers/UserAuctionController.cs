@@ -58,26 +58,26 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet("get-by-auction/{auctionId}")]
-        [ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
-        public async Task<IActionResult> GetUserByAuction(int auctionId,
-            [FromQuery] string? filter,
-            [FromQuery] string? sort,
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 5)
-        {
-            try
-            {
-                var result = await _userAuctionService.GetUserByAuction(auctionId);
-                var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
-                return Ok(pagedResponse);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[Authorize]
+        //[HttpGet("get-by-auction/{auctionId}")]
+        //[ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
+        //public async Task<IActionResult> GetUserByAuction(int auctionId,
+        //    [FromQuery] string? filter,
+        //    [FromQuery] string? sort,
+        //    [FromQuery] int page = 1,
+        //    [FromQuery] int pageSize = 5)
+        //{
+        //    try
+        //    {
+        //        var result = await _userAuctionService.GetUserByAuction(auctionId);
+        //        var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
+        //        return Ok(pagedResponse);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [Authorize]
         [HttpGet("{id}")]
@@ -139,7 +139,27 @@ namespace API.Controllers
             }
         }
 
-         [Authorize(Roles = Roles.MEMBER)]
+        [Authorize]
+        [HttpGet("get-user-by-auction")]
+        [ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
+        public async Task<IActionResult> GetUserByAuction(int auctionId)
+        {
+            try
+            {
+                var result = await _userAuctionService.GetUserByAuction(auctionId);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.MEMBER)]
         [HttpGet("check-join-auction")]
         [ProducesResponseType(typeof(bool), 200)]
         public async Task<IActionResult> CheckUserJoinAuction(int auctionId)
