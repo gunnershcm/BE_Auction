@@ -17,5 +17,9 @@ namespace API.DTOs.Responses.UserAuctions
 
         public bool isJoin { get; set; }
 
+        public double? BiddingAmount { get; set; }
+
+        public bool? isWin { get; set; }
+
     }
 }

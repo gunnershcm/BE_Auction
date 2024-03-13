@@ -95,33 +95,44 @@ namespace API.Services.Implements
                 throw new InvalidOperationException("Invalid Time to join this auction");
             }                
         }
-        
+
         public async Task<UserAuction> BiddingAmount(int userId, int auctionId, BiddingAmountRequest model)
         {
-            var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) 
-            && u.AuctionId.Equals(auctionId)) ?? throw new KeyNotFoundException("Auction for User is not exist");
-            var entity = _mapper.Map(model, target);
+            var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) && u.AuctionId.Equals(auctionId)) ?? throw new KeyNotFoundException("Auction for User is not exist");
+            UserAuction entity = _mapper.Map(model, new UserAuction());
             var auction = await _auctionRepository.FirstOrDefaultAsync(a => a.Id.Equals(auctionId));
-            if (auction.AuctionStatus != AuctionStatus.InProgress)
+            if (target.isJoin == false)
             {
-                throw new InvalidOperationException("Bidding is not allowed for this auction.");
-            }
-            else if (model.BiddingAmount < auction.RevervePrice)
-            {
-                throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
-            }
-            else if (model.BiddingAmount < (auction.FinalPrice + auction.StepFee))
-            {
-                throw new InvalidOperationException("Bidding amount must be greater than current price with stepFee");
+                throw new InvalidOperationException("You must joining this auction before bidding.");
             }
             else
             {
-                target.BiddingAmount = model.BiddingAmount;
-                auction.FinalPrice = model.BiddingAmount;
-                await _auctionRepository.UpdateAsync(auction);
+                if (auction.AuctionStatus != AuctionStatus.InProgress)
+                {
+                    throw new InvalidOperationException("Bidding is not allowed for this auction.");
+                }
+                else if (model.BiddingAmount < auction.RevervePrice)
+                {
+                    throw new InvalidOperationException("Bidding amount should be greater than ReversePrice.");
+                }
+                else if (model.BiddingAmount < (auction.FinalPrice + auction.StepFee))
+                {
+                    throw new InvalidOperationException("Bidding amount must be greater than current price with stepFee.");
+                }
+                else
+                {
+                    //target.BiddingAmount = model.BiddingAmount;
+                    model.AuctionId = auctionId;
+                    model.UserId = userId;
+                    model.isJoin = true;
+                    auction.FinalPrice = model.BiddingAmount;
+                    await _auctionRepository.UpdateAsync(auction);
+                    await _userAuctionRepository.CreateAsync(entity);
+                    return entity;
+                }
             }
-            await _userAuctionRepository.UpdateAsync(entity);
-            return entity;
+
+
         }
 
 
