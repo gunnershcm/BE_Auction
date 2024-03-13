@@ -140,6 +140,26 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = Roles.MEMBER)]
+        [HttpGet("check-join-auction")]
+        [ProducesResponseType(typeof(bool), 200)]
+        public async Task<IActionResult> CheckUserJoinAuction(int auctionId)
+        {
+            try
+            {
+                bool isJoined = await _userAuctionService.CheckUserJoinedAuction(CurrentUserID, auctionId);
+                return Ok(isJoined);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.MEMBER)]
         [HttpPost("member/join-auction")]
         public async Task<IActionResult> JoinAuction(int auctionId)
         {
@@ -177,5 +197,6 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+       
     }
 }
