@@ -1,5 +1,6 @@
 ﻿using API.DTOs.Requests.Auctions;
 using API.DTOs.Responses.Auctions;
+using Domain.Constants.Enums;
 using Domain.Models;
 
 namespace API.Services.Interfaces
@@ -10,6 +11,7 @@ namespace API.Services.Interfaces
         Task<GetAuctionResponse> GetById(int id);
         Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model);
         Task<Auction> UpdateByStaff(int id, UpdateAuctionRequest model);
+        Task<Auction> ModifyAuctionStatus(int auctionId, AuctionStatus newStatus);
         Task Remove(int id);
     }
 }

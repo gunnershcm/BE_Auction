@@ -136,6 +136,29 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]      
+        [HttpPatch("modify-status")]
+        public async Task<IActionResult> ModifyAuctionStatus(int auctionId, AuctionStatus newStatus)
+        {
+            try
+            {
+                var updated = await _auctionService.ModifyAuctionStatus(auctionId, newStatus);
+                return Ok("Status Updated Successfully");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (BadRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
 
     }

@@ -11,6 +11,7 @@ using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
 using API.DTOs.Responses.Auctions;
 using API.DTOs.Requests.Auctions;
+using Microsoft.Extensions.Hosting;
 
 namespace API.Services.Implements
 {
@@ -95,5 +96,59 @@ namespace API.Services.Implements
             await _auctionRepository.DeleteAsync(target);
         }
 
+
+        public async Task<Auction> ModifyAuctionStatus(int auctionId, AuctionStatus newStatus)
+        {
+            var auction = await _auctionRepository.FirstOrDefaultAsync(c => c.Id.Equals(auctionId)) ??
+                         throw new KeyNotFoundException("Auction is not exist");         
+
+            switch (auction.AuctionStatus)
+            {
+                case AuctionStatus.ComingUp:
+                    if (newStatus == AuctionStatus.InProgress)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Finished)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    break;
+
+                case AuctionStatus.InProgress:
+                    if (newStatus == AuctionStatus.ComingUp)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Finished)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    break;
+
+                case AuctionStatus.Finished:
+                    if (newStatus == AuctionStatus.ComingUp)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.InProgress)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    break;
+
+               
+                default:
+                    throw new BadRequestException();
+            }
+
+            return auction;
+        }
     }
 }
