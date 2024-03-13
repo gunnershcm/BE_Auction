@@ -12,6 +12,7 @@ using Persistence.Repositories.Interfaces;
 using API.DTOs.Responses.Auctions;
 using API.DTOs.Requests.Auctions;
 using Microsoft.Extensions.Hosting;
+using API.DTOs.Responses.Properties;
 
 namespace API.Services.Implements
 {
@@ -38,12 +39,25 @@ namespace API.Services.Implements
         {
             var result = await _auctionRepository.GetAsync(navigationProperties: new string[]
                 {"Property"});
-            var response = _mapper.Map<List<GetAuctionResponse>>(result);
-            foreach (var entity in response)
+            var responses = _mapper.Map<List<GetAuctionResponse>>(result);
+            var property = await _propertyRepository.GetAsync(navigationProperties: new string[]
+                {"Post"});
+            if (property != null)
+            {
+                var propmapping = _mapper.Map<List<GetPropertyResponse>>(property);
+                foreach (var response in responses)
+                {
+                    foreach (var propMap in propmapping)
+                    {
+                        response.Property = propMap;
+                    }
+                }
+            }
+            foreach (var entity in responses)
             {
                 entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id)).Select(x => x.Url).ToList();
             }
-            return response;
+            return responses;
         }
         
         public async Task<GetAuctionResponse> GetById(int id)
