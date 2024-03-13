@@ -127,8 +127,12 @@ namespace API.Services.Implements
         public async Task<bool> CheckUserJoinedAuction(int userId, int auctionId)
         {
             var userAuction = await _userAuctionRepository.FirstOrDefaultAsync(u =>
-                u.UserId.Equals(userId) && u.AuctionId.Equals(auctionId)) ?? throw new KeyNotFoundException("User do not join this auction.");
-            return userAuction != null;
+                u.UserId.Equals(userId) && u.AuctionId.Equals(auctionId));
+            if (userAuction != null)
+            {
+                return true;
+            }
+            return false;          
         }
     }
 }

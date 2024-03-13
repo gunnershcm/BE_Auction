@@ -139,7 +139,7 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = Roles.MEMBER)]
+         [Authorize(Roles = Roles.MEMBER)]
         [HttpGet("check-join-auction")]
         [ProducesResponseType(typeof(bool), 200)]
         public async Task<IActionResult> CheckUserJoinAuction(int auctionId)
