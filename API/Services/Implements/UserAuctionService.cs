@@ -72,7 +72,6 @@ namespace API.Services.Implements
             return response;
         }
 
-
         public async Task JoinAuction(int userId, int auctionId)
         {
             var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
