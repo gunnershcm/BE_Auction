@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class HistoryAuction : BaseEntity
+    public class AuctionHistory : BaseEntity
     {
         public int UserId { get; set; }
 
@@ -16,11 +16,7 @@ namespace Domain.Models
 
         public Auction? Auction { get; set; }
 
-        public bool isJoin { get; set; }
-
         public double? BiddingAmount { get; set; }
-
-        public bool? isWin { get; set; }
 
     }
 }

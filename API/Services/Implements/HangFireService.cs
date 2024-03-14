@@ -54,8 +54,7 @@ namespace API.Services.Implements
             foreach (var auction in auctionsStartingIn5Minutes)
             {
                 var userAuctions = await _userAuctionRepository
-                    .WhereAsync(u => u.AuctionId == auction.Id);              
-                
+                    .WhereAsync(u => u.AuctionId == auction.Id);                             
                 foreach (var userAuction in userAuctions)
                 {
                     if (userAuction.User != null)

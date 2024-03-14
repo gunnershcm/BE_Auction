@@ -51,5 +51,8 @@ namespace Domain.Models
 
         [JsonIgnore]
         public virtual ICollection<Transaction>? Transactions { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<AuctionHistory>? AuctionHistories { get; set; }
     }
 }

@@ -86,6 +86,43 @@ namespace Persistence.Migrations
                     b.ToTable("Auctions");
                 });
 
+            modelBuilder.Entity("Domain.Models.AuctionHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("BiddingAmount")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuctionId");
+
+                    b.HasIndex("DeletedAt");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AuctionHistories");
+                });
+
             modelBuilder.Entity("Domain.Models.Log", b =>
                 {
                     b.Property<int>("Id")
@@ -599,6 +636,25 @@ namespace Persistence.Migrations
                     b.Navigation("Property");
                 });
 
+            modelBuilder.Entity("Domain.Models.AuctionHistory", b =>
+                {
+                    b.HasOne("Domain.Models.Auction", "Auction")
+                        .WithMany("AuctionHistories")
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.User", "User")
+                        .WithMany("AuctionHistories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Models.Log", b =>
                 {
                     b.HasOne("Domain.Models.User", "User")
@@ -708,6 +764,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.Auction", b =>
                 {
+                    b.Navigation("AuctionHistories");
+
                     b.Navigation("Transactions");
 
                     b.Navigation("UserAuctions");
@@ -726,6 +784,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Models.User", b =>
                 {
                     b.Navigation("ApproverPosts");
+
+                    b.Navigation("AuctionHistories");
 
                     b.Navigation("AuthorPosts");
 

@@ -42,7 +42,7 @@ namespace Persistence.Context
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
         public virtual DbSet<UrlResource> UrlResources { get; set; }
-
+        public virtual DbSet<AuctionHistory> AuctionHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

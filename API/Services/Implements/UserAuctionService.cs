@@ -62,10 +62,10 @@ namespace API.Services.Implements
             return response;
         }
 
-        public async Task<List<GetUserByAuctionResponse>> GetUserTop3ByAuction(int userId)
+        public async Task<List<GetUserByAuctionResponse>> GetUserTop3ByAuction(int auctionId)
         {
             var result = await _userAuctionRepository
-                .WhereAsync(x => x.UserId.Equals(userId), new string[] { "Auction" });
+                .WhereAsync(x => x.AuctionId.Equals(auctionId), new string[] { "User" });
 
             var orderedResult = result.OrderByDescending(x => x.BiddingAmount).ToList().Take(3);
             var response = _mapper.Map<List<GetUserByAuctionResponse>>(orderedResult);
