@@ -1,4 +1,5 @@
-﻿using API.DTOs.Requests.UserAuctions;
+﻿using API.DTOs.Requests.Properties;
+using API.DTOs.Requests.UserAuctions;
 using API.DTOs.Responses.Posts;
 using API.DTOs.Responses.UserAuctions;
 using API.Services.Interfaces;
@@ -17,13 +18,15 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
         private readonly IRepositoryBase<Auction> _auctionRepository;
+        private readonly IAuctionHistoryService _auctionHistoryService; 
         private readonly IMapper _mapper;
 
         public UserAuctionService(IRepositoryBase<UserAuction> userAuctionRepository, 
-            IRepositoryBase<Auction> auctionRepository, IMapper mapper)
+            IRepositoryBase<Auction> auctionRepository, IMapper mapper, IAuctionHistoryService auctionHistoryService)
         {
             _userAuctionRepository = userAuctionRepository;
             _auctionRepository = auctionRepository;
+            _auctionHistoryService = auctionHistoryService;
             _mapper = mapper;
         }    
 
@@ -118,6 +121,9 @@ namespace API.Services.Implements
                 target.BiddingAmount = model.BiddingAmount;
                 auction.FinalPrice = model.BiddingAmount;
                 await _auctionRepository.UpdateAsync(auction);
+                var historyModel = new BiddingHistoryRequest();
+                historyModel.BiddingAmount = model.BiddingAmount;
+                await _auctionHistoryService.CreateAuctionHistory(userId, auctionId, historyModel);
             }
             await _userAuctionRepository.UpdateAsync(entity);
             return entity;

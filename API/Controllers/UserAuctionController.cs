@@ -58,27 +58,6 @@ namespace API.Controllers
             }
         }
 
-        //[Authorize]
-        //[HttpGet("get-by-auction/{auctionId}")]
-        //[ProducesResponseType(typeof(IEnumerable<GetUserByAuctionResponse>), 200)]
-        //public async Task<IActionResult> GetUserByAuction(int auctionId,
-        //    [FromQuery] string? filter,
-        //    [FromQuery] string? sort,
-        //    [FromQuery] int page = 1,
-        //    [FromQuery] int pageSize = 5)
-        //{
-        //    try
-        //    {
-        //        var result = await _userAuctionService.GetUserByAuction(auctionId);
-        //        var pagedResponse = result.AsQueryable().GetPagedData(page, pageSize, filter, sort);
-        //        return Ok(pagedResponse);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
         [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(IEnumerable<GetUserAuctionResponse>), 200)]
