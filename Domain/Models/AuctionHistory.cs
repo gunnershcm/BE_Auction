@@ -17,6 +17,5 @@ namespace Domain.Models
         public Auction? Auction { get; set; }
 
         public double? BiddingAmount { get; set; }
-
     }
 }
