@@ -43,6 +43,5 @@ namespace API.DTOs.Responses.Posts
         public User? Approver { get; set; }
 
         public int? PropertyTypeId { get; set; }
-        public PropertyType? PropertyType { get; set; }
     }
 }

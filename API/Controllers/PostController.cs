@@ -168,7 +168,7 @@ namespace API.Controllers
         {
             try
             {
-                Post entity = await _postService.CreatePostByMember(CurrentUserID, model);
+                var entity = await _postService.CreatePostByMember(CurrentUserID, model);
                 return Ok(entity);
             }
             catch (Exception ex)

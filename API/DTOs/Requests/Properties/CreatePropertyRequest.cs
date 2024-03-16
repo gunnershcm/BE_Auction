@@ -7,6 +7,8 @@ namespace API.DTOs.Requests.Properties
     {
         public string Name { get; set; }
 
+        public string Code { get; set; }
+
         public List<string>? Images { get; set; }
 
         public string Street { get; set; }

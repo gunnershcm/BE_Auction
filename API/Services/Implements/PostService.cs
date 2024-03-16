@@ -38,7 +38,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> Get()
         {
             var result = await _postRepository.GetAsync(navigationProperties: new string[]
-                { "Approver", "PropertyType", "Author"});
+                { "Approver", "Author"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -51,7 +51,7 @@ namespace API.Services.Implements
         {
             var result =
                await _postRepository.FirstOrDefaultAsync(u => u.Id.Equals(postId), new string[]
-               { "Approver", "PropertyType", "Author"}) ?? throw new KeyNotFoundException("Post is not exist");
+               { "Approver", "Author"}) ?? throw new KeyNotFoundException("Post is not exist");
             var entity = _mapper.Map(result, new GetPostResponse());
             entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
             return entity;
@@ -60,7 +60,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> GetByUser(int userId)
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId),
-                new string[] { "Author", "Approver", "PropertyType" });
+                new string[] { "Author", "Approver",});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -73,7 +73,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> GetPostApproveByUser(int userId)
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
-            && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver", "PropertyType" });
+            && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -85,7 +85,7 @@ namespace API.Services.Implements
         public async Task<List<GetPostResponse>> GetPostRejectByUser(int userId)
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
-            && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver", "PropertyType" });
+            && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver"});
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {

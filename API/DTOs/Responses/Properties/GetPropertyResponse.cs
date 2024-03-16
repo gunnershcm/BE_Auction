@@ -10,6 +10,8 @@ namespace API.DTOs.Responses.Properties
 
         public string Name { get; set; }
 
+        public string Code { get; set; }
+
         public List<string>? Images { get; set; }
 
         public string Street { get; set; }
@@ -29,6 +31,10 @@ namespace API.DTOs.Responses.Properties
         public int PostId { get; set; }
 
         public GetPostForPropertyResponse? Post { get; set; }
+
+        public int? PropertyTypeId { get; set; }
+
+        public PropertyType? PropertyType { get; set; }
 
         public DateTime? CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }

@@ -31,7 +31,7 @@ namespace API.Services.Implements
         public async Task<List<GetPropertyResponse>> Get()
         {
             var result = await _propertyRepository.GetAsync(navigationProperties: new string[]
-                { "Author", "Post"});
+                { "Author", "Post", "PropertyType"});
             var response = _mapper.Map<List<GetPropertyResponse>>(result);
             foreach (var entity in response)
             {
@@ -44,7 +44,7 @@ namespace API.Services.Implements
         {
             var result =
                 await _propertyRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
-                { "Author", "Post"}) ?? throw new KeyNotFoundException("Property is not exist");
+                { "Author", "Post", "PropertyType"}) ?? throw new KeyNotFoundException("Property is not exist");
             var entity = _mapper.Map(result, new GetPropertyResponse());
             entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
             return entity;
@@ -64,6 +64,8 @@ namespace API.Services.Implements
             entity.City = post.PropertyCity;
             entity.Area= post.PropertyArea;
             entity.RevervePrice = post.PropertyRevervePrice;
+            entity.PropertyTypeId = post.PropertyTypeId;
+            entity.Code = CommonService.CreateRandomPropertyCode();
             entity.isAvailable = true;
             var postImages = await _urlResourceService.GetUrls(Tables.POST, post.Id);
             model.Images = postImages;

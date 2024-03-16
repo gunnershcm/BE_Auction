@@ -256,7 +256,7 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PropertyTypeId")
+                    b.Property<int>("PropertyTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("PropertyWard")
@@ -278,8 +278,6 @@ namespace Persistence.Migrations
 
                     b.HasIndex("DeletedAt");
 
-                    b.HasIndex("PropertyTypeId");
-
                     b.ToTable("Posts");
                 });
 
@@ -298,6 +296,10 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -321,6 +323,9 @@ namespace Persistence.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PropertyTypeId")
+                        .HasColumnType("int");
+
                     b.Property<double>("RevervePrice")
                         .HasColumnType("float");
 
@@ -342,6 +347,8 @@ namespace Persistence.Migrations
                     b.HasIndex("DeletedAt");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("PropertyTypeId");
 
                     b.ToTable("Properties");
                 });
@@ -690,15 +697,9 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.PropertyType", "PropertyType")
-                        .WithMany("Posts")
-                        .HasForeignKey("PropertyTypeId");
-
                     b.Navigation("Approver");
 
                     b.Navigation("Author");
-
-                    b.Navigation("PropertyType");
                 });
 
             modelBuilder.Entity("Domain.Models.Property", b =>
@@ -715,9 +716,15 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Models.PropertyType", "PropertyType")
+                        .WithMany("Properties")
+                        .HasForeignKey("PropertyTypeId");
+
                     b.Navigation("Author");
 
                     b.Navigation("Post");
+
+                    b.Navigation("PropertyType");
                 });
 
             modelBuilder.Entity("Domain.Models.Transaction", b =>
@@ -773,7 +780,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.PropertyType", b =>
                 {
-                    b.Navigation("Posts");
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("Domain.Models.TransactionType", b =>

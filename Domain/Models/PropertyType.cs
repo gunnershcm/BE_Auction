@@ -11,13 +11,13 @@ namespace Domain.Models
     {
         public PropertyType()
         {
-            Posts = new HashSet<Post>();
+            Properties = new HashSet<Property>();
         }
 
         public string Name { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Post>? Posts { get; set; }
+        public virtual ICollection<Property>? Properties { get; set; }
 
     }
 }

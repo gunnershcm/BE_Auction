@@ -30,7 +30,6 @@ namespace API.DTOs.Responses.Posts
 
         public double PropertyRevervePrice { get; set; }
 
-
         public PostStatus PostStatus { get; set; }
 
         public DateTime? CreatedAt { get; set; }

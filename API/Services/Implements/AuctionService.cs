@@ -20,19 +20,22 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<Auction> _auctionRepository;
         private readonly IRepositoryBase<Property> _propertyRepository;
+        private readonly IRepositoryBase<PropertyType> _propertyTypeRepository;
         private readonly IMapper _mapper;
         private readonly IPropertyService _propertyService;
         private readonly IUrlResourceService _urlResourceService;
         private readonly IRepositoryBase<Post> _postRepository;
 
         public AuctionService(IRepositoryBase<Auction> auctionRepository, IMapper mapper,
-            IPropertyService propertyService, IUrlResourceService urlResourceService, IRepositoryBase<Property> propertyRepository)
+            IPropertyService propertyService, IUrlResourceService urlResourceService,
+            IRepositoryBase<Property> propertyRepository, IRepositoryBase<PropertyType> propertyTypeRepository)
         {
             _auctionRepository = auctionRepository;
             _mapper = mapper;
             _propertyService = propertyService;
             _urlResourceService = urlResourceService;
             _propertyRepository = propertyRepository;
+            _propertyTypeRepository = propertyTypeRepository;
         }
 
         public async Task<List<GetAuctionResponse>> Get()
@@ -41,8 +44,7 @@ namespace API.Services.Implements
                 {"Property"});
             var responses = _mapper.Map<List<GetAuctionResponse>>(result);
             var property = await _propertyRepository.GetAsync(navigationProperties: new string[]
-                {"Post"});
-            if (property != null)
+                {"Post", "PropertyType"});
             {
                 var propmapping = _mapper.Map<List<GetPropertyResponse>>(property);
                 foreach (var response in responses)
@@ -74,7 +76,9 @@ namespace API.Services.Implements
         {
             Auction entity = _mapper.Map(model, new Auction());
             var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
+            var post = await _postRepository.FoundOrThrow(u => u.Id.Equals(property.PostId), new KeyNotFoundException("Post is not exist"));
             property.isAvailable = false;
+            post.PostStatus = PostStatus.Completed;
             entity.AuctionStatus = AuctionStatus.ComingUp;
             var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id);
             model.AuctionImages = propertyImages;

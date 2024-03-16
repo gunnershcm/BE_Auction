@@ -10,6 +10,8 @@ namespace Domain.Models
     {
         public string Name { get; set; }
 
+        public string Code { get; set; }
+
         public string Street { get; set; }
 
         public string Ward { get; set; }
@@ -32,6 +34,10 @@ namespace Domain.Models
 
         public Post? Post { get; set; }
 
-        
+        public int? PropertyTypeId { get; set; }
+
+        public PropertyType? PropertyType { get; set; }
+
+
     }
 }

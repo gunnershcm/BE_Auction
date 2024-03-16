@@ -31,14 +31,13 @@ namespace Domain.Models
 
         public double PropertyRevervePrice { get; set; }    
 
+        public int PropertyTypeId { get; set; }
+
         public int AuthorId { get; set; }
         public User Author { get; set; }
 
         public int? ApproverId { get; set; }
         public User? Approver { get; set; }
-
-        public int? PropertyTypeId { get; set; }
-        public PropertyType? PropertyType { get; set; }
 
     }
 }
