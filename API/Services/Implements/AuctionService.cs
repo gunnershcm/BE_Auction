@@ -89,6 +89,7 @@ namespace API.Services.Implements
             model.JoiningFee = 50000;
             model.StepFee = 0.1 * (model.RevervePrice);
             model.Deposit = 0;
+            model.Title = post.Title;
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {
