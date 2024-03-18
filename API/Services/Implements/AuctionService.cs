@@ -41,20 +41,12 @@ namespace API.Services.Implements
 
         public async Task<List<GetAuctionResponse>> Get()
         {
-            var result = await _auctionRepository.GetAsync(navigationProperties: new string[]
-                {"Property"});
-            var responses = _mapper.Map<List<GetAuctionResponse>>(result);
-            var property = await _propertyRepository.GetAsync(navigationProperties: new string[]
-                {"Post", "PropertyType"});
+            var auctions = await _auctionRepository.GetAsync(navigationProperties: new string[]
+            {"Property","Property.Post","Property.PropertyType"});
+            var responses = _mapper.Map<List<GetAuctionResponse>>(auctions);
+            foreach (var response in responses)
             {
-                var propmapping = _mapper.Map<List<GetPropertyResponse>>(property);
-                foreach (var response in responses)
-                {
-                    foreach (var propMap in propmapping)
-                    {
-                        response.Property = propMap;
-                    }
-                }
+                response.Property.Post = _mapper.Map<GetPostForPropertyResponse>(response.Property.Post);
             }
             foreach (var entity in responses)
             {
@@ -62,6 +54,7 @@ namespace API.Services.Implements
             }
             return responses;
         }
+
 
         public async Task<List<GetAuctionForDashboardResponse>> GetAuctionsByMonth(DateTime startOfMonth, DateTime endOfMonth)
         {
@@ -81,7 +74,7 @@ namespace API.Services.Implements
             entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id)).Select(x => x.Url).ToList();
             return entity;
         }
-       
+
         public async Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model)
         {
             Auction entity = _mapper.Map(model, new Auction());
@@ -117,7 +110,7 @@ namespace API.Services.Implements
             return result;
         }
 
-         
+
         public async Task Remove(int id)
         {
             var target = await _auctionRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??
@@ -129,7 +122,7 @@ namespace API.Services.Implements
         public async Task<Auction> ModifyAuctionStatus(int auctionId, AuctionStatus newStatus)
         {
             var auction = await _auctionRepository.FirstOrDefaultAsync(c => c.Id.Equals(auctionId)) ??
-                         throw new KeyNotFoundException("Auction is not exist");         
+                         throw new KeyNotFoundException("Auction is not exist");
 
             switch (auction.AuctionStatus)
             {
@@ -172,7 +165,7 @@ namespace API.Services.Implements
                     }
                     break;
 
-               
+
                 default:
                     throw new BadRequestException();
             }
