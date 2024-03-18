@@ -29,7 +29,9 @@ namespace Domain.Models
 
         public double PropertyArea { get; set; }
 
-        public double PropertyRevervePrice { get; set; }    
+        public double PropertyRevervePrice { get; set; }
+        
+        //public double Property
 
         public int PropertyTypeId { get; set; }
 

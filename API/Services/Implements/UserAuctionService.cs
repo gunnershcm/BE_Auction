@@ -38,6 +38,7 @@ namespace API.Services.Implements
             return response;
         }
 
+
         public async Task<GetUserAuctionResponse> GetById(int id)
         {
             var result =

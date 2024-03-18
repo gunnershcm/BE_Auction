@@ -10,4 +10,9 @@ public enum AuctionStatus
     InProgress,
     [Description("Finished")]
     Finished,
+    [Description("Succeeded")]
+    Succeeded,
+    [Description("Failed")]
+    Failed,
+
 }

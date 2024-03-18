@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Requests.UserAuctions;
+using API.DTOs.Responses.Auctions;
 using API.DTOs.Responses.UserAuctions;
 using Domain.Models;
 

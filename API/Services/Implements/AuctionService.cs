@@ -13,6 +13,7 @@ using API.DTOs.Responses.Auctions;
 using API.DTOs.Requests.Auctions;
 using Microsoft.Extensions.Hosting;
 using API.DTOs.Responses.Properties;
+using API.DTOs.Responses.UserAuctions;
 
 namespace API.Services.Implements
 {
@@ -61,7 +62,16 @@ namespace API.Services.Implements
             }
             return responses;
         }
-        
+
+        public async Task<List<GetAuctionForDashboardResponse>> GetAuctionsByMonth(DateTime startOfMonth, DateTime endOfMonth)
+        {
+            var result = await _auctionRepository
+                .WhereAsync(u => u.CreatedAt >= startOfMonth && u.CreatedAt <= endOfMonth);
+
+            var response = _mapper.Map<List<GetAuctionForDashboardResponse>>(result);
+            return response;
+        }
+
         public async Task<GetAuctionResponse> GetById(int id)
         {
             var result =
@@ -85,6 +95,7 @@ namespace API.Services.Implements
             model.FinalPrice = 0;
             model.JoiningFee = 50000;
             model.StepFee = 0.1 * (model.RevervePrice);
+            model.Deposit = 0;
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {

@@ -8,6 +8,7 @@ namespace API.Services.Interfaces
     public interface IAuctionService
     {
         Task<List<GetAuctionResponse>> Get();
+        Task<List<GetAuctionForDashboardResponse>> GetAuctionsByMonth(DateTime startOfMonth, DateTime endOfMonth);
         Task<GetAuctionResponse> GetById(int id);
         Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model);
         Task<Auction> UpdateByStaff(int id, UpdateAuctionRequest model);

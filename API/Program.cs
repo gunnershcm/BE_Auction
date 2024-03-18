@@ -52,6 +52,7 @@ builder.Services.AddScoped<IUserAuctionService, UserAuctionService>();
 builder.Services.AddScoped<IHangFireService, HangFireService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAuctionHistoryService, AuctionHistoryService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 
 

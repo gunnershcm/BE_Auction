@@ -59,7 +59,7 @@ namespace Persistence.Context
 
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Author)
-                .WithMany(u => u.AuthorPosts) 
+                .WithMany(u => u.AuthorPosts)
                 .HasForeignKey(p => p.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -74,6 +74,11 @@ namespace Persistence.Context
                 .WithMany()
                 .HasForeignKey(a => a.PropertyId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserAuction>()
+                .HasOne(ua => ua.User)
+                .WithMany(u => u.UserAuctions)
+                .HasForeignKey(ua => ua.UserId);
 
         }
 

@@ -62,8 +62,8 @@ namespace API.Services.Implements
         }
 
 
-        public async Task PayJoiningFeeAuction(int userId, int auctionId)
-        {
+        public async Task PayJoiningFeeAuction(int userId, int auctionId)                   
+        {                                                                                   
             await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
             var transactionType =  await _tranTypeRepository.FirstOrDefaultAsync(u => u.Name.Equals("JoiningFee"));
             var target = await _paymentRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
@@ -97,15 +97,11 @@ namespace API.Services.Implements
             transaction.AuctionId = auctionId;
             transaction.TransactionTypeId = transactionType.Id;
             transaction.TransactionStatus = TransactionStatus.Paid;
-            transaction.Amount = 0.1 * (auction.FinalPrice);            
+            transaction.Amount = 0.1 * (auction.FinalPrice);
+            auction.Deposit = transaction.Amount;
             await _paymentRepository.CreateAsync(transaction);
             userAuction.isWin = true;
             await _userAuctionRepository.UpdateAsync(userAuction);
         }
-
-
-
-
-
     }
 }
