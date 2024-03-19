@@ -28,14 +28,14 @@ builder.Services.AddDbContext<AuctionDbContext>(options =>
         sqlServerOptions.EnableRetryOnFailure());
 });
 
-//builder.Services.AddHangfire(config => config
-//    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-//    .UseSimpleAssemblyNameTypeSerializer()
-//    .UseRecommendedSerializerSettings()
-//    .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
-//builder.Services.AddHangfireServer();
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
+builder.Services.AddHangfireServer();
 
-//builder.Services.Configure<PaymentSettings>(configuration.GetSection(nameof(PaymentSettings)));
+builder.Services.Configure<PaymentSettings>(configuration.GetSection(nameof(PaymentSettings)));
 
 
 builder.Services.Configure<MailSettings>(configuration.GetSection(nameof(MailSettings)));
@@ -153,9 +153,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAutoWrapper();
 app.MapControllers();
-//app.UseHangfireDashboard("/hangfire");
-//app.MapHangfireDashboard();
+app.UseHangfireDashboard("/hangfire");
+app.MapHangfireDashboard();
 
-//RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
-//RecurringJob.AddOrUpdate<IHangFireService>("send-mail-auction", x => x.SendMailAuction(), Cron.Minutely);
+RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
+RecurringJob.AddOrUpdate<IHangFireService>("send-mail-auction", x => x.SendMailAuction(), Cron.Minutely);
 app.Run();

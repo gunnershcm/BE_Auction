@@ -120,7 +120,6 @@ public class UserService : IUserService
         var linkImage = await _firebaseService.UploadFirebaseAsync(stream, file.FileName);
         user.AvatarUrl = linkImage;
         await _userRepository.UpdateAsync(user);
-        //await UpdateUserDocument(user);
         return linkImage;
     }
     

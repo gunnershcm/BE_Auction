@@ -11,34 +11,36 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<Auction> _auctionRepository;
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
+        private readonly IUserService _userService;
         private readonly IMailService _mailService;
 
-        public HangFireService(IRepositoryBase<Auction> auctionRepository, IRepositoryBase<UserAuction> userAuctionRepository, 
-            IMailService mailService)
+        public HangFireService(IRepositoryBase<Auction> auctionRepository, IRepositoryBase<UserAuction> userAuctionRepository,
+            IMailService mailService, IUserService userService)
         {
             _auctionRepository = auctionRepository;
             _userAuctionRepository = userAuctionRepository;
             _mailService = mailService;
+            _userService = userService;
         }
 
 
         public async Task UpdateAuctionStatus()
         {
-            var auctions = await _auctionRepository.ToListAsync(); 
+            var auctions = await _auctionRepository.ToListAsync();
             foreach (var auction in auctions)
             {
                 DateTime currentTime = DateTime.Now;
                 if (currentTime < auction.BiddingStartTime)
                 {
-                    auction.AuctionStatus = AuctionStatus.ComingUp; 
+                    auction.AuctionStatus = AuctionStatus.ComingUp;
                 }
                 else if (currentTime >= auction.BiddingStartTime && currentTime <= auction.BiddingEndTime)
                 {
-                    auction.AuctionStatus = AuctionStatus.InProgress; 
+                    auction.AuctionStatus = AuctionStatus.InProgress;
                 }
                 else
                 {
-                    auction.AuctionStatus = AuctionStatus.Finished; 
+                    auction.AuctionStatus = AuctionStatus.Finished;
                 }
                 await _auctionRepository.UpdateAsync(auction);
             }
@@ -54,17 +56,11 @@ namespace API.Services.Implements
             foreach (var auction in auctionsStartingIn5Minutes)
             {
                 var userAuctions = await _userAuctionRepository
-                    .WhereAsync(u => u.AuctionId == auction.Id);                             
+                    .WhereAsync(u => u.AuctionId == auction.Id);
                 foreach (var userAuction in userAuctions)
                 {
-                    if (userAuction.User != null)
-                    {
-                        await _mailService.SendUserAuctionNotification(userAuction.User.Username, userAuction.User.Email);
-                    }
-                    else
-                    {
-                        throw new Exception("User is not exist");
-                    }
+                    var user = await _userService.GetById(userAuction.UserId);
+                    await _mailService.SendUserAuctionNotification(user.Username, user.Email);
                 }
             }
         }
