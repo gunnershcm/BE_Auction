@@ -43,6 +43,7 @@ namespace Persistence.Context
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
         public virtual DbSet<UrlResource> UrlResources { get; set; }
         public virtual DbSet<AuctionHistory> AuctionHistories { get; set; }
+        public virtual DbSet<TransferForm> TransferForms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -66,6 +67,18 @@ namespace Persistence.Context
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Approver)
                 .WithMany(u => u.ApproverPosts)
+                .HasForeignKey(p => p.ApproverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TransferForm>()
+                .HasOne(p => p.Author)
+                .WithMany(u => u.AuthorTransferForms)
+                .HasForeignKey(p => p.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TransferForm>()
+                .HasOne(p => p.Approver)
+                .WithMany(u => u.ApproverTransferForms)
                 .HasForeignKey(p => p.ApproverId)
                 .OnDelete(DeleteBehavior.Restrict);
 

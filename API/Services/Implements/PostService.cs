@@ -42,7 +42,7 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
-                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             } 
             return response;
         }
@@ -53,7 +53,7 @@ namespace API.Services.Implements
                await _postRepository.FirstOrDefaultAsync(u => u.Id.Equals(postId), new string[]
                { "Approver", "Author"}) ?? throw new KeyNotFoundException("Post is not exist");
             var entity = _mapper.Map(result, new GetPostResponse());
-            entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+            entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             return entity;
         }
 
@@ -64,7 +64,7 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
-                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -77,7 +77,7 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
-                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -89,7 +89,7 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
-                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id)).Select(x => x.Url).ToList();
+                entity.PropertyImages = (await _urlResourceService.Get(Tables.POST, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -103,7 +103,7 @@ namespace API.Services.Implements
             var result = await _postRepository.CreateAsync(entity);
             if (model.PropertyImages != null)
             {
-                await _urlResourceService.Add(Tables.POST, result.Id, model.PropertyImages);
+                await _urlResourceService.Add(Tables.POST, result.Id, model.PropertyImages, ResourceType.Common);
             }
             return result;
         }
@@ -116,7 +116,7 @@ namespace API.Services.Implements
             var result = await _postRepository.UpdateAsync(entity);
             if (model.PropertyImages != null)
             {
-                await _urlResourceService.Update(Tables.POST, result.Id, model.PropertyImages);
+                await _urlResourceService.Update(Tables.POST, result.Id, model.PropertyImages, ResourceType.Common);
             }
             return result;
         }

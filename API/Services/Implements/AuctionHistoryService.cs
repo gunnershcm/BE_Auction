@@ -14,7 +14,7 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<AuctionHistory> _auctionHistoryRepository;
         private readonly IRepositoryBase<Auction> _auctionRepository;
-        private readonly IMapper _mapper;
+        private readonly IMapper _mapper;   
 
         public AuctionHistoryService(IRepositoryBase<AuctionHistory> auctionHistoryRepository,
             IRepositoryBase<Auction> auctionRepository, IMapper mapper)

@@ -1,7 +1,10 @@
 ﻿using API.Services.Interfaces;
+using Domain.Constants.Enums;
 using Domain.Models;
 using Persistence.Repositories.Interfaces;
-using System.Net.Mail;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Services.Implements
 {
@@ -14,29 +17,30 @@ namespace API.Services.Implements
             _repo = repo;
         }
 
-        public async Task<List<UrlResource>> Get(string table, int entityId)
+        public async Task<List<UrlResource>> Get(string table, int entityId, ResourceType resourceType)
         {
-            var result = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId);
+            var result = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId && (int)x.ResourceType == (int)resourceType);
             return result.ToList();
         }
 
-        public async Task<List<string>> GetUrls(string table, int entityId)
+        public async Task<List<string>> GetUrls(string table, int entityId, ResourceType resourceType)
         {
-            var urlResources = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId);
+            var urlResources = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId && (int)x.ResourceType == (int)resourceType);
             return urlResources.Select(x => x.Url).ToList();
         }
 
-        public async Task<List<UrlResource>> Add(string table, int entityId, List<string>? urls)
+        public async Task<List<UrlResource>> Add(string table, int entityId, List<string>? urls, ResourceType resourceType)
         {
             List<UrlResource> newList = new();
             if (urls == null) return newList;
             foreach (var url in urls)
             {
                 UrlResource newUrl = new UrlResource()
-                {   
+                {
                     Table = table,
                     EntityId = entityId,
-                    Url = url
+                    Url = url,
+                    ResourceType = resourceType
                 };
                 newList.Add(newUrl);
             }
@@ -44,9 +48,9 @@ namespace API.Services.Implements
             return newList;
         }
 
-        public async Task<List<UrlResource>> Update(string table, int entityId, List<string>? urls)
+        public async Task<List<UrlResource>> Update(string table, int entityId, List<string>? urls, ResourceType resourceType)
         {
-            var target = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId);
+            var target = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId && (int)x.ResourceType == (int)resourceType);
             foreach (var entity in target)
             {
                 await _repo.DeleteAsync(entity);
@@ -61,7 +65,8 @@ namespace API.Services.Implements
                 {
                     Table = table,
                     EntityId = entityId,
-                    Url = url
+                    Url = url,
+                    ResourceType = resourceType
                 };
                 newList.Add(newUrl);
             }
@@ -69,9 +74,9 @@ namespace API.Services.Implements
             return newList;
         }
 
-        public async Task Delete(string table, int entityId)
+        public async Task Delete(string table, int entityId, ResourceType resourceType)
         {
-            var target = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId);
+            var target = await _repo.WhereAsync(x => x.Table.Equals(table) && x.EntityId == entityId && (int)x.ResourceType == (int)resourceType);
             foreach (var entity in target)
             {
                 await _repo.DeleteAsync(entity);

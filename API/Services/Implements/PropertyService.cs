@@ -35,7 +35,7 @@ namespace API.Services.Implements
             var response = _mapper.Map<List<GetPropertyResponse>>(result);
             foreach (var entity in response)
             {
-                entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
+                entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -46,7 +46,7 @@ namespace API.Services.Implements
                 await _propertyRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
                 { "Author", "Post", "PropertyType"}) ?? throw new KeyNotFoundException("Property is not exist");
             var entity = _mapper.Map(result, new GetPropertyResponse());
-            entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id)).Select(x => x.Url).ToList();
+            entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             return entity;
         }
 
@@ -67,12 +67,13 @@ namespace API.Services.Implements
             entity.PropertyTypeId = post.PropertyTypeId;
             entity.Code = CommonService.CreateRandomPropertyCode();
             entity.isAvailable = true;
-            var postImages = await _urlResourceService.GetUrls(Tables.POST, post.Id);
+            entity.isDone = false;
+            var postImages = await _urlResourceService.GetUrls(Tables.POST, post.Id, ResourceType.Common);
             model.Images = postImages;
             var result = await _propertyRepository.CreateAsync(entity);
             if (model.Images != null)
             {
-                await _urlResourceService.Add(Tables.PROPERTY, result.Id, model.Images);
+                await _urlResourceService.Add(Tables.PROPERTY, result.Id, model.Images, ResourceType.Common);
             }
             return result;
         }
@@ -85,7 +86,7 @@ namespace API.Services.Implements
             var result = await _propertyRepository.UpdateAsync(entity);
             if (model.Images != null)
             {
-                await _urlResourceService.Update(Tables.PROPERTY, result.Id, model.Images);
+                await _urlResourceService.Update(Tables.PROPERTY, result.Id, model.Images, ResourceType.Common);
             }
             return result;
         }

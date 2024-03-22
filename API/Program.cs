@@ -53,6 +53,7 @@ builder.Services.AddScoped<IHangFireService, HangFireService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAuctionHistoryService, AuctionHistoryService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ITransferFormService, TransferFormService>();
 
 
 
@@ -156,6 +157,6 @@ app.MapControllers();
 app.UseHangfireDashboard("/hangfire");
 app.MapHangfireDashboard();
 
-RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
+//RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
 //RecurringJob.AddOrUpdate<IHangFireService>("send-mail-auction", x => x.SendMailAuction(), Cron.Minutely);
 app.Run();

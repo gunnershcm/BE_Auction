@@ -258,7 +258,7 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = Roles.STAFF)]
+        [Authorize]
         [HttpPatch("modify-status")]
         public async Task<IActionResult> ModifyPostStatus(int postId, PostStatus newStatus)
         {

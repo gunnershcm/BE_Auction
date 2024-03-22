@@ -28,6 +28,8 @@ namespace API.DTOs.Responses.Properties
 
         public bool isAvailable { get; set; }
 
+        public bool isDone { get; set; }
+
         public int PostId { get; set; }
 
         public GetPostForPropertyResponse? Post { get; set; }

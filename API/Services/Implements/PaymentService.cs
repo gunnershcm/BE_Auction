@@ -21,17 +21,20 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<Transaction> _paymentRepository;
         private readonly IRepositoryBase<TransactionType> _tranTypeRepository;
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
+        private readonly IRepositoryBase<Property> _propertyRepository;
         private readonly IMapper _mapper;
         
 
         public PaymentService(IRepositoryBase<Auction> auctionRepository, IMapper mapper,
-            IRepositoryBase<Transaction> paymentRepository, IRepositoryBase<TransactionType> tranTypeRepository, IRepositoryBase<UserAuction> userAuctionRepository)
+            IRepositoryBase<Transaction> paymentRepository, IRepositoryBase<TransactionType> tranTypeRepository, 
+            IRepositoryBase<UserAuction> userAuctionRepository, IRepositoryBase<Property> propertyRepository)
         {
             _auctionRepository = auctionRepository;
             _mapper = mapper;
             _paymentRepository = paymentRepository;
             _tranTypeRepository = tranTypeRepository;
             _userAuctionRepository = userAuctionRepository;
+            _propertyRepository = propertyRepository;
         }
 
         public async Task<List<GetPaymentResponse>> Get()
@@ -83,7 +86,8 @@ namespace API.Services.Implements
 
         public async Task PayDepositFeeAuction(int userId, int auctionId)
         {
-            var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));          
+            var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(auction.PropertyId), new KeyNotFoundException("Property is not exist"));
             var transactionType = await _tranTypeRepository.FirstOrDefaultAsync(u => u.Name.Equals("Deposit"));
             var userAuction = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) && u.AuctionId.Equals(auctionId));
             var target = await _paymentRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
@@ -102,6 +106,8 @@ namespace API.Services.Implements
             await _paymentRepository.CreateAsync(transaction);
             userAuction.isWin = true;
             await _userAuctionRepository.UpdateAsync(userAuction);
+            property.isDone = true;
+            await _propertyRepository.UpdateAsync(property);
         }
     }
 }

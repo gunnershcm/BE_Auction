@@ -16,6 +16,8 @@ namespace Domain.Models
             Logs = new HashSet<Log>();
             AuthorPosts = new HashSet<Post>();
             ApproverPosts = new HashSet<Post>();
+            AuthorTransferForms = new HashSet<TransferForm>();
+            ApproverTransferForms = new HashSet<TransferForm>();
             Properties = new HashSet<Property>();
             UserAuctions = new HashSet<UserAuction>();
             Transactions = new HashSet<Transaction>();
@@ -71,6 +73,12 @@ namespace Domain.Models
 
         [JsonIgnore]
         public virtual ICollection<Post>? ApproverPosts { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<TransferForm>? AuthorTransferForms { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<TransferForm>? ApproverTransferForms { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Property>? Properties { get; set; }

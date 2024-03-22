@@ -340,6 +340,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("isAvailable")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("isDone")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
@@ -463,6 +466,59 @@ namespace Persistence.Migrations
                     b.ToTable("TransactionTypes");
                 });
 
+            modelBuilder.Entity("Domain.Models.TransferForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ApproverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TranferFormStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApproverId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("DeletedAt");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("TransferForms");
+                });
+
             modelBuilder.Entity("Domain.Models.UrlResource", b =>
                 {
                     b.Property<int>("Id")
@@ -482,6 +538,9 @@ namespace Persistence.Migrations
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("ResourceType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Table")
                         .IsRequired()
@@ -750,6 +809,32 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Models.TransferForm", b =>
+                {
+                    b.HasOne("Domain.Models.User", "Approver")
+                        .WithMany("ApproverTransferForms")
+                        .HasForeignKey("ApproverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Models.User", "Author")
+                        .WithMany("AuthorTransferForms")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Property", "Property")
+                        .WithMany()
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Property");
+                });
+
             modelBuilder.Entity("Domain.Models.UserAuction", b =>
                 {
                     b.HasOne("Domain.Models.Auction", "Auction")
@@ -792,9 +877,13 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("ApproverPosts");
 
+                    b.Navigation("ApproverTransferForms");
+
                     b.Navigation("AuctionHistories");
 
                     b.Navigation("AuthorPosts");
+
+                    b.Navigation("AuthorTransferForms");
 
                     b.Navigation("Logs");
 

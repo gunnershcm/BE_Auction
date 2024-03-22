@@ -43,4 +43,8 @@
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\Responses\TransferForms\" />
+  </ItemGroup>
+
 </Project>

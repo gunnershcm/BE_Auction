@@ -26,6 +26,8 @@ namespace Domain.Models
 
         public bool isAvailable { get; set; }
 
+        public bool isDone { get; set; }
+
         public int AuthorId { get; set; }
 
         public User? Author { get; set; }
@@ -37,7 +39,6 @@ namespace Domain.Models
         public int? PropertyTypeId { get; set; }
 
         public PropertyType? PropertyType { get; set; }
-
 
     }
 }

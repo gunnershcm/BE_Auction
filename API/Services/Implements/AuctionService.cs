@@ -50,17 +50,15 @@ namespace API.Services.Implements
             }
             foreach (var entity in responses)
             {
-                entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id)).Select(x => x.Url).ToList();
+                entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             }
             return responses;
         }
-
 
         public async Task<List<GetAuctionForDashboardResponse>> GetAuctionsByMonth(DateTime startOfMonth, DateTime endOfMonth)
         {
             var result = await _auctionRepository
                 .WhereAsync(u => u.CreatedAt >= startOfMonth && u.CreatedAt <= endOfMonth);
-
             var response = _mapper.Map<List<GetAuctionForDashboardResponse>>(result);
             return response;
         }
@@ -71,7 +69,7 @@ namespace API.Services.Implements
                 await _auctionRepository.FirstOrDefaultAsync(u => u.Id.Equals(id), new string[]
                 {"Property"}) ?? throw new KeyNotFoundException("Auction is not exist");
             var entity = _mapper.Map(result, new GetAuctionResponse());
-            entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id)).Select(x => x.Url).ToList();
+            entity.AuctionImages = (await _urlResourceService.Get(Tables.AUCTION, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
             return entity;
         }
 
@@ -80,10 +78,11 @@ namespace API.Services.Implements
             Auction entity = _mapper.Map(model, new Auction());
             var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
             var post = await _postRepository.FoundOrThrow(u => u.Id.Equals(property.PostId), new KeyNotFoundException("Post is not exist"));
-            property.isAvailable = false;
+            property.isAvailable = true;
+            property.isDone = false;
             post.PostStatus = PostStatus.Completed;
             entity.AuctionStatus = AuctionStatus.ComingUp;
-            var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id);
+            var propertyImages = await _urlResourceService.GetUrls(Tables.PROPERTY, property.Id, ResourceType.Common);
             model.AuctionImages = propertyImages;
             model.FinalPrice = 0;
             model.JoiningFee = 50000;
@@ -92,7 +91,7 @@ namespace API.Services.Implements
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
             {
-                await _urlResourceService.Add(Tables.AUCTION, result.Id, model.AuctionImages);
+                await _urlResourceService.Add(Tables.AUCTION, result.Id, model.AuctionImages, ResourceType.Common);
             }
             return result;
         }
@@ -105,7 +104,7 @@ namespace API.Services.Implements
             var result = await _auctionRepository.UpdateAsync(entity);
             if (model.AuctionImages != null)
             {
-                await _urlResourceService.Update(Tables.AUCTION, result.Id, model.AuctionImages);
+                await _urlResourceService.Update(Tables.AUCTION, result.Id, model.AuctionImages, ResourceType.Common);
             }
             return result;
         }

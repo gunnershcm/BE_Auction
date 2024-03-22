@@ -25,6 +25,7 @@ namespace API.Services.Implements
             _auctionService = auctionService;
         }
 
+
         public async Task<AuctionDashboardResponse> GetNumberOfAuctionState()
         {
             AuctionDashboardResponse model = new AuctionDashboardResponse();
@@ -50,22 +51,15 @@ namespace API.Services.Implements
         {
             DateTime startOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
             DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
-
-            // Lấy tất cả các đấu giá trong tháng từ repository UserAuction
             var userAuctionsInMonth = await _userAuctionRepository
                 .WhereAsync(u => u.CreatedAt >= startOfMonth && u.CreatedAt <= endOfMonth);
-
-            // Lấy tất cả các đấu giá trong tháng từ dịch vụ đấu giá
             var allAuctions = await _auctionService.GetAuctionsByMonth(startOfMonth, endOfMonth);
-
-            // Tạo danh sách các đấu giá và số lượng người dùng tham gia mỗi đấu giá
             var response = allAuctions.Select((auction, index) => new UserAuctionCountResponse
             {
                 AuctionId = auction.Id,
                 AuctionName = auction.Name,
                 NumberOfUser = userAuctionsInMonth.Count(u => u.AuctionId == auction.Id)
             }).ToList();
-
             return response;
         }
 
