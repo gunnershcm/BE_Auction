@@ -3,6 +3,7 @@ using API.DTOs.Requests.Posts;
 using API.DTOs.Requests.UserAuctions;
 using API.DTOs.Responses.Auctions;
 using API.DTOs.Responses.Posts;
+using API.DTOs.Responses.TransferForms;
 using API.DTOs.Responses.UserAuctions;
 using API.Services.Implements;
 using API.Services.Interfaces;
@@ -20,10 +21,12 @@ namespace API.Controllers
     public class PaymentController : BaseController
     {
         private readonly IPaymentService _paymentService;
+        private readonly IRepositoryBase<Transaction> _tranRepository;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService, IRepositoryBase<Transaction> tranRepository)
         {
             _paymentService = paymentService;
+            _tranRepository = tranRepository;
         }
 
         [Authorize]
@@ -128,6 +131,46 @@ namespace API.Controllers
             catch (KeyNotFoundException)
             {
                 return NotFound("Payment is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.ADMIN)]
+        [HttpPost("member/payback-deposit-auction")]
+        public async Task<IActionResult> PayBackDepositFeeAuction(int auctionId)
+        {
+            try
+            {
+                await _paymentService.PayDepositFeeAuction(CurrentUserID, auctionId);
+                return Ok("Payment successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Payment is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.ADMIN)]
+        [HttpDelete("admin/{id}")]
+        [ProducesResponseType(typeof(IEnumerable<GetTransferFormResponse>), 200)]
+        public async Task<IActionResult> DeleteForm(int id)
+        {
+            try
+            {
+                var form = await _tranRepository.FirstOrDefaultAsync(x => x.Id == id);
+                await _paymentService.Remove(id);
+                return Ok("Remove Transaction Successfully");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

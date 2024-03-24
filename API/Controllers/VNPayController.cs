@@ -1,6 +1,6 @@
 using API.DTOs.Requests.Users;
+using API.DTOs.VNPay;
 using API.Services.Implements;
-using API.Services.Implements.VNPay;
 using API.Services.Interfaces;
 using Domain.Constants;
 using Domain.Exceptions;

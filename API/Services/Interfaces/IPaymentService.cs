@@ -9,5 +9,7 @@ namespace API.Services.Implements
         Task<List<GetPaymentResponse>> GetPaymentAvailable(int userId);
         Task PayJoiningFeeAuction(int userId, int auctionId);
         Task PayDepositFeeAuction(int userId, int auctionId);
+        Task PayBackDepositFeeAuction(int userId, int auctionId);
+        Task Remove(int id);
     }
 }

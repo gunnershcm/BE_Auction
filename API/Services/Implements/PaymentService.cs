@@ -109,5 +109,31 @@ namespace API.Services.Implements
             property.isDone = true;
             await _propertyRepository.UpdateAsync(property);
         }
+
+        public async Task PayBackDepositFeeAuction (int userId, int auctionId)
+        {
+            var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+            var transactionType = await _tranTypeRepository.FirstOrDefaultAsync(u => u.Name.Equals("Deposit"));
+            var target = await _paymentRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
+            u.AuctionId.Equals(auctionId) && u.TransactionTypeId.Equals(transactionType.Id));
+            if (target != null)
+            {
+                throw new InvalidOperationException("You has already paid back deposit fee for this auction");
+            }
+            Transaction transaction = new Transaction();
+            transaction.UserId = userId;
+            transaction.AuctionId = auctionId;
+            transaction.TransactionTypeId = transactionType.Id;
+            transaction.TransactionStatus = TransactionStatus.Paid;
+            transaction.Amount = auction.Deposit;
+            await _paymentRepository.CreateAsync(transaction);
+        }
+
+        public async Task Remove(int id)
+        {
+            var target = await _paymentRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??
+                         throw new KeyNotFoundException("Payment is not exist");
+            await _paymentRepository.DeleteAsync(target);
+        }
     }
 }

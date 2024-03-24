@@ -15,14 +15,17 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
         private readonly IAuctionService _auctionService;
         private readonly IMapper _mapper;
+        private readonly IRepositoryBase<Transaction> _transactionRepository;
 
         public DashboardService(IRepositoryBase<Auction> auctionRepository, 
-            IRepositoryBase<UserAuction> userAuctionRepository, IMapper mapper, IAuctionService auctionService) 
+            IRepositoryBase<UserAuction> userAuctionRepository, IMapper mapper, 
+            IAuctionService auctionService, IRepositoryBase<Transaction> transactionRepository) 
         {
             _auctionRepository = auctionRepository;
             _userAuctionRepository = userAuctionRepository;
             _mapper = mapper;
             _auctionService = auctionService;
+            _transactionRepository = transactionRepository;
         }
 
 
@@ -62,6 +65,14 @@ namespace API.Services.Implements
             }).ToList();
             return response;
         }
+
+        //public async Task<List<>> GetTransactionForAuctionDashBoardByMonth(DateTime currentDate)
+        //{
+        //    var auction = _auctionRepository.
+        //    var tran = await _transactionRepository.FoundOrThrow(u => u.AuctionId == )
+        //}
+
+
 
     }
 }
