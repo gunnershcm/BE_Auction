@@ -29,7 +29,7 @@ namespace API.Services.Implements
 
         public AuctionService(IRepositoryBase<Auction> auctionRepository, IMapper mapper,
             IPropertyService propertyService, IUrlResourceService urlResourceService,
-            IRepositoryBase<Property> propertyRepository, IRepositoryBase<PropertyType> propertyTypeRepository)
+            IRepositoryBase<Property> propertyRepository, IRepositoryBase<PropertyType> propertyTypeRepository, IRepositoryBase<Post> postRepository)
         {
             _auctionRepository = auctionRepository;
             _mapper = mapper;
@@ -37,6 +37,7 @@ namespace API.Services.Implements
             _urlResourceService = urlResourceService;
             _propertyRepository = propertyRepository;
             _propertyTypeRepository = propertyTypeRepository;
+            _postRepository = postRepository;
         }
 
         public async Task<List<GetAuctionResponse>> Get()
@@ -76,7 +77,7 @@ namespace API.Services.Implements
         public async Task<Auction> CreateAuctionByStaff(CreateAuctionRequest model)
         {
             Auction entity = _mapper.Map(model, new Auction());
-            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
+            var property = await _propertyRepository.FirstOrDefaultAsync(u => u.Id.Equals(entity.PropertyId), new string[] {"Post"}) ?? throw new KeyNotFoundException("Property is not exist or in valid");
             var post = await _postRepository.FoundOrThrow(u => u.Id.Equals(property.PostId), new KeyNotFoundException("Post is not exist"));
             property.isAvailable = false;
             property.isDone = false;

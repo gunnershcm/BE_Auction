@@ -128,7 +128,7 @@ namespace API.Services.Implements
             var target = await _transferFormRepository.FirstOrDefaultAsync(c => c.Id.Equals(formId)) ??
                          throw new KeyNotFoundException();
             var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(target.PropertyId), new KeyNotFoundException("Property is not exist"));
-            property.isAvailable = false;
+            //property.isAvailable = false;
             target.TranferFormStatus = TranferFormStatus.Approved;
             target.Reason = null;
             await _transferFormRepository.UpdateAsync(target);

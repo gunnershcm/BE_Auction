@@ -157,6 +157,6 @@ app.MapControllers();
 app.UseHangfireDashboard("/hangfire");
 app.MapHangfireDashboard();
 
-//RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
+RecurringJob.AddOrUpdate<IHangFireService>("update-auction-status", x => x.UpdateAuctionStatus(),Cron.Minutely);
 //RecurringJob.AddOrUpdate<IHangFireService>("send-mail-auction", x => x.SendMailAuction(), Cron.Minutely);
 app.Run();
