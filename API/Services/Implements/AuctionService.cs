@@ -78,7 +78,7 @@ namespace API.Services.Implements
             Auction entity = _mapper.Map(model, new Auction());
             var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(entity.PropertyId), new KeyNotFoundException("Property is not exist"));
             var post = await _postRepository.FoundOrThrow(u => u.Id.Equals(property.PostId), new KeyNotFoundException("Post is not exist"));
-            property.isAvailable = true;
+            property.isAvailable = false;
             property.isDone = false;
             post.PostStatus = PostStatus.Completed;
             entity.AuctionStatus = AuctionStatus.ComingUp;
