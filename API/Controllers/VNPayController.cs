@@ -54,7 +54,7 @@ public class VNPayController : BaseController
         pay.AddRequestData("vnp_OrderType", "other"); //topup: Nạp tiền điện thoại - billpayment: Thanh toán hóa đơn - fashion: Thời trang - other: Thanh toán trực tuyến
         pay.AddRequestData("vnp_ReturnUrl", returnUrl); //URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán
         pay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); //mã hóa đơn
-        pay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddHours(1).ToString("yyyyMMddHHmmss")); //Thời gian kết thúc thanh toán
+        pay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddHours(8).ToString("yyyyMMddHHmmss")); //Thời gian kết thúc thanh toán
         string paymentUrl = pay.CreateRequestUrl(url, hashSecret);
         return Ok(paymentUrl);
     }
