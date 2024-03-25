@@ -137,6 +137,16 @@ namespace API.Services.Implements
                         auction.AuctionStatus = newStatus;
                         await _auctionRepository.UpdateAsync(auction);
                     }
+                    else if (newStatus == AuctionStatus.Succeeded)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Failed)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
                     break;
 
                 case AuctionStatus.InProgress:
@@ -150,6 +160,16 @@ namespace API.Services.Implements
                         auction.AuctionStatus = newStatus;
                         await _auctionRepository.UpdateAsync(auction);
                     }
+                    else if (newStatus == AuctionStatus.Succeeded)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Failed)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
                     break;
 
                 case AuctionStatus.Finished:
@@ -159,6 +179,61 @@ namespace API.Services.Implements
                         await _auctionRepository.UpdateAsync(auction);
                     }
                     else if (newStatus == AuctionStatus.InProgress)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Succeeded)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Failed)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    break;
+
+                case AuctionStatus.Succeeded:
+                    if (newStatus == AuctionStatus.ComingUp)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.InProgress)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Finished)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Failed)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    break;
+                case AuctionStatus.Failed:
+                    if (newStatus == AuctionStatus.ComingUp)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.InProgress)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Finished)
+                    {
+                        auction.AuctionStatus = newStatus;
+                        await _auctionRepository.UpdateAsync(auction);
+                    }
+                    else if (newStatus == AuctionStatus.Succeeded)
                     {
                         auction.AuctionStatus = newStatus;
                         await _auctionRepository.UpdateAsync(auction);
