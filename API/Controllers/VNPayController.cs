@@ -62,13 +62,14 @@ public class VNPayController : BaseController
     [HttpGet("PaymentConfirm")]
     public async Task<IActionResult> Confirm()
     {
-        string returnUrl = _configuration["VnPay:ReturnPath"];
+        string returnSuccessUrl = _configuration["VnPay:ReturnSuccessPath"];
+        string returnFailUrl = _configuration["VnPay:ReturnFailPath"];
         float amount = 0;
         string status = "failed";
 
         if (Request.Query.Count > 0)
         {
-            string vnp_HashSecret = _configuration["VnPay:HashSecret"]; //Secret key
+            //string vnp_HashSecret = _configuration["VnPay:HashSecret"]; //Secret key
             var vnpayData = Request.Query;
             VnPayLibrary vnpay = new VnPayLibrary();
 
@@ -81,23 +82,24 @@ public class VNPayController : BaseController
                 }
             }
 
-            long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
+            //long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
             float vnp_Amount = Convert.ToInt64(vnpay.GetResponseData("vnp_Amount")) / 100;
             amount = vnp_Amount;
-            long vnpayTranId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
+            //long vnpayTranId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
             string vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
             string vnp_TransactionStatus = vnpay.GetResponseData("vnp_TransactionStatus");
-            String vnp_SecureHash = Request.Query["vnp_SecureHash"];
-            bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
-            var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
-            int userId = int.Parse(vnp_OrderInfo);        
+            //String vnp_SecureHash = Request.Query["vnp_SecureHash"];
+            //bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
+            //var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
+            //int userId = int.Parse(vnp_OrderInfo);        
 
             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
             {
                 status = "success";
+                return Redirect(returnSuccessUrl);
             }
+               
         }
-
-        return Redirect(returnUrl + "?amount=" + amount + "&status=" + status);
+        return Redirect(returnFailUrl);
     }
 }

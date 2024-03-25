@@ -102,7 +102,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("user/available")]
-        [ProducesResponseType(typeof(IEnumerable<GetPostResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<GetPostResponse>), 200)]   
         public async Task<IActionResult> GetPostByUserAvailable()
         {
             try

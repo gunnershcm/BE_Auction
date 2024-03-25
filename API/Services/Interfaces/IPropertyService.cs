@@ -8,6 +8,7 @@ namespace API.Services.Interfaces
     {
         Task<List<GetPropertyResponse>> Get();
         Task<GetPropertyResponse> GetById(int id);
+        Task<List<GetPropertyResponse>> GetForTransferForm(int userId);
         Task<Property> CreateProperty(int postId, CreatePropertyRequest model);
         Task<Property> UpdateProperty(int id, UpdatePropertyRequest model);
         Task Remove(int id);

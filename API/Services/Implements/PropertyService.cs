@@ -50,6 +50,23 @@ namespace API.Services.Implements
             return entity;
         }
 
+        public async Task<List<GetPropertyResponse>> GetForTransferForm(int userId)
+        {
+            var result = await _propertyRepository.GetAsync(
+                filter: p => p.AuthorId == userId && p.isDone == true,
+                navigationProperties: new string[] { "Author", "Post", "PropertyType" }) ?? throw new KeyNotFoundException("Property is not exist");
+
+            var response = _mapper.Map<List<GetPropertyResponse>>(result);
+
+            foreach (var entity in response)
+            {
+                entity.Images = (await _urlResourceService.Get(Tables.PROPERTY, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
+            }
+
+            return response;
+        }
+
+
         public async Task<Property> CreateProperty(int postId,CreatePropertyRequest model)
         {
             var post = await _postRepository.FirstOrDefaultAsync(x => x.Id.Equals(postId)) ??   

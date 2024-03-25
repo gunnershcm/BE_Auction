@@ -62,6 +62,26 @@ namespace API.Controllers
         }
 
         [Authorize]
+        [HttpGet("available")]
+        [ProducesResponseType(typeof(IEnumerable<GetPropertyResponse>), 200)]
+        public async Task<IActionResult> GetPropertyForTranfer()
+        {
+            try
+            {
+                var result = await _propertyService.GetForTransferForm(CurrentUserID);
+                return Ok(result);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<GetPropertyResponse>), 200)]
         public async Task<IActionResult> GetProperties(

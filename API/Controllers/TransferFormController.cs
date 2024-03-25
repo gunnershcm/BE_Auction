@@ -179,7 +179,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = Roles.ADMIN)]
-        [HttpPut("member/{formId}")]
+        [HttpPut("admin/{formId}")]
         [ProducesResponseType(typeof(IEnumerable<GetTransferFormResponse>), 200)]
         public async Task<IActionResult> UpdateFormByAdmin(int formId, [FromBody] UpdateTransferFormRequest model)
         {
