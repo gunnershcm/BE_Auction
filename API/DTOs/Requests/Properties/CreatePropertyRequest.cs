@@ -25,6 +25,8 @@ namespace API.DTOs.Requests.Properties
 
         public bool isAvailable { get; set; }
 
+        public double Price { get; set; }
+
     }
 }
     

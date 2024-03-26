@@ -107,6 +107,7 @@ namespace API.Services.Implements
             userAuction.isWin = true;
             await _userAuctionRepository.UpdateAsync(userAuction);
             property.isDone = true;
+            property.Price = auction.FinalPrice;
             await _propertyRepository.UpdateAsync(property);
         }
 

@@ -85,6 +85,7 @@ namespace API.Services.Implements
             entity.Code = CommonService.CreateRandomPropertyCode();
             entity.isAvailable = true;
             entity.isDone = false;
+            entity.Price = 0;
             var postImages = await _urlResourceService.GetUrls(Tables.POST, post.Id, ResourceType.Common);
             model.Images = postImages;
             var result = await _propertyRepository.CreateAsync(entity);

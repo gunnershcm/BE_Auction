@@ -28,6 +28,8 @@ namespace Domain.Models
 
         public bool isDone { get; set; }
 
+        public double Price { get; set; }
+
         public int AuthorId { get; set; }
 
         public User? Author { get; set; }
