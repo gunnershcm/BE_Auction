@@ -13,7 +13,6 @@ namespace Domain.Models
     {
         public User()
         {
-            Logs = new HashSet<Log>();
             AuthorPosts = new HashSet<Post>();
             ApproverPosts = new HashSet<Post>();
             AuthorTransferForms = new HashSet<TransferForm>();
@@ -64,9 +63,6 @@ namespace Domain.Models
         public string? ConfirmCode { get; set; }
 
         public DateTime? ResetTokenExpires { get; set; }
-
-        [JsonIgnore]
-        public virtual ICollection<Log>? Logs { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Post>? AuthorPosts { get; set; }

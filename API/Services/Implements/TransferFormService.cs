@@ -44,6 +44,7 @@ namespace API.Services.Implements
             foreach (var entity in response)
             {
                 entity.TransferImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
+                entity.TransactionImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Confirm)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -55,6 +56,7 @@ namespace API.Services.Implements
                { "Approver", "Author", "Property"}) ?? throw new KeyNotFoundException("Form is not exist");
             var entity = _mapper.Map(result, new GetTransferFormResponse());
             entity.TransferImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
+            entity.TransactionImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Confirm)).Select(x => x.Url).ToList();
             return entity;
         }
 
@@ -66,6 +68,7 @@ namespace API.Services.Implements
             foreach (var entity in response)
             {
                 entity.TransferImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
+                entity.TransactionImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Confirm)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -79,6 +82,7 @@ namespace API.Services.Implements
             foreach (var entity in response)
             {
                 entity.TransferImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
+                entity.TransactionImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Confirm)).Select(x => x.Url).ToList();
             }
             return response;
         }
@@ -91,6 +95,7 @@ namespace API.Services.Implements
             foreach (var entity in response)
             {
                 entity.TransferImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Common)).Select(x => x.Url).ToList();
+                entity.TransactionImages = (await _urlResourceService.Get(Tables.TRANSFERFORM, entity.Id, ResourceType.Confirm)).Select(x => x.Url).ToList();
             }
             return response;
         }

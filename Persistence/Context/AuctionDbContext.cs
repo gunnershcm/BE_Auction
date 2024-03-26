@@ -32,14 +32,12 @@ namespace Persistence.Context
         }
 
         public virtual DbSet<Auction> Auctions { get; set; }
-        public virtual DbSet<Log> Logs { get; set; }
         public virtual DbSet<Post> Posts { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<TransactionType> TransactionTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAuction> UserAuctions { get; set; }
-        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<PropertyType> PropertyTypes { get; set; }
         public virtual DbSet<UrlResource> UrlResources { get; set; }
         public virtual DbSet<AuctionHistory> AuctionHistories { get; set; }
