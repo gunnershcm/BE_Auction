@@ -131,7 +131,7 @@ FirebaseApp.Create(new AppOptions()
 });
 
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS",
-    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "admin_dk.json"));
+    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "admin_dk.json"));  
 
 builder.Services.AddLogging();
 var app = builder.Build();

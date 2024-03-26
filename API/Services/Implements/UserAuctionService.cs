@@ -10,6 +10,7 @@ using Domain.Models;
 using Firebase.Auth;
 using Persistence.Helpers;
 using Persistence.Repositories.Interfaces;
+using System;
 
 
 namespace API.Services.Implements
@@ -18,15 +19,17 @@ namespace API.Services.Implements
     {
         private readonly IRepositoryBase<UserAuction> _userAuctionRepository;
         private readonly IRepositoryBase<Auction> _auctionRepository;
-        private readonly IAuctionHistoryService _auctionHistoryService; 
+        private readonly IAuctionHistoryService _auctionHistoryService;
+        private readonly IRepositoryBase<Property> _propertyRepository;
         private readonly IMapper _mapper;
 
         public UserAuctionService(IRepositoryBase<UserAuction> userAuctionRepository, 
-            IRepositoryBase<Auction> auctionRepository, IMapper mapper, IAuctionHistoryService auctionHistoryService)
+            IRepositoryBase<Auction> auctionRepository, IMapper mapper, IAuctionHistoryService auctionHistoryService, IRepositoryBase<Property> propertyRepository)
         {
             _userAuctionRepository = userAuctionRepository;
             _auctionRepository = auctionRepository;
             _auctionHistoryService = auctionHistoryService;
+            _propertyRepository = propertyRepository;
             _mapper = mapper;
         }    
 
@@ -79,6 +82,11 @@ namespace API.Services.Implements
         public async Task JoinAuction(int userId, int auctionId)
         {
             var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(auction.PropertyId), new KeyNotFoundException("Property is not exist"));
+            if (property.AuthorId == userId)
+            {
+                throw new InvalidOperationException("Owner can not join to her/his auction");
+            }      
             var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
             u.AuctionId.Equals(auctionId));
             if (target != null)
