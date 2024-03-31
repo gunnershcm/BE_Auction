@@ -48,7 +48,7 @@ namespace API.Services.Implements
         {
             var result = await _auctionHistoryRepository.WhereAsync(x => x.AuctionId.Equals(auctionId),
                 new string[] { "User" });
-            result = result.OrderByDescending(x => x.Id).ToList();
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
             var response = _mapper.Map<List<GetHistoryByAuctionResponse>>(result);
             return response;
         }
