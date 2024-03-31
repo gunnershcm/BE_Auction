@@ -57,6 +57,9 @@ namespace Persistence.Migrations
                     b.Property<double>("JoiningFee")
                         .HasColumnType("float");
 
+                    b.Property<int?>("MaxStepFee")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 

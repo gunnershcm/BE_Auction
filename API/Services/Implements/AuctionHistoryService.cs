@@ -42,10 +42,13 @@ namespace API.Services.Implements
             return entity;
         }
 
+
+
         public async Task<List<GetHistoryByAuctionResponse>> GetHistoryByAuction(int auctionId)
         {
             var result = await _auctionHistoryRepository.WhereAsync(x => x.AuctionId.Equals(auctionId),
                 new string[] { "User" });
+            result = result.OrderByDescending(x => x.Id).ToList();
             var response = _mapper.Map<List<GetHistoryByAuctionResponse>>(result);
             return response;
         }

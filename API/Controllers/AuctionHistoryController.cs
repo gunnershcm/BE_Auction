@@ -96,7 +96,7 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("get-user")]
+        [HttpGet("Get-Histoy-By-Auction")]
         [ProducesResponseType(typeof(IEnumerable<GetHistoryByAuctionResponse>), 200)]
         public async Task<IActionResult> GetHistoryByAuction(int auctionId)
         {

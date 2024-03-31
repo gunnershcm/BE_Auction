@@ -92,13 +92,11 @@ public class VNPayController : BaseController
             //bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
             //var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
             //int userId = int.Parse(vnp_OrderInfo);        
-
             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
             {
                 status = "success";
                 return Redirect(returnSuccessUrl);
-            }
-               
+            }               
         }
         return Redirect(returnFailUrl);
     }

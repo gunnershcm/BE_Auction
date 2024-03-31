@@ -32,6 +32,8 @@ namespace Domain.Models
 
         public double StepFee { get; set; }
 
+        public int? MaxStepFee { get; set; }
+
         public double Deposit { get; set; }
 
         public DateTime BiddingStartTime { get; set; }
