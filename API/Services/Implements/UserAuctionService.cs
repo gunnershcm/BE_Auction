@@ -23,7 +23,7 @@ namespace API.Services.Implements
         private readonly IRepositoryBase<Property> _propertyRepository;
         private readonly IMapper _mapper;
 
-        public UserAuctionService(IRepositoryBase<UserAuction> userAuctionRepository, 
+        public UserAuctionService(IRepositoryBase<UserAuction> userAuctionRepository,
             IRepositoryBase<Auction> auctionRepository, IMapper mapper, IAuctionHistoryService auctionHistoryService, IRepositoryBase<Property> propertyRepository)
         {
             _userAuctionRepository = userAuctionRepository;
@@ -31,7 +31,7 @@ namespace API.Services.Implements
             _auctionHistoryService = auctionHistoryService;
             _propertyRepository = propertyRepository;
             _mapper = mapper;
-        }    
+        }
 
         public async Task<List<GetUserAuctionResponse>> Get()
         {
@@ -86,13 +86,14 @@ namespace API.Services.Implements
             if (property.AuthorId == userId)
             {
                 throw new InvalidOperationException("Owner can not join to her/his auction");
-            }      
+            }
             var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
             u.AuctionId.Equals(auctionId));
             if (target != null)
             {
                 throw new InvalidOperationException("You has already joined this auction");
-            }else if (auction.AuctionStatus == AuctionStatus.ComingUp)
+            }
+            else if (auction.AuctionStatus == AuctionStatus.ComingUp)
             {
                 UserAuction userAuction = new UserAuction();
                 userAuction.UserId = userId;
@@ -100,16 +101,16 @@ namespace API.Services.Implements
                 userAuction.isJoin = true;
                 userAuction.isWin = false;
                 await _userAuctionRepository.CreateAsync(userAuction);
-            } 
+            }
             else
             {
                 throw new InvalidOperationException("Invalid Time to join this auction");
-            }                
+            }
         }
-        
+
         public async Task<UserAuction> BiddingAmount(int userId, int auctionId, BiddingAmountRequest model)
         {
-            var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) 
+            var target = await _userAuctionRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId)
             && u.AuctionId.Equals(auctionId)) ?? throw new KeyNotFoundException("Auction for User is not exist");
             var entity = _mapper.Map(model, target);
             var auction = await _auctionRepository.FirstOrDefaultAsync(a => a.Id.Equals(auctionId));
@@ -124,6 +125,11 @@ namespace API.Services.Implements
             else if (model.BiddingAmount < (auction.FinalPrice + auction.StepFee))
             {
                 throw new InvalidOperationException("Bidding amount must be greater than current price with stepFee");
+            }
+            else if (auction.MaxStepFee != null && model.BiddingAmount > (auction.StepFee * auction.MaxStepFee))
+            {
+                throw new Exception("Bidding amount must be smaller than step fee value.");
+
             }
             else
             {
@@ -146,7 +152,7 @@ namespace API.Services.Implements
             {
                 return true;
             }
-            return false;          
+            return false;
         }
     }
 }

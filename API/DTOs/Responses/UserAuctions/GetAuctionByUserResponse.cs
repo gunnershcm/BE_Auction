@@ -13,5 +13,11 @@ namespace API.DTOs.Responses.UserAuctions
 
         public bool isJoin { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

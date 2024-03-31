@@ -88,6 +88,10 @@ namespace API.Services.Implements
             model.FinalPrice = 0;
             model.JoiningFee = 50000;
             model.StepFee = 0.1 * (model.RevervePrice);
+            if (1>model.MaxStepFee && model.MaxStepFee> 10)
+            {
+                throw new InvalidOperationException("MaxStepFee invalid");
+            }
             model.Deposit = 0;
             var result = await _auctionRepository.CreateAsync(entity);
             if (model.AuctionImages != null)
