@@ -23,6 +23,8 @@ namespace API.DTOs.Responses.Auctions
 
         public double StepFee { get; set; }
 
+        public int? MaxStepFee { get; set; }
+
         public double Deposit { get; set; }
 
         public string Method { get; set; }
