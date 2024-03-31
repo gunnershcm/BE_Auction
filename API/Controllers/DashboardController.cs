@@ -35,5 +35,24 @@ namespace API.Controllers
             var dashboard = await _dashboardService.GetUserForAuctionDashBoardByMonth(DateTime.Today);
             return Ok(dashboard);
         }
+
+        [Authorize(Roles = Roles.ADMIN)]
+        [HttpGet("admin/auction/get-transaction-in-year")]
+        [ProducesResponseType(typeof(IEnumerable<UserAuctionCountResponse>), 200)]
+        public async Task<IActionResult> GetTransactionThisMonth()
+        {
+            var dashboard = await _dashboardService.GetTransactionDashBoardInCurrentYear(DateTime.Today);
+            return Ok(dashboard);
+        }
+
+        [Authorize(Roles = Roles.ADMIN)]
+        [HttpGet("admin/auction/get-bidding-in-month")]
+        [ProducesResponseType(typeof(IEnumerable<UserAuctionCountResponse>), 200)]
+        public async Task<IActionResult> GetBiddingInformation()
+        {
+            var dashboard = await _dashboardService.GetBiddingInformationDashboard(DateTime.Today);
+            return Ok(dashboard);
+        }
     }
 }
+

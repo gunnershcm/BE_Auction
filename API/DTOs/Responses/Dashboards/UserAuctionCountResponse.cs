@@ -15,6 +15,7 @@ namespace API.DTOs.Responses.Dashboards
 
         public int NumberOfUser { get; set; }
 
-
     }
+
+
 }

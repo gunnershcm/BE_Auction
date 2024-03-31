@@ -6,5 +6,7 @@ namespace API.Services.Implements
     {
         Task<AuctionDashboardResponse> GetNumberOfAuctionState();
         Task<List<UserAuctionCountResponse>> GetUserForAuctionDashBoardByMonth(DateTime currentDate);
+        Task<List<TransactionDashboardResponse>> GetTransactionDashBoardInCurrentYear(DateTime currentDate);
+        Task<List<HistoryBiddingDashboardResponse>> GetBiddingInformationDashboard(DateTime currentDate);
     }
 }
