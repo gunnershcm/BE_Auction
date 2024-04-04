@@ -67,7 +67,12 @@ namespace API.Services.Implements
 
         public async Task PayJoiningFeeAuction(int userId, int auctionId)                   
         {                                                                                   
-            await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+            var auction = await _auctionRepository.FoundOrThrow(u => u.Id.Equals(auctionId), new KeyNotFoundException("Auction is not exist"));
+            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(auction.PropertyId), new KeyNotFoundException("Property is not exist"));
+            if (property.AuthorId == userId)
+            {
+                throw new InvalidOperationException("Owner can not pay for her/his auction");
+            }
             var transactionType =  await _tranTypeRepository.FirstOrDefaultAsync(u => u.Name.Equals("JoiningFee"));
             var target = await _paymentRepository.FirstOrDefaultAsync(u => u.UserId.Equals(userId) &&
             u.AuctionId.Equals(auctionId) && u.TransactionTypeId.Equals(transactionType.Id));
