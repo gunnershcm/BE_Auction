@@ -28,5 +28,11 @@ namespace API.DTOs.Responses.Auctions
         public int TransactionTypeId { get; set; }      
 
         public TransactionType? TransactionType { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
     }
 }

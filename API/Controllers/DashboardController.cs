@@ -38,7 +38,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.ADMIN)]
         [HttpGet("admin/auction/get-transaction-in-year")]
-        [ProducesResponseType(typeof(IEnumerable<UserAuctionCountResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<TransactionDashboardResponse>), 200)]
         public async Task<IActionResult> GetTransactionThisMonth()
         {
             var dashboard = await _dashboardService.GetTransactionDashBoardInCurrentYear(DateTime.Today);
@@ -47,7 +47,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Roles.ADMIN)]
         [HttpGet("admin/auction/get-bidding-in-month")]
-        [ProducesResponseType(typeof(IEnumerable<UserAuctionCountResponse>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<HistoryBiddingDashboardResponse>), 200)]
         public async Task<IActionResult> GetBiddingInformation()
         {
             var dashboard = await _dashboardService.GetBiddingInformationDashboard(DateTime.Today);

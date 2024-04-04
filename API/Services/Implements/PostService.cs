@@ -39,6 +39,7 @@ namespace API.Services.Implements
         {
             var result = await _postRepository.GetAsync(navigationProperties: new string[]
                 { "Approver", "Author"});
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -61,6 +62,7 @@ namespace API.Services.Implements
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId),
                 new string[] { "Author", "Approver",});
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -74,6 +76,7 @@ namespace API.Services.Implements
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
             && x.PostStatus == PostStatus.Approved, new string[] { "Author", "Approver"});
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {
@@ -86,6 +89,7 @@ namespace API.Services.Implements
         {
             var result = await _postRepository.WhereAsync(x => x.AuthorId.Equals(userId)
             && x.PostStatus == PostStatus.Rejected, new string[] { "Author", "Approver"});
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
             var response = _mapper.Map<List<GetPostResponse>>(result);
             foreach (var entity in response)
             {

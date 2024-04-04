@@ -115,7 +115,7 @@ namespace API.Services.Implements
         }
 
         public async Task<List<HistoryBiddingDashboardResponse>> GetBiddingInformationDashboard(DateTime currentDate)
-        {
+        {   
             var response = new List<HistoryBiddingDashboardResponse>();
 
             DateTime startOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
@@ -128,14 +128,11 @@ namespace API.Services.Implements
                 // Lấy thông tin về các lượt đấu giá trong phiên đấu giá này
                 var biddings = await _auctionHistoryRepository
                     .WhereAsync(t => t.AuctionId == auction.Id);
-
                 // Số lượng lượt đấu giá
                 var numberOfBidding = biddings.Count();
-
                 // Lượt đấu giá cao nhất và người đấu giá cao nhất
                 var highestBidding = biddings.Max(t => t.BiddingAmount);
                 var highestBiddingPersonId = biddings.FirstOrDefault(t => t.BiddingAmount == highestBidding)?.UserId ?? 0;
-
                 // Tạo đối tượng HistoryBiddingDashboardResponse và thêm vào danh sách response
                 var biddingInfo = new HistoryBiddingDashboardResponse
                 {
@@ -145,12 +142,10 @@ namespace API.Services.Implements
                     HighestBidding = highestBidding,
                     HighestBiddingPersonId = highestBiddingPersonId
                 };
-
                 response.Add(biddingInfo);
             }
             return response;
         }
-
     }
 
 

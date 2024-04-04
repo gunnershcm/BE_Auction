@@ -22,7 +22,7 @@ public class VNPayController : BaseController
     private readonly IRepositoryBase<TransactionType> _tranTypeRepository;
 
 
-    public VNPayController(IConfiguration configuration, IRepositoryBase<Transaction> transactionRepository, 
+    public VNPayController(IConfiguration configuration, IRepositoryBase<Transaction> transactionRepository,
         IPaymentService paymentService, IRepositoryBase<TransactionType> tranTypeRepository)
     {
         _configuration = configuration;
@@ -50,8 +50,7 @@ public class VNPayController : BaseController
         pay.AddRequestData("vnp_CurrCode", "VND"); //Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
         pay.AddRequestData("vnp_IpAddr", "0.0.0.0"); //Địa chỉ IP của khách hàng thực hiện giao dịch
         pay.AddRequestData("vnp_Locale", "vn"); //Ngôn ngữ giao diện hiển thị - Tiếng Việt (vn), Tiếng Anh (en)
-        pay.AddRequestData("vnp_OrderInfo", businessPayment.UserId.ToString()); //Thông tin mô tả nội dung thanh toán
-        pay.AddRequestData("vnp_OrderType", "other"); //topup: Nạp tiền điện thoại - billpayment: Thanh toán hóa đơn - fashion: Thời trang - other: Thanh toán trực tuyến
+        pay.AddRequestData("vnp_OrderInfo", businessPayment.UserId.ToString()); //Thông tin mô tả nội dung thanh toán/-strong/-heart:>:o:-((:-hpay.AddRequestData("vnp_OrderType", "other"); //topup: Nạp tiền điện thoại - billpayment: Thanh toán hóa đơn - fashion: Thời trang - other: Thanh toán trực tuyến
         pay.AddRequestData("vnp_ReturnUrl", returnUrl); //URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán
         pay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); //mã hóa đơn
         pay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddHours(8).ToString("yyyyMMddHHmmss")); //Thời gian kết thúc thanh toán
@@ -96,7 +95,7 @@ public class VNPayController : BaseController
             {
                 status = "success";
                 return Redirect(returnSuccessUrl);
-            }               
+            }
         }
         return Redirect(returnFailUrl);
     }

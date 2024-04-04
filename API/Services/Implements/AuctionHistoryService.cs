@@ -65,7 +65,7 @@ namespace API.Services.Implements
 
         public async Task<AuctionHistory> CreateAuctionHistory(int userId, int auctionId, BiddingHistoryRequest model)
         {
-            AuctionHistory entity = _mapper.Map(model, new AuctionHistory());
+            AuctionHistory entity = _mapper.Map(model, new AuctionHistory());   
             entity.UserId = userId;
             entity.AuctionId = auctionId;
             entity.BiddingAmount = model.BiddingAmount;
