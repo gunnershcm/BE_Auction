@@ -44,6 +44,7 @@ namespace API.Services.Implements
         {
             var auctions = await _auctionRepository.GetAsync(navigationProperties: new string[]
             {"Property","Property.Post","Property.PropertyType"});
+            auctions = auctions.OrderByDescending(x => x.CreatedAt).ToList();
             var responses = _mapper.Map<List<GetAuctionResponse>>(auctions);
             foreach (var response in responses)
             {
@@ -60,6 +61,7 @@ namespace API.Services.Implements
         {
             var result = await _auctionRepository
                 .WhereAsync(u => u.CreatedAt >= startOfMonth && u.CreatedAt <= endOfMonth);
+            result = result.OrderByDescending(x => x.CreatedAt).ToList();
             var response = _mapper.Map<List<GetAuctionForDashboardResponse>>(result);
             return response;
         }

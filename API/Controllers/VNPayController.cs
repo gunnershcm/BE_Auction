@@ -33,7 +33,7 @@ public class VNPayController : BaseController
     }
 
     [HttpGet]
-    [AllowAnonymous]
+    [ProducesResponseType(typeof(BaseResponse<ResponsePaymentUrlModel>), StatusCodes.Status201Created)]
     public async Task<IActionResult> Get([FromQuery] BusinessPayment businessPayment)
     {
         string url = _configuration["VnPay:Url"];
@@ -58,45 +58,63 @@ public class VNPayController : BaseController
         return Ok(paymentUrl);
     }
 
+    /// <summary>
+    /// Endpoint for verify payment for topup
+    /// </summary>
+    /// <returns>Status of payment</returns>
+    /// <response code="200">Returns the status of payment</response>
     [HttpGet("PaymentConfirm")]
+    [ProducesResponseType(typeof(BaseResponse<ResponseStatusPaymentModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Confirm()
     {
-        string returnSuccessUrl = _configuration["VnPay:ReturnSuccessPath"];
-        string returnFailUrl = _configuration["VnPay:ReturnFailPath"];
-        float amount = 0;
-        string status = "failed";
-
+        //string returnUrl = _configuration["VnPay:ReturnPath"];
+        double amount = 0;
+        string status = "FAILED";
         if (Request.Query.Count > 0)
         {
-            //string vnp_HashSecret = _configuration["VnPay:HashSecret"]; //Secret key
+            string vnp_HashSecret = _configuration["VnPay:HashSecret"]!;
             var vnpayData = Request.Query;
             VnPayLibrary vnpay = new VnPayLibrary();
-
             foreach (string s in vnpayData.Keys)
             {
-                //get all querystring data
+                // Lấy dữ liệu từ query string
                 if (!string.IsNullOrEmpty(s) && s.StartsWith("vnp_"))
                 {
                     vnpay.AddResponseData(s, vnpayData[s]);
                 }
             }
 
-            //long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
+            long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
             float vnp_Amount = Convert.ToInt64(vnpay.GetResponseData("vnp_Amount")) / 100;
             amount = vnp_Amount;
-            //long vnpayTranId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
             string vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
             string vnp_TransactionStatus = vnpay.GetResponseData("vnp_TransactionStatus");
-            //String vnp_SecureHash = Request.Query["vnp_SecureHash"];
-            //bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
-            //var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
-            //int userId = int.Parse(vnp_OrderInfo);        
+            String vnp_SecureHash = Request.Query["vnp_SecureHash"]!;
+            bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
+            var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
+            Guid touristId = Guid.Parse(vnp_OrderInfo);
+
+            // Kiểm tra dữ liệu trả về từ VNPAY
             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
             {
-                status = "success";
-                return Redirect(returnSuccessUrl);
+                // Thanh toán thành công
+                status = "SUCCESS";
             }
+
+            // Đoạn này đã bị loại bỏ vì không còn sử dụng dịch vụ ví
         }
-        return Redirect(returnFailUrl);
+
+        return Redirect($"amount={amount}&status={status}");
+
+    }
+    public class ResponsePaymentUrlModel
+    {
+        public string? Url { get; set; }
+    }
+
+    public class ResponseStatusPaymentModel
+    {
+        public string? Status { get; set; }
+        public double? Amount { get; set; }
     }
 }
