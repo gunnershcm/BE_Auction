@@ -203,7 +203,7 @@ public class VNPayController : BaseController
 
     [HttpGet("Payment-For-Back-Deposit")]
     [ProducesResponseType(typeof(BaseResponse<ResponsePaymentUrlModel>), StatusCodes.Status201Created)]
-    public async Task<IActionResult> GetPayBackDeposit([FromQuery] BusinessPayment businessPayment)
+    public async Task<IActionResult> GetPayBackDeposit([FromQuery] PaybackPayment businessPayment)
     {
         string url = _configuration["VnPay:Url"]!;
         string returnUrl = _configuration["VnPay:ReturnPathBackDeposit"]!;
