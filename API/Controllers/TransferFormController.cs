@@ -240,6 +240,26 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = Roles.ADMIN)]
+        [HttpPatch("done")]
+        [ProducesResponseType(typeof(IEnumerable<GetTransferFormResponse>), 200)]
+        public async Task<IActionResult> DoneForm(int formId)
+        {
+            try
+            {
+                await _tranferFormService.Done(formId);
+                return Ok("Form Done Successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Form is not exist");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = Roles.ADMIN)]
         [HttpPatch("reject")]
         [ProducesResponseType(typeof(IEnumerable<GetTransferFormResponse>), 200)]
         public async Task<IActionResult> RejectForm(int formId, [FromBody] UpdateRejectReasonForm model)

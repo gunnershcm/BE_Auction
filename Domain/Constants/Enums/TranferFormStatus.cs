@@ -12,7 +12,9 @@ namespace Domain.Constants.Enums
         Rejected,
         [Description("Approved")]
         Approved,
-        [Description("Completed")]
-        Completed,
+        [Description("Payment Complete")]
+        PaymentComplete,
+        [Description("Done")]
+        Done,
     }
 }

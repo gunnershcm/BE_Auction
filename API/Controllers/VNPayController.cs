@@ -23,16 +23,18 @@ public class VNPayController : BaseController
     private readonly IPaymentService _paymentService;
     private readonly IRepositoryBase<TransactionType> _tranTypeRepository;
     private readonly IUserAuctionService _userAuctionService;
+    private readonly ITransferFormService _transferFormService;
 
 
     public VNPayController(IConfiguration configuration, IRepositoryBase<Transaction> transactionRepository,
-        IPaymentService paymentService, IRepositoryBase<TransactionType> tranTypeRepository, IUserAuctionService userAuctionService)
+        IPaymentService paymentService, IRepositoryBase<TransactionType> tranTypeRepository, IUserAuctionService userAuctionService, ITransferFormService transferFormService)
     {
         _configuration = configuration;
         _transactionRepository = transactionRepository;
         _paymentService = paymentService;
         _tranTypeRepository = tranTypeRepository;
         _userAuctionService = userAuctionService;
+        _transferFormService = transferFormService;
         //_exchangeRate = double.Parse(configuration["SystemConfiguration:ExchangeRate"]);
     }
 
@@ -219,7 +221,7 @@ public class VNPayController : BaseController
         pay.AddRequestData("vnp_CurrCode", "VND"); //Đơn vị tiền tệ sử dụng thanh toán. Hiện tại chỉ hỗ trợ VND
         pay.AddRequestData("vnp_IpAddr", "0.0.0.0"); //Địa chỉ IP của khách hàng thực hiện giao dịch
         pay.AddRequestData("vnp_Locale", "vn"); //Ngôn ngữ giao diện hiển thị - Tiếng Việt (vn), Tiếng Anh (en)
-        pay.AddRequestData("vnp_OrderInfo", $"{businessPayment.UserId},{businessPayment.AuctionId}"); //Thông tin mô tả nội dung thanh toán
+        pay.AddRequestData("vnp_OrderInfo", $"{businessPayment.UserId},{businessPayment.AuctionId},{businessPayment.FormId}"); //Thông tin mô tả nội dung thanh toán
         pay.AddRequestData("vnp_OrderType", "other"); //topup: Nạp tiền điện thoại - billpayment: Thanh toán hóa đơn - fashion: Thời trang - other: Thanh toán trực tuyến
         pay.AddRequestData("vnp_ReturnUrl", returnUrl); //URL thông báo kết quả giao dịch khi Khách hàng kết thúc thanh toán
         pay.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); //mã hóa đơn
@@ -264,12 +266,14 @@ public class VNPayController : BaseController
             var splitVnpOrderInfo = vnp_OrderInfo.Split(",");
             int userId = int.Parse(splitVnpOrderInfo[0]);
             int auctionId = int.Parse(splitVnpOrderInfo[1]);
+            int formId = int.Parse(splitVnpOrderInfo[2]);
             // Kiểm tra dữ liệu trả về từ VNPAY
             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
             {
                 // Thanh toán thành công
                 status = "SUCCESS";
                 await _paymentService.PayBackDepositFeeAuction(userId, auctionId);
+                await _transferFormService.PaymentComplete(formId);
 
             }
 

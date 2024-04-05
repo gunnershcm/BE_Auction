@@ -139,6 +139,24 @@ namespace API.Services.Implements
             await _transferFormRepository.UpdateAsync(target);
         }
 
+        public async Task PaymentComplete(int formId)
+        {
+            var target = await _transferFormRepository.FirstOrDefaultAsync(c => c.Id.Equals(formId)) ??
+                         throw new KeyNotFoundException();
+            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(target.PropertyId), new KeyNotFoundException("Property is not exist"));
+            target.TranferFormStatus = TranferFormStatus.PaymentComplete;
+            await _transferFormRepository.UpdateAsync(target);
+        }
+
+        public async Task Done(int formId)
+        {
+            var target = await _transferFormRepository.FirstOrDefaultAsync(c => c.Id.Equals(formId)) ??
+                         throw new KeyNotFoundException();
+            var property = await _propertyRepository.FoundOrThrow(u => u.Id.Equals(target.PropertyId), new KeyNotFoundException("Property is not exist"));
+            target.TranferFormStatus = TranferFormStatus.Done;
+            await _transferFormRepository.UpdateAsync(target);
+        }
+
         public async Task<TransferForm> Reject(int formId, UpdateRejectReasonForm model)
         {
             var target = await _transferFormRepository.FirstOrDefaultAsync(c => c.Id.Equals(formId)) ??
@@ -172,7 +190,7 @@ namespace API.Services.Implements
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
                     }
-                    else if (newStatus == TranferFormStatus.Completed)
+                    else if (newStatus == TranferFormStatus.PaymentComplete)
                     {
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
@@ -195,7 +213,7 @@ namespace API.Services.Implements
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
                     }
-                    else if (newStatus == TranferFormStatus.Completed)
+                    else if (newStatus == TranferFormStatus.PaymentComplete)
                     {
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
@@ -218,7 +236,7 @@ namespace API.Services.Implements
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
                     }
-                    else if (newStatus == TranferFormStatus.Completed)
+                    else if (newStatus == TranferFormStatus.PaymentComplete)
                     {
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
@@ -241,13 +259,13 @@ namespace API.Services.Implements
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
                     }
-                    else if (newStatus == TranferFormStatus.Completed)
+                    else if (newStatus == TranferFormStatus.PaymentComplete)
                     {
                         form.TranferFormStatus = newStatus;
                         await _transferFormRepository.UpdateAsync(form);
                     }
                     break;
-                case TranferFormStatus.Completed:
+                case TranferFormStatus.PaymentComplete:
                     if (newStatus == TranferFormStatus.Draft)
                     {
                         form.TranferFormStatus = newStatus;

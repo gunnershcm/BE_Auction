@@ -16,6 +16,8 @@ namespace API.Services.Interfaces
         Task<TransferForm> CreateFormByMember(int createdById, CreateTransferFormRequest model);
         Task<TransferForm> UpdateByAdmin(int id, UpdateTransferFormRequest model);
         Task Approve(int formId);
+        Task PaymentComplete(int formId);
+        Task Done(int formId);
         Task<TransferForm> Reject(int formId, UpdateRejectReasonForm model);
         Task<TransferForm> ModifyFormStatus(int formId, TranferFormStatus newStatus);
         Task Remove(int id);
