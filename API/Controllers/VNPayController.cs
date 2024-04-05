@@ -112,10 +112,7 @@ public class VNPayController : BaseController
                 await _paymentService.PayJoiningFeeAuction(userId, auctionId);
                 await  _userAuctionService.JoinAuction(userId, auctionId);
             }
-
-            // Đoạn này đã bị loại bỏ vì không còn sử dụng dịch vụ ví
         }
-
         return Redirect($"amount={amount}&status={status}");
 
     }
