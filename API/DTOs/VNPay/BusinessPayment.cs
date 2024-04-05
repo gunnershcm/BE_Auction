@@ -6,4 +6,5 @@ public class BusinessPayment
     public double Amount { get; set; }
     public int AuctionId { get; set; }
     public int? FormId { get; set; }
+    public int PropertyId { get; set; }
 }

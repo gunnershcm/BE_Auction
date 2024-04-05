@@ -214,6 +214,9 @@ namespace Persistence.Migrations
                     b.Property<double>("Area")
                         .HasColumnType("float");
 
+                    b.Property<int?>("AuctionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 

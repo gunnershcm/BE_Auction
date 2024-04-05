@@ -32,6 +32,8 @@ namespace API.DTOs.Responses.Properties
 
         public double Price { get; set; }
 
+        public int? AuctionId { get; set; }
+
         public int PostId { get; set; }
 
         public GetPostForPropertyResponse? Post { get; set; }

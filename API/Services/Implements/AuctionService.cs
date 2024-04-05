@@ -96,6 +96,7 @@ namespace API.Services.Implements
             }
             model.Deposit = 0;
             var result = await _auctionRepository.CreateAsync(entity);
+            property.AuctionId = result.Id;
             if (model.AuctionImages != null)
             {
                 await _urlResourceService.Add(Tables.AUCTION, result.Id, model.AuctionImages, ResourceType.Common);

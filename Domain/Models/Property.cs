@@ -42,5 +42,7 @@ namespace Domain.Models
 
         public PropertyType? PropertyType { get; set; }
 
+        public int? AuctionId { get; set; }
+
     }
 }
