@@ -117,7 +117,6 @@ namespace API.Services.Implements
             return result;
         }
 
-
         public async Task Remove(int id)
         {
             var target = await _auctionRepository.FirstOrDefaultAsync(x => x.Id.Equals(id)) ??

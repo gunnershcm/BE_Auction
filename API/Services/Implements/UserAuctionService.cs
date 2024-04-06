@@ -126,7 +126,7 @@ namespace API.Services.Implements
             {
                 throw new InvalidOperationException("Bidding amount must be greater than current price with stepFee");
             }
-            else if (auction.MaxStepFee != null && model.BiddingAmount > (auction.StepFee * auction.MaxStepFee))
+            else if (auction.MaxStepFee != null && model.BiddingAmount > (auction.StepFee * auction.MaxStepFee + auction.FinalPrice))
             {
                 throw new Exception("Bidding amount must be smaller than step fee value.");
 
