@@ -31,7 +31,8 @@ namespace API.Services.Implements
             
             foreach (var auction in auctions)
             {
-                var target = await _transactionRepository.FirstOrDefaultAsync(u => u.AuctionId == auction.Id);
+                var target = await _transactionRepository.FirstOrDefaultAsync(u => u.AuctionId == auction.Id && u.TransactionType.Name == "Deposit",
+                    navigationProperties: new string[]{ "TransactionType"});
                 DateTime currentTime = DateTime.Now;
                 if (currentTime < auction.BiddingStartTime)
                 {
@@ -68,7 +69,7 @@ namespace API.Services.Implements
         {
             DateTime currentTime = DateTime.Now;
             var auctionsStartingIn2Minutes = await _auctionRepository
-                .WhereAsync(a => a.BiddingStartTime <= currentTime.AddMinutes(2) && a.BiddingStartTime > currentTime);
+                .WhereAsync(a => a.BiddingStartTime <= currentTime.AddMinutes(1) && a.BiddingStartTime > currentTime);
 
             foreach (var auction in auctionsStartingIn2Minutes)
             {

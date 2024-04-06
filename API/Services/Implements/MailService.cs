@@ -111,7 +111,7 @@ namespace API.Services.Implements
     </div>
     <div style=""padding: 20px;"">
       <p>Kính gửi {0},</p>
-      <p>Chúng tôi rất vui mừng chào đón bạn đến với Trang Web Đấu Giá! Cuộc đấu giá của bạn sẽ diễn ra trong vòng 2 phút tới.</p>      
+      <p>Chúng tôi rất vui mừng chào đón bạn đến với Trang Web Đấu Giá! Cuộc đấu giá của bạn sẽ diễn ra trong vòng 1 phút tới.</p>      
       <p>Nếu bạn có bất kỳ câu hỏi hoặc thắc mắc nào, đừng ngần ngại liên hệ với nhóm hỗ trợ của chúng tôi tại <a href=""mailto:auctionweb789@gmail.com"">auctionweb789@gmail.com</a>.</p>
     </div>
     <div style=""background-color: #f1f1f1; padding: 10px; text-align: center; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;"">
