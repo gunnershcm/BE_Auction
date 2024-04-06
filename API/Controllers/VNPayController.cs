@@ -75,7 +75,8 @@ public class VNPayController : BaseController
     [ProducesResponseType(typeof(BaseResponse<ResponseStatusPaymentModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ConfirmJoinging()
     {
-        //string returnUrl = _configuration["VnPay:ReturnPath"];
+        string returnUrlSuccess = _configuration["VnPay:ReturnPathSuccess"];
+        string returnUrlFail = _configuration["VnPay:ReturnPathFail"];
         double amount = 0;
         string status = "FAILED";
         if (Request.Query.Count > 0)
@@ -113,9 +114,11 @@ public class VNPayController : BaseController
                 status = "SUCCESS";
                 await _paymentService.PayJoiningFeeAuction(userId, auctionId);
                 await  _userAuctionService.JoinAuction(userId, auctionId);
+                return Redirect(returnUrlSuccess);
             }
         }
-        return Redirect($"amount={amount}&status={status}");
+        //return Redirect($"amount={amount}&status={status}");
+        return Redirect(returnUrlFail);
 
     }
 
@@ -156,7 +159,8 @@ public class VNPayController : BaseController
     [ProducesResponseType(typeof(BaseResponse<ResponseStatusPaymentModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ConfirmDeposit()
     {
-        //string returnUrl = _configuration["VnPay:ReturnPath"];
+        string returnUrlSuccess = _configuration["VnPay:ReturnPathSuccess"];
+        string returnUrlFail = _configuration["VnPay:ReturnPathFail"];
         double amount = 0;
         string status = "FAILED";
         if (Request.Query.Count > 0)
@@ -191,13 +195,14 @@ public class VNPayController : BaseController
                 // Thanh toán thành công
                 status = "SUCCESS";
                 await _paymentService.PayDepositFeeAuction(userId, auctionId);
+                return Redirect(returnUrlSuccess);
 
             }
 
             // Đoạn này đã bị loại bỏ vì không còn sử dụng dịch vụ ví
         }
-
-        return Redirect($"amount={amount}&status={status}");
+        return Redirect(returnUrlFail);
+        // return Redirect($"amount={amount}&status={status}");
 
     }
 
@@ -283,7 +288,6 @@ public class VNPayController : BaseController
         return Redirect($"amount={amount}&status={status}");
 
     }
-
 
     public class ResponsePaymentUrlModel
     {public string? Url { get; set; }
